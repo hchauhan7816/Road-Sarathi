@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "471791834316",
+    "project_id": "road-sarathi",
+    "storage_bucket": "road-sarathi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471791834316:android:c2aec6182a38123f9a9e69",
+        "android_client_info": {
+          "package_name": "com.example.sadak"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "471791834316-c6adngtq7rm4ee4rvv92p4s66jcdhn7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqVIPLy9cK4dVca6eb8VvVa44Yz1wp4Fo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "471791834316-c6adngtq7rm4ee4rvv92p4s66jcdhn7a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
