@@ -17,6 +17,7 @@ class OurApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
+      // Todo Adjust according to your phone resolution before work
       designSize: const Size(1080, 2210),
       builder: () => GetMaterialApp(
         title: 'Flutter Demo',
