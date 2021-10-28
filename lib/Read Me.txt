@@ -1,4 +1,8 @@
-For Temporary Responsiveness
+    For Temporary Responsiveness
 flutter_screenutil -> A flutter plugin for adapting screen and font size.Let your UI display a reasonable layout on different screen sizes!
 
-Standard Value of top Padding 80.h in case of NO APP BAR
+    Standard Value of top Padding 80.h in case of NO APP BAR
+    How to use flutter_screenutil -> 
+                        height : 80.h
+                        width : 40.w
+                        fontsize : 39.sp 
