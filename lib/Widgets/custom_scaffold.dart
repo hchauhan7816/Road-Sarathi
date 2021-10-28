@@ -10,14 +10,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CustomScaffold extends StatelessWidget {
   final Widget body;
   AppBar? appBar;
-  final String title;
   final Color backgroundColor;
   TabBar? tabBar;
 
   CustomScaffold(
       {Key? key,
       required this.body,
-      required this.title,
       this.appBar,
       this.tabBar,
       this.backgroundColor = Colors.white})

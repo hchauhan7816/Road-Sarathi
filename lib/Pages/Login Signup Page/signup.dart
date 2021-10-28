@@ -11,14 +11,14 @@ class SignupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-        body: SignupBody(), title: "Sign Up", appBar: signupAppBar(context));
+    return CustomScaffold(body: SignupBody(), appBar: signupAppBar(context));
   }
 }
 
 AppBar signupAppBar(BuildContext context) {
   return AppBar(
     elevation: 0,
+    title: const Text("Sign Up"),
     brightness: Brightness.light,
     backgroundColor: Colors.white,
     leading: IconButton(
@@ -49,7 +49,6 @@ class SignupBody extends StatelessWidget {
     if (_formKey.currentState!.validate()) {
       if (password.text == password2.text) {
         authController.signUp(email: email.text, password: password.text);
-        
       } else {
         Get.snackbar("Error!", "Confirm Password does not match.");
       }

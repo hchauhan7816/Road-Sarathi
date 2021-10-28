@@ -6,6 +6,8 @@ import 'package:sadak/Pages/Login%20Signup%20Page/login_gov.dart';
 import 'package:sadak/Pages/Login%20Signup%20Page/navigate_login_signup.dart';
 import 'package:get/get.dart';
 
+import 'Config/themes.dart';
+import 'Pages/Chat Screen/chat_page.dart';
 import 'Pages/Login Signup Page/login.dart';
 import 'Pages/Login Signup Page/signup.dart';
 
@@ -21,13 +23,16 @@ class OurApp extends StatelessWidget {
       designSize: const Size(1080, 2210),
       builder: () => GetMaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        // Todo navigate to which home page?
-        home: authController.auth.currentUser != null
-            ? HomePage()
-            : const LoginNavigator(),
+        theme: Themes().lightTheme,
+        // Todo navigate to which home page (user or gov)?
+
+        // home: authController.auth.currentUser != null
+        //     ? HomePage()
+        //     : const LoginNavigator(),
+
+        // Todo update the path to home page back
+        home: ChatScreen(),
+
         getPages: [
           GetPage(name: '/navigator', page: () => const LoginNavigator()),
           GetPage(name: '/login', page: () => const LoginPage()),

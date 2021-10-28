@@ -10,7 +10,7 @@ class LoginNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(body: LoginNavigatorBody(), title: "", appBar: null);
+    return CustomScaffold(body: LoginNavigatorBody(), appBar: null);
   }
 }
 

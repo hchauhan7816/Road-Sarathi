@@ -29,9 +29,10 @@ class AuthController extends GetxController {
 
   void signIn({required String email, required String password}) async {
     try {
+      // todo Temp. /chat
       await auth
           .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) => Get.offAllNamed("/home"));
+          .then((value) => Get.offAllNamed("/chat"));
     } on FirebaseAuthException catch (e) {
       Get.snackbar("Error while Login", e.message.toString(),
           duration: const Duration(seconds: 5));

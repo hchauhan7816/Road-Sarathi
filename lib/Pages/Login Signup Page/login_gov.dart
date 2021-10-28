@@ -11,14 +11,14 @@ class LoginGovPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-        body: LoginGovBody(), title: "Login", appBar: loginAppBar(context));
+    return CustomScaffold(body: LoginGovBody(), appBar: loginAppBar(context));
   }
 }
 
 AppBar loginAppBar(BuildContext context) {
   return AppBar(
     elevation: 0,
+    title: const Text("Government Login"),
     brightness: Brightness.light,
     backgroundColor: Colors.white,
     leading: IconButton(
