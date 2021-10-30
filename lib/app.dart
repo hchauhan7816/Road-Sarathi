@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sadak/Controllers/auth_controller.dart';
 import 'package:sadak/Pages/Home%20Page/home.dart';
 import 'package:sadak/Pages/Login%20Signup%20Page/login_gov.dart';
 import 'package:sadak/Pages/Login%20Signup%20Page/navigate_login_signup.dart';
@@ -10,6 +9,7 @@ import 'Config/themes.dart';
 import 'Pages/Chat Screen/chat_page.dart';
 import 'Pages/Login Signup Page/login.dart';
 import 'Pages/Login Signup Page/signup.dart';
+import 'Services/Controllers/auth_controller.dart';
 
 class OurApp extends StatelessWidget {
   OurApp({Key? key}) : super(key: key);

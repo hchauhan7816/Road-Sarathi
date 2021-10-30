@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:sadak/Controllers/auth_controller.dart';
+import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'package:sadak/Config/palette.dart';
 import 'package:sadak/Widgets/text_styles.dart';
