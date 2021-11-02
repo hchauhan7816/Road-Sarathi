@@ -20,7 +20,7 @@ Future<void> main() async {
   );
 
   // Dependency Injections
-  AuthController authController = Get.put(AuthController());
+  FirebaseHelper firebaseHelper = Get.put(FirebaseHelper());
 
   runApp(OurApp());
 }
