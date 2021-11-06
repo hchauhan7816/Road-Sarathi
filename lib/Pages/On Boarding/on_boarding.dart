@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:sadak/Pages/Login%20Signup%20Page/login.dart';
+import 'package:sadak/Pages/Login%20Signup%20Page/login_gov.dart';
+import 'package:sadak/Pages/Signup%20Page/signup.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'package:sadak/Config/palette.dart';
-import 'package:sadak/Widgets/text_styles.dart';
+import 'package:sadak/Config/text_styles.dart';
 
-class LoginNavigator extends StatelessWidget {
-  const LoginNavigator({Key? key}) : super(key: key);
+class OnBoarding extends StatelessWidget {
+  const OnBoarding({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(body: LoginNavigatorBody(), title: "", appBar: null);
+    return CustomScaffold(body: OnBoardingBody(), appBar: null);
   }
 }
 
-class LoginNavigatorBody extends StatelessWidget {
-  const LoginNavigatorBody({Key? key}) : super(key: key);
+class OnBoardingBody extends StatelessWidget {
+  const OnBoardingBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +72,7 @@ class LoginNavigatorBody extends StatelessWidget {
             minWidth: double.infinity,
             height: 150.h,
             onPressed: () {
-              Get.toNamed("/login");
+              Get.to(() => LoginPage());
             },
             shape: RoundedRectangleBorder(
               side: const BorderSide(color: Colors.black),
@@ -87,7 +90,7 @@ class LoginNavigatorBody extends StatelessWidget {
             minWidth: double.infinity,
             height: 150.h,
             onPressed: () {
-              Get.toNamed("/gov_login");
+              Get.to(() => LoginGovPage());
             },
             shape: RoundedRectangleBorder(
               side: const BorderSide(color: Colors.black),
@@ -105,7 +108,7 @@ class LoginNavigatorBody extends StatelessWidget {
             minWidth: double.infinity,
             height: 150.h,
             onPressed: () {
-              Get.toNamed("/signup");
+              Get.to(() => SignupPage());
             },
             color: Palette.darkPurple,
             shape: RoundedRectangleBorder(

@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:sadak/Config/palette.dart';
-import 'package:sadak/Controllers/auth_controller.dart';
+import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
-import 'package:sadak/Widgets/text_styles.dart';
+import 'package:sadak/Config/text_styles.dart';
 
 class SignupPage extends StatelessWidget {
   const SignupPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-        body: SignupBody(), title: "Sign Up", appBar: signupAppBar(context));
+    return CustomScaffold(body: SignupBody(), appBar: signupAppBar(context));
   }
 }
 
 AppBar signupAppBar(BuildContext context) {
   return AppBar(
     elevation: 0,
+    title: const Text("Sign Up"),
     brightness: Brightness.light,
     backgroundColor: Colors.white,
     leading: IconButton(
@@ -37,7 +37,9 @@ class SignupBody extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
 
-  AuthController authController = Get.find();
+  FirebaseHelper firebaseHelper = Get.find<FirebaseHelper>();
+
+  TextEditingController name = TextEditingController();
 
   TextEditingController email = TextEditingController();
 
@@ -48,8 +50,8 @@ class SignupBody extends StatelessWidget {
   signUpUser(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       if (password.text == password2.text) {
-        authController.signUp(email: email.text, password: password.text);
-        
+        firebaseHelper.signUp(
+            name: name.text, email: email.text, password: password.text);
       } else {
         Get.snackbar("Error!", "Confirm Password does not match.");
       }
@@ -88,6 +90,43 @@ class SignupBody extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Name",
+                            style: TextStyle(
+                                fontSize: 40.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black87),
+                          ),
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          TextFormField(
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return "Name cannot be empty";
+                              }
+
+                              return null;
+                            },
+                            controller: name,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 0.h, horizontal: 15.w),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.grey))),
+                          ),
+                          SizedBox(
+                            height: 30.h,
+                          )
+                        ],
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[

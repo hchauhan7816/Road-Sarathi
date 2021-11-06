@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:sadak/Controllers/auth_controller.dart';
+import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'package:sadak/Config/palette.dart';
-import 'package:sadak/Widgets/text_styles.dart';
+import 'package:sadak/Config/text_styles.dart';
 
 class LoginGovPage extends StatelessWidget {
   const LoginGovPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-        body: LoginGovBody(), title: "Login", appBar: loginAppBar(context));
+    return CustomScaffold(body: LoginGovBody(), appBar: loginAppBar(context));
   }
 }
 
 AppBar loginAppBar(BuildContext context) {
   return AppBar(
     elevation: 0,
+    title: const Text("Government Login"),
     brightness: Brightness.light,
     backgroundColor: Colors.white,
     leading: IconButton(
@@ -35,11 +35,11 @@ AppBar loginAppBar(BuildContext context) {
 class LoginGovBody extends StatelessWidget {
   LoginGovBody({Key? key}) : super(key: key);
 
-  AuthController authController = Get.find();
+  FirebaseHelper firebaseHelper = Get.find<FirebaseHelper>();
 
-  TextEditingController email = TextEditingController();
+  TextEditingController? email = TextEditingController();
 
-  TextEditingController password = TextEditingController();
+  TextEditingController? password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -152,8 +152,16 @@ class LoginGovBody extends StatelessWidget {
                       minWidth: double.infinity,
                       height: 150.h,
                       onPressed: () {
-                        authController.signIn(
-                            email: email.text, password: password.text);
+                        if (email != null &&
+                            password != null &&
+                            email!.text.isNotEmpty &&
+                            password!.text.isNotEmpty) {
+                          firebaseHelper.signInGovernment(
+                              email: email!.text, password: password!.text);
+                        } else {
+                          Get.snackbar(
+                              "Error", "Please Enter email and password");
+                        }
                       },
                       color: Palette.darkPurple,
                       shape: RoundedRectangleBorder(

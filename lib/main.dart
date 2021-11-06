@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:sadak/app.dart';
 
-import 'Controllers/auth_controller.dart';
+import 'Services/Controllers/auth_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +20,7 @@ Future<void> main() async {
   );
 
   // Dependency Injections
-  AuthController authController = Get.put(AuthController());
+  FirebaseHelper firebaseHelper = Get.put(FirebaseHelper());
 
   runApp(OurApp());
 }

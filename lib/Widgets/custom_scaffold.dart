@@ -10,14 +10,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CustomScaffold extends StatelessWidget {
   final Widget body;
   AppBar? appBar;
-  final String title;
+  FloatingActionButton? floatingActionButton;
   final Color backgroundColor;
   TabBar? tabBar;
 
   CustomScaffold(
       {Key? key,
       required this.body,
-      required this.title,
+      this.floatingActionButton,
       this.appBar,
       this.tabBar,
       this.backgroundColor = Colors.white})
@@ -34,6 +34,7 @@ class CustomScaffold extends StatelessWidget {
       child: Scaffold(
         backgroundColor: backgroundColor,
         appBar: appBar,
+        floatingActionButton: floatingActionButton,
         // appBar: wantAppbar
         //     ? AppBar(
         //         title: Text(title),
