@@ -115,10 +115,14 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
 
   void sendDetails() {
     // dev.log("Here  ${ImageUrl}");
+    int val = DateTime.now().millisecondsSinceEpoch;
+
     if (ImageUrl != null && ImageUrl!.isNotEmpty) {
       var chatroomId = firebaseHelper.getChatroomId(
-          userEmail1: Constants.myEmail,
-          userEmail2: "localauthority@gmail.com");
+        userEmail1: Constants.myEmail,
+        userEmail2: "localauthority@gmail.com",
+        val: val
+      );
 
       // dev.log("Done CreateChatroomAndStartConversation");
       Map<String, dynamic> chatroomMap = {
@@ -127,10 +131,12 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
         "chatroomId": chatroomId,
         "title": _titleController.text,
         "location": _locationController.text,
+        "dueDate": DateTime.now().add(const Duration(days: 60)),
       };
       firebaseHelper.createChatRooms(
           userEmail1: Constants.myEmail,
           userEmail2: "localauthority@gmail.com",
+          chatroomId: chatroomId,
           chatroomMap: chatroomMap);
 
       firebaseHelper.setConversationMessages(

@@ -138,11 +138,8 @@ class _UserHigherConversationRoomsBodyState
             // dev.log(
             //     "${snapshot.data!.docs.length}  \n\n\n${snapshot.data!.docs[index].data()[CHATROOM]}");
             return ChatRoomsTile(
-                username: snapshot.data!.docs[index]
-                    .data()[_CHATROOMID]
-                    .toString()
-                    .replaceAll(Constants.myEmail, "")
-                    .replaceAll("_", ""),
+                username:
+                    snapshot.data!.docs[index].data()["authority"].toString(),
                 chatRoomId:
                     snapshot.data!.docs[index].data()[_CHATROOMID].toString());
           },

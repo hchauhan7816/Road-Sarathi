@@ -194,10 +194,13 @@ class FirebaseHelper extends GetxController {
   createChatRooms(
       {required String userEmail1,
       required String userEmail2,
-      required chatroomMap}) {
-    String val = getChatroomId(userEmail1: userEmail1, userEmail2: userEmail2);
+      required chatroomMap,
+      required String chatroomId}) {
     // dev.log("Here createChatRooms");
-    FirebaseFirestore.instance.collection(_CHATROOM).doc(val).set(chatroomMap);
+    FirebaseFirestore.instance
+        .collection(_CHATROOM)
+        .doc(chatroomId)
+        .set(chatroomMap);
     // dev.log("Done Here createChatRooms");
   }
 
@@ -217,20 +220,24 @@ class FirebaseHelper extends GetxController {
   //   return userList;
   // }
 
-  getChatroomId({required String userEmail1, required String userEmail2}) {
-    String val;
+  getChatroomId(
+      {required String userEmail1,
+      required String userEmail2,
+      required int val}) {
+    String temp;
     // dev.log("$userEmail1 \n\n\n $userEmail2");
-    val = "${userEmail1.toLowerCase()}_${userEmail2.toLowerCase()}";
+    temp =
+        "${userEmail1.toLowerCase()}_${userEmail2.toLowerCase()}_${val.toString()}";
 
     // dev.log("${userEmail1.toLowerCase().codeUnitAt(0)}");
     // dev.log("${userEmail2.toLowerCase().codeUnitAt(0)}");
 
-    return val;
+    return temp;
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getAuthorityChatRooms(
       {required String userEmail}) {
-    return FirebaseFirestore.instance
+    return firebaseFirestore
         .collection(_CHATROOM)
         .where(_AUTHORITY, isEqualTo: userEmail)
         .snapshots();
@@ -238,7 +245,7 @@ class FirebaseHelper extends GetxController {
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getChatRoomsLocalAuthority(
       {required String userEmail}) {
-    return FirebaseFirestore.instance
+    return firebaseFirestore
         .collection(_CHATROOM)
         .where(_USERS, isEqualTo: userEmail)
         .where(_AUTHORITY, isEqualTo: _LOCALAUTHORITYMAIL)
@@ -247,7 +254,7 @@ class FirebaseHelper extends GetxController {
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getChatRoomsHigherAuthority(
       {required String userEmail}) {
-    return FirebaseFirestore.instance
+    return firebaseFirestore
         .collection(_CHATROOM)
         .where(_USERS, isEqualTo: userEmail)
         .where(_AUTHORITY, isEqualTo: _HIGHERAUTHORITYMAIL)
@@ -256,7 +263,7 @@ class FirebaseHelper extends GetxController {
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getChatRoomsUsingChatroomId(
       {required String chatroomId}) {
-    return FirebaseFirestore.instance
+    return firebaseFirestore
         .collection(_CHATROOM)
         .where(_CHATROOMID, isEqualTo: chatroomId)
         .snapshots();

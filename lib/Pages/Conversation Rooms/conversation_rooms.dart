@@ -145,11 +145,10 @@ class _GovConversationRoomsBodyState extends State<GovConversationRoomsBody> {
             // dev.log(
             //     "${snapshot.data!.docs.length}  \n\n\n${snapshot.data!.docs[index].data()[CHATROOM]}");
             return ChatRoomsTile(
-                username: snapshot.data!.docs[index]
-                    .data()[_CHATROOMID]
-                    .toString()
-                    .replaceAll(Constants.myEmail, "")
-                    .replaceAll("_", ""),
+                username:
+                    snapshot.data!.docs[index].data()["authority"].toString(),
+                // .replaceAll(Constants.myEmail, "")
+                // .replaceAll("_", ""),
                 chatRoomId:
                     snapshot.data!.docs[index].data()[_CHATROOMID].toString());
           },
@@ -162,8 +161,9 @@ class _GovConversationRoomsBodyState extends State<GovConversationRoomsBody> {
 
   createChatroomAndStartConversation(String clickedUserEmail) {
     String users = Constants.myEmail;
+    int time = DateTime.now().millisecondsSinceEpoch;
     String chatroomId = firebaseHelper.getChatroomId(
-        userEmail1: Constants.myEmail, userEmail2: clickedUserEmail);
+        userEmail1: Constants.myEmail, userEmail2: clickedUserEmail, val: time);
 
     if (clickedUserEmail != Constants.myEmail) {
       Map<String, dynamic> chatroomMap = {
@@ -176,6 +176,7 @@ class _GovConversationRoomsBodyState extends State<GovConversationRoomsBody> {
       firebaseHelper.createChatRooms(
           userEmail1: Constants.myEmail,
           userEmail2: clickedUserEmail,
+          chatroomId: chatroomId,
           chatroomMap: chatroomMap);
 
       Get.to(ChatScreen(

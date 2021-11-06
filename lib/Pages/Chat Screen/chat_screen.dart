@@ -148,15 +148,15 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
 
             return ListView.builder(
               shrinkWrap: true,
+              scrollDirection: Axis.vertical,
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
-                // dev.log(
-                //     "Value    ----->     ${snapshot.data!.docs[index].data()["sendBy"]}");
                 return HeadingTile(
                   title: snapshot.data!.docs[index].data()[_TITLE].toString(),
                   location:
                       snapshot.data!.docs[index].data()[_LOCATION].toString(),
                 );
+                return Container();
               },
             );
           },
@@ -171,6 +171,7 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
 
             return ListView.builder(
               shrinkWrap: true,
+              scrollDirection: Axis.vertical,
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 // dev.log(
