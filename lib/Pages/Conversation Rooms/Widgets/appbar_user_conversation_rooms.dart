@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sadak/Config/text_styles.dart';
 import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 
-AppBar userHigherConversationRoomsAppBar(BuildContext context,
-    {TabBar? tabBar}) {
+AppBar userConversationRoomsAppBar(BuildContext context, {TabBar? tabBar}) {
   return AppBar(
-    elevation: 10,
-    title: Text("Chat Room"),
+    // elevation: 10,
+    title: Text(
+      "Chat Rooms",
+      style: appTitleStyle,
+    ),
     centerTitle: true,
-    brightness: Brightness.light,
+    // brightness: Brightness.light,
+    // backgroundColor: Colors.white,
     bottom: tabBar,
-    backgroundColor: Colors.white,
     actions: [
       GestureDetector(
         onTap: () {

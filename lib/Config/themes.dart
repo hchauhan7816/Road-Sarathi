@@ -5,21 +5,21 @@ import 'package:sadak/Config/palette.dart';
 
 class Themes {
   final lightTheme = ThemeData(
-    primarySwatch: Colors.purple,
+    primarySwatch: Colors.blueGrey,
     // primaryColor: Colors.white,
     // disabledColor: Colors.grey,
     // cardColor: Colors.white,
-    canvasColor: Colors.white,
+    // canvasColor: Colors.white,
     // fontFamily: Devfest.googleSansFamily,
-    brightness: Brightness.light,
+    // brightness: Brightness.light,
     appBarTheme: AppBarTheme(
       elevation: 0,
       // backgroundColor: Colors.white,
-      titleTextStyle: TextStyle(
-        color: Colors.black,
-        fontSize: 55.sp,
-        fontWeight: FontWeight.w500,
-      ),
+      // titleTextStyle: TextStyle(
+      //   color: Colors.black,
+      //   fontSize: 55.sp,
+      //   fontWeight: FontWeight.w500,
+      // ),
     ),
   );
 

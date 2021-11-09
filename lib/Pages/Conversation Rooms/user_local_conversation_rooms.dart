@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:sadak/Config/constants.dart';
+import 'package:sadak/Config/palette.dart';
 import 'package:sadak/Config/text_styles.dart';
 import 'package:sadak/Modal/users.dart';
 import 'package:sadak/Pages/Chat%20Screen/Widgets/tiles.dart';
@@ -12,7 +13,8 @@ import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'dart:developer' as dev;
 
-import 'Widgets/appbar_user_local_conversation_rooms.dart';
+import 'Widgets/appbar_user_conversation_rooms.dart';
+import 'Widgets/tabbar.dart';
 
 const String _CHATROOMID = "chatroomId";
 
@@ -42,26 +44,7 @@ class UserConversationRooms extends StatelessWidget {
           backgroundColor: Colors.blueGrey,
           appBar: userConversationRoomsAppBar(
             context,
-            tabBar: TabBar(
-              indicatorSize: TabBarIndicatorSize.label,
-              // indicatorColor: ,
-              isScrollable: false,
-              labelStyle: TextStyle(fontSize: 45.sp),
-              tabs: <Widget>[
-                Tab(
-                  child: Text(
-                    "Ongoing Complaints",
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Tab(
-                  child: Text(
-                    "Completed Complaints",
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
+            tabBar: conversationRoomsTabBar(),
           )),
     );
   }
@@ -141,12 +124,24 @@ class _UserConversationRoomsBodyState extends State<UserConversationRoomsBody> {
       stream: chatRoomsStream,
       builder: (context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-        if (snapshot.data == null) {
+        if (!snapshot.hasData) {
           return Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height / 1.5,
             child: Center(
-              child: Text("Nothing to show"),
+              child: Text(
+                "No Complaints",
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+              ),
+            ),
+          );
+        } else if (snapshot.data!.docs.length == 0) {
+          return Container(
+            height: MediaQuery.of(context).size.height / 1.5,
+            child: Center(
+              child: Text(
+                "No Complaints",
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+              ),
             ),
           );
         }
@@ -159,10 +154,9 @@ class _UserConversationRoomsBodyState extends State<UserConversationRoomsBody> {
             //     "${snapshot.data!.docs.length}  \n\n\n${snapshot.data!.docs[index].data()[CHATROOM]}");
             return ChatRoomsTile(
                 username:
-                    snapshot.data!.docs[index].data()["authority"].toString() +
-                        "  " +
-                        snapshot.data!.docs[index].data()["title"].toString(),
+                    snapshot.data!.docs[index].data()["authority"].toString(),
                 userEmail: Constants.myEmail,
+                title: snapshot.data!.docs[index].data()["title"].toString(),
                 chatRoomId:
                     snapshot.data!.docs[index].data()[_CHATROOMID].toString());
           },
@@ -263,72 +257,82 @@ class _UserConversationRoomsBodyState extends State<UserConversationRoomsBody> {
         ? const Center(
             child: CircularProgressIndicator(),
           )
-        : Column(
-            children: [
-              // Column(
-              //   children: [
-              //     Container(
-              //       color: const Color(0x54FFFFFF),
-              //       padding:
-              //           EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-              //       child: Row(
-              //         children: [
-              //           Expanded(
-              //             child: TextField(
-              //               onChanged: (val) {
-              //                 searchValue = val;
-              //                 if (searchValue == null) {
-              //                   Get.snackbar("Invalid", "Enter correct email");
-              //                   return;
-              //                 }
-              //                 initiateSearch(searchValue!);
-              //               },
-              //               controller: searchTextController,
-              //               // style: TextStyle(color: Colors.white),
-              //               decoration: const InputDecoration(
-              //                 hintText: "search username...",
-              //                 hintStyle: TextStyle(
-              //                   color: Colors.white54,
-              //                 ),
-              //                 border: InputBorder.none,
-              //               ),
-              //             ),
-              //           ),
-              //           GestureDetector(
-              //             onTap: () {
-              //               if (searchValue == null) {
-              //                 Get.snackbar("Invalid", "Enter correct email");
-              //                 return;
-              //               }
-              //               initiateSearch(searchValue!);
-              //             },
-              //             child: Container(
-              //               height: 48,
-              //               width: 48,
-              //               padding: EdgeInsets.all(16),
-              //               decoration: BoxDecoration(
-              //                 gradient: LinearGradient(
-              //                   colors: [
-              //                     const Color(0x36FFFFFF),
-              //                     const Color(0x0FFFFFFF)
-              //                   ],
-              //                 ),
-              //                 borderRadius: BorderRadius.circular(40),
-              //               ),
-              //               // color: Colors.red,
-              //               child: Icon(Icons.search),
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              Container(
-                margin: EdgeInsets.only(top: 8),
-                child: chatRoomList(),
+        : Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30))),
+              child: Column(
+                children: [
+                  // Column(
+                  //   children: [
+                  //     Container(
+                  //       color: const Color(0x54FFFFFF),
+                  //       padding:
+                  //           EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                  //       child: Row(
+                  //         children: [
+                  //           Expanded(
+                  //             child: TextField(
+                  //               onChanged: (val) {
+                  //                 searchValue = val;
+                  //                 if (searchValue == null) {
+                  //                   Get.snackbar("Invalid", "Enter correct email");
+                  //                   return;
+                  //                 }
+                  //                 initiateSearch(searchValue!);
+                  //               },
+                  //               controller: searchTextController,
+                  //               // style: TextStyle(color: Colors.white),
+                  //               decoration: const InputDecoration(
+                  //                 hintText: "search username...",
+                  //                 hintStyle: TextStyle(
+                  //                   color: Colors.white54,
+                  //                 ),
+                  //                 border: InputBorder.none,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           GestureDetector(
+                  //             onTap: () {
+                  //               if (searchValue == null) {
+                  //                 Get.snackbar("Invalid", "Enter correct email");
+                  //                 return;
+                  //               }
+                  //               initiateSearch(searchValue!);
+                  //             },
+                  //             child: Container(
+                  //               height: 48,
+                  //               width: 48,
+                  //               padding: EdgeInsets.all(16),
+                  //               decoration: BoxDecoration(
+                  //                 gradient: LinearGradient(
+                  //                   colors: [
+                  //                     const Color(0x36FFFFFF),
+                  //                     const Color(0x0FFFFFFF)
+                  //                   ],
+                  //                 ),
+                  //                 borderRadius: BorderRadius.circular(40),
+                  //               ),
+                  //               // color: Colors.red,
+                  //               child: Icon(Icons.search),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  Container(
+                    margin: EdgeInsets.only(top: 8),
+                    child: chatRoomList(),
+                  ),
+                ],
               ),
-            ],
+            ),
           );
   }
 }
