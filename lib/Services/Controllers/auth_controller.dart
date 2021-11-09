@@ -13,6 +13,7 @@ class FirebaseHelper extends GetxController {
   static const String _USERS = "users";
   static const String _EMAIL = "email";
   static const String _CHATROOM = "chatroom";
+  static const String _COMPLETED = "completed";
   static const String _CHATS = "chats";
   static const String _TIME = "time";
   static const String _CHATROOMID = "chatroomId";
@@ -92,6 +93,24 @@ class FirebaseHelper extends GetxController {
     }
   }
 
+  // Future<int> giveUserStatus({required String email}) async {
+  //   int val = 0;
+  //   Map<String, dynamic>? x;
+  //   await firebaseFirestore
+  //       .collection(_USERS)
+  //       .where(_EMAIL, isEqualTo: email)
+  //       .get()
+  //       .then((value) {
+  //     value.docs.isNotEmpty ? x = value.docs[0].data() : x = null;
+  //   });
+
+  //   if (x != null && x!['status'] != 0) {
+  //     return x!['status'];
+  //   } else {
+  //     return 1;
+  //   }
+  // }
+
   void signInGovernment(
       {required String email, required String password}) async {
     try {
@@ -109,11 +128,23 @@ class FirebaseHelper extends GetxController {
       });
 
       if (x != null && x!['status'] != 0) {
-        await auth
-            .signInWithEmailAndPassword(email: email, password: password)
-            .then((value) => Get.offAll(() => GovConversationRooms()));
+        if (x!['status'] == 1) {
+          await auth
+              .signInWithEmailAndPassword(email: email, password: password)
+              .then((value) => Get.offAll(() => GovConversationRooms(
+                    authorityEmail: _LOCALAUTHORITYMAIL,
+                  )));
 
-        Constants.myEmail = auth.currentUser!.email!;
+          Constants.myEmail = auth.currentUser!.email!;
+        } else {
+          await auth
+              .signInWithEmailAndPassword(email: email, password: password)
+              .then((value) => Get.offAll(() => GovConversationRooms(
+                    authorityEmail: _HIGHERAUTHORITYMAIL,
+                  )));
+
+          Constants.myEmail = auth.currentUser!.email!;
+        }
       } else {
         Get.snackbar("Error while Login", "Not a Government user id",
             duration: const Duration(seconds: 5));
@@ -236,28 +267,31 @@ class FirebaseHelper extends GetxController {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getAuthorityChatRooms(
-      {required String userEmail}) {
+      {required String userEmail, required bool completed}) {
     return firebaseFirestore
         .collection(_CHATROOM)
         .where(_AUTHORITY, isEqualTo: userEmail)
+        .where(_COMPLETED, isEqualTo: completed)
         .snapshots();
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getChatRoomsLocalAuthority(
-      {required String userEmail}) {
+      {required String userEmail, required bool completed}) {
     return firebaseFirestore
         .collection(_CHATROOM)
         .where(_USERS, isEqualTo: userEmail)
         .where(_AUTHORITY, isEqualTo: _LOCALAUTHORITYMAIL)
+        .where(_COMPLETED, isEqualTo: completed)
         .snapshots();
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getChatRoomsHigherAuthority(
-      {required String userEmail}) {
+      {required String userEmail, required bool completed}) {
     return firebaseFirestore
         .collection(_CHATROOM)
         .where(_USERS, isEqualTo: userEmail)
         .where(_AUTHORITY, isEqualTo: _HIGHERAUTHORITYMAIL)
+        .where(_COMPLETED, isEqualTo: completed)
         .snapshots();
   }
 
@@ -267,5 +301,24 @@ class FirebaseHelper extends GetxController {
         .collection(_CHATROOM)
         .where(_CHATROOMID, isEqualTo: chatroomId)
         .snapshots();
+  }
+
+  completedComplaint({required chatroomId}) async {
+    var collection = FirebaseFirestore.instance.collection(_CHATROOM);
+    dev.log(chatroomId);
+    try {
+      collection.doc(chatroomId).update({"completed": true});
+
+      Get.back();
+    } catch (e) {
+      Get.snackbar("Error", "Cannot perform task");
+    }
+
+    // QuerySnapshot<Map<String, dynamic>> querySnapshot = await firebaseFirestore
+    //     .collection(_USERS)
+    //     .where(_EMAIL, isGreaterThanOrEqualTo: val)
+    //     .where(_EMAIL, isLessThanOrEqualTo: val + 'z')
+    //     .where(_EMAIL, isNotEqualTo: Constants.myEmail)
+    //     .get();
   }
 }

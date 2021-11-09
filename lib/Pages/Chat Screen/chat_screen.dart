@@ -3,48 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sadak/Config/constants.dart';
 import 'package:sadak/Modal/chat_messages.dart';
-import 'package:sadak/Pages/Chat%20Screen/Widgets/chat_tile.dart';
+import 'package:sadak/Pages/Chat%20Screen/Widgets/tiles.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'dart:developer' as dev;
+
+import 'Widgets/appbar_chat_screen.dart';
 
 const String _TITLE = "title";
 const String _LOCATION = "location";
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({Key? key, required this.chatRoomId}) : super(key: key);
-  final String chatRoomId;
+  const ChatScreen(
+      {Key? key, required this.chatroomId, required this.userEmail})
+      : super(key: key);
+  final String chatroomId;
+  final String userEmail;
 
   @override
   Widget build(BuildContext context) {
+    // dev.log(userEmail);
     return CustomScaffold(
-        body: ChatScreenBody(chatRoomId: chatRoomId),
+        body: ChatScreenBody(chatroomId: chatroomId, userEmail: userEmail),
         backgroundColor: Colors.blueGrey,
-        appBar: chatScreenAppBar(context));
+        appBar: chatScreenAppBar(context,
+            userEmail: userEmail, chatroomId: chatroomId));
   }
 }
 
-AppBar chatScreenAppBar(BuildContext context) {
-  return AppBar(
-    elevation: 10,
-    title: Text("Chat Screen"),
-    centerTitle: true,
-    brightness: Brightness.light,
-    backgroundColor: Colors.white,
-    leading: IconButton(
-      onPressed: () {
-        Get.back();
-      },
-      icon: const Icon(Icons.arrow_back_ios_new_rounded),
-      iconSize: 20,
-      color: Colors.black,
-    ),
-  );
-}
-
 class ChatScreenBody extends StatefulWidget {
-  final String chatRoomId;
-  const ChatScreenBody({required this.chatRoomId, Key? key}) : super(key: key);
+  final String chatroomId;
+  final String userEmail;
+  const ChatScreenBody(
+      {required this.chatroomId, required this.userEmail, Key? key})
+      : super(key: key);
 
   @override
   State<ChatScreenBody> createState() => _ChatScreenBodyState();
@@ -60,10 +52,10 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
   void initState() {
     Constants.myEmail = firebaseHelper.auth.currentUser!.email!;
     messages =
-        firebaseHelper.getConversationMessages(chatroomId: widget.chatRoomId);
+        firebaseHelper.getConversationMessages(chatroomId: widget.chatroomId);
 
     heading = firebaseHelper.getChatRoomsUsingChatroomId(
-        chatroomId: widget.chatRoomId);
+        chatroomId: widget.chatroomId);
     super.initState();
   }
 
@@ -94,7 +86,7 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    sendMessage();
+                    sendMessage(userEmail: widget.userEmail);
                   },
                   child: Container(
                     height: 48,
@@ -121,13 +113,13 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
     );
   }
 
-  sendMessage() {
+  sendMessage({required userEmail}) {
     if (messageController.text.isNotEmpty) {
       firebaseHelper.setConversationMessages(
-          chatroomId: widget.chatRoomId,
+          chatroomId: widget.chatroomId,
           messageMap: ModalChatMessages(
                   message: messageController.text,
-                  sendby: Constants.myEmail,
+                  sendby: userEmail, //Constants.myEmail, // userEmail,
                   text: true,
                   time: DateTime.now().millisecondsSinceEpoch)
               .toJson());
@@ -179,7 +171,7 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
                 return MessageTile(
                   message: snapshot.data!.docs[index].data()["message"],
                   isSendByMe: snapshot.data!.docs[index].data()["sendBy"] ==
-                      Constants.myEmail,
+                      widget.userEmail,
                   isText: snapshot.data!.docs[index].data()["text"],
                 );
               },

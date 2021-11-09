@@ -5,61 +5,69 @@ import 'package:get/get.dart';
 import 'package:sadak/Config/constants.dart';
 import 'package:sadak/Config/text_styles.dart';
 import 'package:sadak/Modal/users.dart';
-import 'package:sadak/Pages/Chat%20Screen/Widgets/chat_tile.dart';
+import 'package:sadak/Pages/Chat%20Screen/Widgets/tiles.dart';
 import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
 import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'dart:developer' as dev;
 
+import 'Widgets/appbar_conversation_rooms.dart';
+
 const String _CHATROOMID = "chatroomId";
 
+const String _LOCALAUTHORITYMAIL = "localauthority@gmail.com";
+const String _HIGHERAUTHORITYMAIL = "higherauthority@gmail.com";
+
 class GovConversationRooms extends StatelessWidget {
-  const GovConversationRooms({Key? key}) : super(key: key);
+  GovConversationRooms({Key? key, required this.authorityEmail})
+      : super(key: key);
+  String authorityEmail;
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-        body: GovConversationRoomsBody(),
+    return DefaultTabController(
+      // Added
+      length: 2, // Added
+      initialIndex: 0,
+      child: CustomScaffold(
+        body: TabBarView(
+          children: [
+            GovConversationRoomsBody(
+                authorityEmail: authorityEmail, completed: false),
+            GovConversationRoomsBody(
+                authorityEmail: authorityEmail, completed: true),
+            // Icon(Icons.directions_transit, size: 350),
+            // Icon(Icons.directions_car, size: 350),
+          ],
+        ),
         backgroundColor: Colors.blueGrey,
-        appBar: govConversationRoomsAppBar(context));
-  }
-}
-
-AppBar govConversationRoomsAppBar(BuildContext context) {
-  return AppBar(
-    elevation: 10,
-    title: Text("Chat Room"),
-    centerTitle: true,
-    brightness: Brightness.light,
-    backgroundColor: Colors.white,
-    leading: IconButton(
-      onPressed: () {
-        Get.back();
-      },
-      icon: const Icon(Icons.arrow_back_ios_new_rounded),
-      iconSize: 20,
-      color: Colors.black,
-    ),
-    actions: [
-      GestureDetector(
-        onTap: () {
-          // authMethods.signOut();
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => Authenticate(),
-          //   ),
-          // );
-          Get.offAll(() => OnBoarding());
-        },
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Icon(Icons.logout),
+        appBar: govConversationRoomsAppBar(
+          context,
+          tabBar: TabBar(
+            indicatorSize: TabBarIndicatorSize.label,
+            // indicatorColor: ,
+            isScrollable: false,
+            labelStyle: TextStyle(fontSize: 45.sp),
+            tabs: <Widget>[
+              Tab(
+                child: Text(
+                  "Ongoing Complaints",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Tab(
+                child: Text(
+                  "Completed Complaints",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-    ],
-  );
+    );
+  }
 }
 
 FloatingActionButton govConversationRoomsFloatingActionButton(context) {
@@ -77,7 +85,11 @@ FloatingActionButton govConversationRoomsFloatingActionButton(context) {
 }
 
 class GovConversationRoomsBody extends StatefulWidget {
-  GovConversationRoomsBody({Key? key}) : super(key: key);
+  GovConversationRoomsBody(
+      {Key? key, required this.authorityEmail, required this.completed})
+      : super(key: key);
+  String authorityEmail;
+  bool completed;
 
   @override
   State<GovConversationRoomsBody> createState() =>
@@ -98,8 +110,11 @@ class _GovConversationRoomsBodyState extends State<GovConversationRoomsBody> {
   void initState() {
     Constants.myEmail = firebaseHelper.auth.currentUser!.email!;
     // getUserInfo();
-    chatRoomsStream =
-        firebaseHelper.getAuthorityChatRooms(userEmail: Constants.myEmail);
+
+    chatRoomsStream = firebaseHelper.getAuthorityChatRooms(
+        userEmail: /*Constants.myEmail*/ widget.authorityEmail,
+        completed: widget.completed);
+
     super.initState();
   }
 
@@ -112,21 +127,21 @@ class _GovConversationRoomsBodyState extends State<GovConversationRoomsBody> {
     //   });
     // });
 
-    setState(() {
-      isLoading = true;
-    });
+    // setState(() {
+    //   isLoading = true;
+    // });
 
-    // dev.log("Here");
+    // // dev.log("Here");
 
-    searchResult =
-        firebaseHelper.searchWithAlreadyConnectedUsers(userEmail: searchValue);
+    // searchResult =
+    //     firebaseHelper.searchWithAlreadyConnectedUsers(userEmail: searchValue);
 
     // dev.log(searchResult);
     // dev.log("Done");
 
-    setState(() {
-      isLoading = false;
-    });
+    // setState(() {
+    //   isLoading = false;
+    // });
   }
 
   Widget chatRoomList() {
@@ -146,9 +161,12 @@ class _GovConversationRoomsBodyState extends State<GovConversationRoomsBody> {
             //     "${snapshot.data!.docs.length}  \n\n\n${snapshot.data!.docs[index].data()[CHATROOM]}");
             return ChatRoomsTile(
                 username:
-                    snapshot.data!.docs[index].data()["authority"].toString(),
+                    snapshot.data!.docs[index].data()["users"].toString() +
+                        "  " +
+                        snapshot.data!.docs[index].data()["title"].toString(),
                 // .replaceAll(Constants.myEmail, "")
                 // .replaceAll("_", ""),
+                userEmail: widget.authorityEmail,
                 chatRoomId:
                     snapshot.data!.docs[index].data()[_CHATROOMID].toString());
           },
@@ -180,7 +198,9 @@ class _GovConversationRoomsBodyState extends State<GovConversationRoomsBody> {
           chatroomMap: chatroomMap);
 
       Get.to(ChatScreen(
-        chatRoomId: chatroomId,
+        chatroomId: chatroomId,
+        // Todo authorityEmail
+        userEmail: Constants.myEmail,
       ));
     }
   }

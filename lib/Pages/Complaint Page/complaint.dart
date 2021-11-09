@@ -6,12 +6,15 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sadak/Config/constants.dart';
 import 'package:sadak/Modal/chat_messages.dart';
+import 'package:sadak/Modal/chatroom_map.dart';
 import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
 import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:developer' as dev;
+
+import 'Widgets/appbar_complaint.dart';
 
 class ComplaintPage extends StatelessWidget {
   const ComplaintPage({Key? key}) : super(key: key);
@@ -21,42 +24,6 @@ class ComplaintPage extends StatelessWidget {
     return CustomScaffold(
         body: ComplaintPageBody(), appBar: complaintPageAppBar(context));
   }
-}
-
-AppBar complaintPageAppBar(BuildContext context) {
-  return AppBar(
-    elevation: 10,
-    title: Text("Register Complaint"),
-    centerTitle: true,
-    brightness: Brightness.light,
-    backgroundColor: Colors.white,
-    leading: IconButton(
-      onPressed: () {
-        Get.back();
-      },
-      icon: const Icon(Icons.arrow_back_ios_new_rounded),
-      iconSize: 20,
-      color: Colors.black,
-    ),
-    actions: [
-      GestureDetector(
-        onTap: () {
-          // authMethods.signOut();
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => Authenticate(),
-          //   ),
-          // );
-          Get.offAll(() => OnBoarding());
-        },
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Icon(Icons.logout),
-        ),
-      ),
-    ],
-  );
 }
 
 class ComplaintPageBody extends StatefulWidget {
@@ -119,25 +86,35 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
 
     if (ImageUrl != null && ImageUrl!.isNotEmpty) {
       var chatroomId = firebaseHelper.getChatroomId(
-        userEmail1: Constants.myEmail,
-        userEmail2: "localauthority@gmail.com",
-        val: val
-      );
-
-      // dev.log("Done CreateChatroomAndStartConversation");
-      Map<String, dynamic> chatroomMap = {
-        "users": Constants.myEmail,
-        "authority": "localauthority@gmail.com",
-        "chatroomId": chatroomId,
-        "title": _titleController.text,
-        "location": _locationController.text,
-        "dueDate": DateTime.now().add(const Duration(days: 60)),
-      };
-      firebaseHelper.createChatRooms(
           userEmail1: Constants.myEmail,
           userEmail2: "localauthority@gmail.com",
+          val: val);
+
+      // dev.log("Done CreateChatroomAndStartConversation");
+      // Map<String, dynamic> chatroomMap = {
+      //   "users": Constants.myEmail,
+      //   "authority": "localauthority@gmail.com",
+      //   "chatroomId": chatroomId,
+      //   "title": _titleController.text,
+      //   "location": _locationController.text,
+      //   "completed": false,
+      //   "dueDate": DateTime.now().add(const Duration(days: 60)),
+      // };
+
+      var chatroomMap = ChatroomModal(
+          users: Constants.myEmail,
+          authority: "higherauthority@gmail.com", // todo change
           chatroomId: chatroomId,
-          chatroomMap: chatroomMap);
+          title: _titleController.text,
+          location: _locationController.text,
+          completed: false,
+          dueDate: DateTime.now().add(const Duration(days: 60)));
+
+      firebaseHelper.createChatRooms(
+          userEmail1: Constants.myEmail,
+          userEmail2: "higherauthority@gmail.com", // todo change
+          chatroomId: chatroomId,
+          chatroomMap: chatroomMap.toJson());
 
       firebaseHelper.setConversationMessages(
           chatroomId: chatroomId,
@@ -148,7 +125,8 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                   time: DateTime.now().millisecondsSinceEpoch)
               .toJson());
 
-      Get.to(() => ChatScreen(chatRoomId: chatroomId));
+      Get.to(() =>
+          ChatScreen(chatroomId: chatroomId, userEmail: Constants.myEmail));
     } else {
       // Todo
       Get.snackbar("Unable to Proceed", "Image not Uploaded");

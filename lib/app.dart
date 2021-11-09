@@ -27,12 +27,13 @@ class OurApp extends StatelessWidget {
         theme: Themes().lightTheme,
         // Todo navigate to which home page (user or gov)?
 
-        home: firebaseHelper.auth.currentUser != null
-            ? HomePage()
-            : const OnBoarding(),
+        // home: firebaseHelper.auth.currentUser != null
+        //     ? GovConversationRooms(
+        //         authorityEmail: "localauthority@gmail.com") //HomePage()
+        //     : const OnBoarding(),
 
         // Todo update the path to home page back
-        // home: ConversationRooms(),
+        home: OnBoarding(),
 
         // getPages: [
         //   GetPage(name: '/on_boarding', page: () => const OnBoarding()),

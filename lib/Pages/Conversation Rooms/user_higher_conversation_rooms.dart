@@ -5,12 +5,14 @@ import 'package:get/get.dart';
 import 'package:sadak/Config/constants.dart';
 import 'package:sadak/Config/text_styles.dart';
 import 'package:sadak/Modal/users.dart';
-import 'package:sadak/Pages/Chat%20Screen/Widgets/chat_tile.dart';
+import 'package:sadak/Pages/Chat%20Screen/Widgets/tiles.dart';
 import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
 import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'dart:developer' as dev;
+
+import 'Widgets/appbar_user_higher_conversation_rooms.dart';
 
 const String _CHATROOMID = "chatroomId";
 
@@ -19,39 +21,52 @@ class UserHigherConversationRooms extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-        body: UserHigherConversationRoomsBody(),
-        backgroundColor: Colors.blueGrey,
-        appBar: userHigherConversationRoomsAppBar(context));
-  }
-}
+    return DefaultTabController(
+      // Added
+      length: 2, // Added
+      initialIndex: 0,
+      child: CustomScaffold(
+          body: TabBarView(
+            children: [
+              UserHigherConversationRoomsBody(
+                  completed: false), //completed: false),
 
-AppBar userHigherConversationRoomsAppBar(BuildContext context) {
-  return AppBar(
-    elevation: 10,
-    title: Text("Chat Room"),
-    centerTitle: true,
-    brightness: Brightness.light,
-    backgroundColor: Colors.white,
-    actions: [
-      GestureDetector(
-        onTap: () {
-          // authMethods.signOut();
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => Authenticate(),
-          //   ),
-          // );
-          Get.offAll(() => OnBoarding());
-        },
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Icon(Icons.logout),
-        ),
-      ),
-    ],
-  );
+              UserHigherConversationRoomsBody(
+                  completed: true), //completed: true),
+              // GovConversationRoomsBody(
+              //     authorityEmail: authorityEmail, completed: false),
+              // GovConversationRoomsBody(
+              //     authorityEmail: authorityEmail, completed: true),
+              // Icon(Icons.directions_transit, size: 350),
+              // Icon(Icons.directions_car, size: 350),
+            ],
+          ),
+          backgroundColor: Colors.blueGrey,
+          appBar: userHigherConversationRoomsAppBar(
+            context,
+            tabBar: TabBar(
+              indicatorSize: TabBarIndicatorSize.label,
+              // indicatorColor: ,
+              isScrollable: false,
+              labelStyle: TextStyle(fontSize: 45.sp),
+              tabs: <Widget>[
+                Tab(
+                  child: Text(
+                    "Ongoing Complaints",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Tab(
+                  child: Text(
+                    "Completed Complaints",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+          )),
+    );
+  }
 }
 
 FloatingActionButton userHigherConversationRoomsFloatingActionButton(context) {
@@ -69,7 +84,9 @@ FloatingActionButton userHigherConversationRoomsFloatingActionButton(context) {
 }
 
 class UserHigherConversationRoomsBody extends StatefulWidget {
-  UserHigherConversationRoomsBody({Key? key}) : super(key: key);
+  UserHigherConversationRoomsBody({Key? key, required this.completed})
+      : super(key: key);
+  bool completed;
 
   @override
   State<UserHigherConversationRoomsBody> createState() =>
@@ -92,7 +109,7 @@ class _UserHigherConversationRoomsBodyState
     Constants.myEmail = firebaseHelper.auth.currentUser!.email!;
     // getUserInfo();
     chatRoomsStream = firebaseHelper.getChatRoomsHigherAuthority(
-        userEmail: Constants.myEmail);
+        userEmail: Constants.myEmail, completed: widget.completed);
     super.initState();
   }
 
@@ -139,7 +156,10 @@ class _UserHigherConversationRoomsBodyState
             //     "${snapshot.data!.docs.length}  \n\n\n${snapshot.data!.docs[index].data()[CHATROOM]}");
             return ChatRoomsTile(
                 username:
-                    snapshot.data!.docs[index].data()["authority"].toString(),
+                    snapshot.data!.docs[index].data()["authority"].toString() +
+                        "  " +
+                        snapshot.data!.docs[index].data()["title"].toString(),
+                userEmail: Constants.myEmail,
                 chatRoomId:
                     snapshot.data!.docs[index].data()[_CHATROOMID].toString());
           },

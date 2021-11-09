@@ -9,12 +9,16 @@ import 'package:sadak/Pages/Conversation%20Rooms/user_higher_conversation_rooms.
 import 'package:sadak/Pages/Conversation%20Rooms/user_local_conversation_rooms.dart';
 import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
+import 'dart:developer' as dev;
 
 const String _USERS = "users";
 const String _EMAIL = "email";
 
+const String _LOCALAUTHORITYMAIL = "localauthority@gmail.com";
+const String _HIGHERAUTHORITYMAIL = "higherauthority@gmail.com";
+
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -30,19 +34,41 @@ class _HomePageState extends State<HomePage> {
     // dev.log("email :: $email   \n\n password :: $password");
 
     // todo - Must have status 1 or 2
-    Map<String, dynamic>? x;
+    // Map<String, dynamic>? x;
 
-    firebaseHelper.firebaseFirestore
-        .collection(_USERS)
-        .where(_EMAIL, isEqualTo: Constants.myEmail)
-        .get()
-        .then((value) {
-      value.docs.isNotEmpty ? x = value.docs[0].data() : x = null;
-    });
+    // Get.offAll(() => GovConversationRooms(authorityEmail: _LOCALAUTHORITYMAIL));
 
-    if (x != null && x!['status'] != 0) {
-      Get.offAll(() => GovConversationRooms());
-    }
+    // todo Some error is here in off , to , off all etc ...
+    // Get.off(() => GovConversationRooms(authorityEmail: _LOCALAUTHORITYMAIL));
+
+    // firebaseHelper.firebaseFirestore
+    //     .collection(_USERS)
+    //     .where(_EMAIL, isEqualTo: Constants.myEmail)
+    //     .get()
+    //     .then((value) {
+    //   // setState(() {
+    //   value.docs.isNotEmpty ? x = value.docs[0].data()["status"] : x = null;
+    //   // });
+
+    //   dev.log(value.docs[0].data()["status"].toString());
+    // });
+
+    // dev.log("Here");
+
+    // if (x != null) {
+    //   dev.log(x!['status']);
+    //   if (x!['status'] != 0) {
+    //     if (x!['status'] == 1) {
+    //       Get.offAll(
+    //           () => GovConversationRooms(authorityEmail: _LOCALAUTHORITYMAIL));
+    //     } else {
+    //       Get.offAll(
+    //           () => GovConversationRooms(authorityEmail: _HIGHERAUTHORITYMAIL));
+    //     }
+    //   }
+    // }
+    // dev.log("Here");
+
     super.initState();
   }
 

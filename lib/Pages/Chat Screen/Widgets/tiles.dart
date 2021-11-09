@@ -5,17 +5,21 @@ import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
 
 class ChatRoomsTile extends StatelessWidget {
   const ChatRoomsTile(
-      {Key? key, required this.username, required this.chatRoomId})
+      {Key? key,
+      required this.username,
+      required this.userEmail,
+      required this.chatRoomId})
       : super(key: key);
 
   final String username;
+  final String userEmail;
   final String chatRoomId;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => ChatScreen(chatRoomId: chatRoomId));
+        Get.to(() => ChatScreen(chatroomId: chatRoomId, userEmail: userEmail));
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

@@ -5,12 +5,14 @@ import 'package:get/get.dart';
 import 'package:sadak/Config/constants.dart';
 import 'package:sadak/Config/text_styles.dart';
 import 'package:sadak/Modal/users.dart';
-import 'package:sadak/Pages/Chat%20Screen/Widgets/chat_tile.dart';
+import 'package:sadak/Pages/Chat%20Screen/Widgets/tiles.dart';
 import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
 import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'dart:developer' as dev;
+
+import 'Widgets/appbar_user_local_conversation_rooms.dart';
 
 const String _CHATROOMID = "chatroomId";
 
@@ -19,39 +21,50 @@ class UserConversationRooms extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-        body: UserConversationRoomsBody(),
-        backgroundColor: Colors.blueGrey,
-        appBar: userConversationRoomsAppBar(context));
-  }
-}
+    return DefaultTabController(
+      // Added
+      length: 2, // Added
+      initialIndex: 0,
+      child: CustomScaffold(
+          body: TabBarView(
+            children: [
+              UserConversationRoomsBody(completed: false),
 
-AppBar userConversationRoomsAppBar(BuildContext context) {
-  return AppBar(
-    elevation: 10,
-    title: Text("Chat Room"),
-    centerTitle: true,
-    brightness: Brightness.light,
-    backgroundColor: Colors.white,
-    actions: [
-      GestureDetector(
-        onTap: () {
-          // authMethods.signOut();
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => Authenticate(),
-          //   ),
-          // );
-          Get.offAll(() => OnBoarding());
-        },
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Icon(Icons.logout),
-        ),
-      ),
-    ],
-  );
+              UserConversationRoomsBody(completed: true),
+              // GovConversationRoomsBody(
+              //     authorityEmail: authorityEmail, completed: false),
+              // GovConversationRoomsBody(
+              //     authorityEmail: authorityEmail, completed: true),
+              // Icon(Icons.directions_transit, size: 350),
+              // Icon(Icons.directions_car, size: 350),
+            ],
+          ),
+          backgroundColor: Colors.blueGrey,
+          appBar: userConversationRoomsAppBar(
+            context,
+            tabBar: TabBar(
+              indicatorSize: TabBarIndicatorSize.label,
+              // indicatorColor: ,
+              isScrollable: false,
+              labelStyle: TextStyle(fontSize: 45.sp),
+              tabs: <Widget>[
+                Tab(
+                  child: Text(
+                    "Ongoing Complaints",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Tab(
+                  child: Text(
+                    "Completed Complaints",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+          )),
+    );
+  }
 }
 
 FloatingActionButton userConversationRoomsFloatingActionButton(context) {
@@ -69,7 +82,9 @@ FloatingActionButton userConversationRoomsFloatingActionButton(context) {
 }
 
 class UserConversationRoomsBody extends StatefulWidget {
-  UserConversationRoomsBody({Key? key}) : super(key: key);
+  UserConversationRoomsBody({Key? key, required this.completed})
+      : super(key: key);
+  bool completed;
 
   @override
   State<UserConversationRoomsBody> createState() =>
@@ -90,8 +105,8 @@ class _UserConversationRoomsBodyState extends State<UserConversationRoomsBody> {
   void initState() {
     Constants.myEmail = firebaseHelper.auth.currentUser!.email!;
     // getUserInfo();
-    chatRoomsStream =
-        firebaseHelper.getChatRoomsLocalAuthority(userEmail: Constants.myEmail);
+    chatRoomsStream = firebaseHelper.getChatRoomsLocalAuthority(
+        userEmail: Constants.myEmail, completed: widget.completed);
     super.initState();
   }
 
@@ -127,7 +142,13 @@ class _UserConversationRoomsBodyState extends State<UserConversationRoomsBody> {
       builder: (context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.data == null) {
-          return Center(child: Text("Nothing to show"));
+          return Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Center(
+              child: Text("Nothing to show"),
+            ),
+          );
         }
 
         return ListView.builder(
@@ -138,7 +159,10 @@ class _UserConversationRoomsBodyState extends State<UserConversationRoomsBody> {
             //     "${snapshot.data!.docs.length}  \n\n\n${snapshot.data!.docs[index].data()[CHATROOM]}");
             return ChatRoomsTile(
                 username:
-                    snapshot.data!.docs[index].data()["authority"].toString(),
+                    snapshot.data!.docs[index].data()["authority"].toString() +
+                        "  " +
+                        snapshot.data!.docs[index].data()["title"].toString(),
+                userEmail: Constants.myEmail,
                 chatRoomId:
                     snapshot.data!.docs[index].data()[_CHATROOMID].toString());
           },
