@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:sadak/Pages/Signup%20Page/signup.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'package:sadak/Config/palette.dart';
@@ -189,11 +190,17 @@ class LoginGovBody extends StatelessWidget {
                           style: small1(),
                         ),
                         // Todo Sign up linking
-                        const Text(
-                          " Sign up",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
+
+                        GestureDetector(
+                          onTap: () {
+                            Get.off(() => SignupPage());
+                          },
+                          child: const Text(
+                            " Sign up",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                            ),
                           ),
                         ),
                       ],

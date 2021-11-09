@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:sadak/Config/palette.dart';
+import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'package:sadak/Config/text_styles.dart';
@@ -279,11 +280,17 @@ class SignupBody extends StatelessWidget {
                   style: small1(),
                 ),
                 // Todo Sign up linking
-                const Text(
-                  " Login",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
+
+                GestureDetector(
+                  onTap: () {
+                    Get.off(() => OnBoarding());
+                  },
+                  child: Text(
+                    " Login",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ],
