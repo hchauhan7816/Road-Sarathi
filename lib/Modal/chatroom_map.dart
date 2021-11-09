@@ -28,7 +28,7 @@ class ChatroomModal with ChangeNotifier {
       title: parsedJson['title'] ?? '',
       location: parsedJson['location'] ?? '',
       completed: parsedJson['completed'] ?? '',
-      dueDate: parsedJson['dueDate'] ?? '',
+      dueDate: parsedJson['dueDate'].toDate() ?? '',
     );
   }
 

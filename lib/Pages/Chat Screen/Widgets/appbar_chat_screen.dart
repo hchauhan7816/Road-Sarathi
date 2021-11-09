@@ -30,7 +30,7 @@ AppBar chatScreenAppBar(BuildContext context,
               child: MaterialButton(
                 color: Colors.amber,
                 onPressed: () {
-                  firebaseHelper.completedComplaint(chatroomId: chatroomId);
+                  firebaseHelper.setCompleteComplaint(chatroomId: chatroomId);
                 },
                 child: Text("Completed"),
               ),

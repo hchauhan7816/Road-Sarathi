@@ -13,26 +13,14 @@ import 'Pages/Signup Page/signup.dart';
 import 'Services/Controllers/auth_controller.dart';
 import 'dart:developer' as dev;
 
-class OurApp extends StatefulWidget {
+class OurApp extends StatelessWidget {
   OurApp({Key? key}) : super(key: key);
 
   static const String _USERS = "users";
   static const String _EMAIL = "email";
 
-  @override
-  State<OurApp> createState() => _OurAppState();
-}
-
-class _OurAppState extends State<OurApp> {
   FirebaseHelper firebaseHelper = Get.find<FirebaseHelper>();
   bool isGovern = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    Constants.myEmail = firebaseHelper.auth.currentUser!.email!;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +46,8 @@ class _OurAppState extends State<OurApp> {
 
         // Todo update the path to home page back
         // home: OnBoarding(),
-        home: HomePage(),
+        home:
+            firebaseHelper.auth.currentUser != null ? HomePage() : OnBoarding(),
 
         // getPages: [
         //   GetPage(name: '/on_boarding', page: () => const OnBoarding()),

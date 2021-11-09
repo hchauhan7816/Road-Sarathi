@@ -119,7 +119,7 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
           chatroomId: widget.chatroomId,
           messageMap: ModalChatMessages(
                   message: messageController.text,
-                  sendby: userEmail, //Constants.myEmail, // userEmail,
+                  sendBy: userEmail, //Constants.myEmail, // userEmail,
                   text: true,
                   time: DateTime.now().millisecondsSinceEpoch)
               .toJson());

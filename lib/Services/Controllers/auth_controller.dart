@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:sadak/Config/constants.dart';
+import 'package:sadak/Modal/chat_messages.dart';
+import 'package:sadak/Modal/chatroom_map.dart';
 import 'package:sadak/Modal/users.dart';
 import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
 import 'package:sadak/Pages/Conversation%20Rooms/conversation_rooms.dart';
@@ -16,6 +18,7 @@ class FirebaseHelper extends GetxController {
   static const String _COMPLETED = "completed";
   static const String _CHATS = "chats";
   static const String _TIME = "time";
+  static const String _TEXT = "text";
   static const String _CHATROOMID = "chatroomId";
   static const String _AUTHORITY = "authority";
   static const String _LOCALAUTHORITY = "localauthority";
@@ -222,16 +225,28 @@ class FirebaseHelper extends GetxController {
         .snapshots();
   }
 
+  getChatroomId(
+      {required String userEmail1,
+      required String userEmail2,
+      required int val}) {
+    String temp;
+    // dev.log("$userEmail1 \n\n\n $userEmail2");
+    temp =
+        "${userEmail1.toLowerCase()}_${userEmail2.toLowerCase()}_${val.toString()}";
+
+    // dev.log("${userEmail1.toLowerCase().codeUnitAt(0)}");
+    // dev.log("${userEmail2.toLowerCase().codeUnitAt(0)}");
+
+    return temp;
+  }
+
   createChatRooms(
       {required String userEmail1,
       required String userEmail2,
       required chatroomMap,
       required String chatroomId}) {
     // dev.log("Here createChatRooms");
-    FirebaseFirestore.instance
-        .collection(_CHATROOM)
-        .doc(chatroomId)
-        .set(chatroomMap);
+    firebaseFirestore.collection(_CHATROOM).doc(chatroomId).set(chatroomMap);
     // dev.log("Done Here createChatRooms");
   }
 
@@ -251,19 +266,77 @@ class FirebaseHelper extends GetxController {
   //   return userList;
   // }
 
-  getChatroomId(
-      {required String userEmail1,
-      required String userEmail2,
-      required int val}) {
-    String temp;
-    // dev.log("$userEmail1 \n\n\n $userEmail2");
-    temp =
-        "${userEmail1.toLowerCase()}_${userEmail2.toLowerCase()}_${val.toString()}";
+  getAllChatRooms() async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await firebaseFirestore.collection(_CHATROOM).get();
 
-    // dev.log("${userEmail1.toLowerCase().codeUnitAt(0)}");
-    // dev.log("${userEmail2.toLowerCase().codeUnitAt(0)}");
+    // List <ChatroomModal> chatroomList;
 
-    return temp;
+    var chatroomList = querySnapshot.docs
+        .map((e) => ChatroomModal.fromJson(e.data()))
+        .toList();
+
+    // querySnapshot.docs.map((e) {
+    //   dev.log(e.data().toString());
+    //   ChatroomModal.fromJson(e.data());
+    // }).toList();
+
+    int val = DateTime.now().millisecondsSinceEpoch;
+
+    for (int i = 0; i < chatroomList.length; i++) {
+      if (chatroomList[i].authority == _LOCALAUTHORITYMAIL &&
+          chatroomList[i].completed == false &&
+          chatroomList[i].dueDate.isBefore(DateTime.now())) {
+        dev.log(chatroomList[i].toString());
+        setCompleteComplaint(chatroomId: chatroomList[i].chatroomId);
+        var chatroomId = getChatroomId(
+            userEmail1: chatroomList[i].users,
+            userEmail2: _HIGHERAUTHORITYMAIL,
+            val: val);
+
+        var chatroomMap = ChatroomModal(
+            users: chatroomList[i].users,
+            authority: _HIGHERAUTHORITYMAIL,
+            chatroomId: chatroomId,
+            title: chatroomList[i].title,
+            location: chatroomList[i].location,
+            completed: false,
+            dueDate: DateTime.now().add(const Duration(days: 120)));
+
+        createChatRooms(
+            userEmail1: chatroomList[i].users,
+            userEmail2: _HIGHERAUTHORITYMAIL,
+            chatroomId: chatroomId,
+            chatroomMap: chatroomMap.toJson());
+
+        QuerySnapshot<Map<String, dynamic>> chatData = await FirebaseFirestore
+            .instance
+            .collection(_CHATROOM)
+            .doc(chatroomList[i].chatroomId)
+            .collection(_CHATS)
+            .orderBy(_TIME)
+            .get();
+
+        var chatDataList = chatData.docs
+            .map((e) => ModalChatMessages.fromJson(e.data()))
+            .toList();
+
+        for (int j = 0; j < chatDataList.length; j++) {
+          dev.log(chatDataList[j].toJson().toString());
+          if (chatDataList[j].text == false) {
+            var tempInstance = ModalChatMessages(
+                message: chatDataList[j].message.toString(),
+                sendBy: chatDataList[j].sendBy.toString(),
+                text: chatDataList[j].text,
+                time: chatDataList[j].time);
+
+            dev.log(tempInstance.toJson().toString());
+            setConversationMessages(
+                chatroomId: chatroomId, messageMap: tempInstance.toJson());
+          }
+        }
+      }
+    }
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getAuthorityChatRooms(
@@ -303,7 +376,7 @@ class FirebaseHelper extends GetxController {
         .snapshots();
   }
 
-  completedComplaint({required chatroomId}) async {
+  setCompleteComplaint({required chatroomId}) async {
     var collection = FirebaseFirestore.instance.collection(_CHATROOM);
     dev.log(chatroomId);
     try {

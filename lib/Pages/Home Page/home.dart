@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
     });
 
     if (x != null) {
-      dev.log(x.toString());
+      dev.log(x.toString() + "   HEREEE");
       if (x != 0) {
         if (x == 1) {
           Get.offAll(
@@ -63,6 +63,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  checkAllComplaints() {
+    firebaseHelper.getAllChatRooms();
+  }
+
   @override
   void initState() {
     Constants.myEmail = firebaseHelper.auth.currentUser!.email!;
@@ -72,6 +76,7 @@ class _HomePageState extends State<HomePage> {
     // todo - Must have status 1 or 2
 
     navigateUser();
+    checkAllComplaints();
     // Map<String, dynamic>? x;
 
     // Get.offAll(() => GovConversationRooms(authorityEmail: _LOCALAUTHORITYMAIL));

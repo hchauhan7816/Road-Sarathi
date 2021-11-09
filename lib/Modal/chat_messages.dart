@@ -2,22 +2,22 @@ import 'package:flutter/foundation.dart';
 
 class ModalChatMessages with ChangeNotifier {
   String message;
-  String sendby;
+  String sendBy;
   bool text;
   int time;
 
   // Default Values
   ModalChatMessages({
-    this.message = '',
-    this.sendby = '',
-    this.text = false,
-    this.time = 0,
+    required this.message,
+    required this.sendBy,
+    required this.text,
+    required this.time,
   });
 
   factory ModalChatMessages.fromJson(Map<String, dynamic> parsedJson) {
     return ModalChatMessages(
       message: parsedJson['message'] ?? '',
-      sendby: parsedJson['sendby'] ?? '',
+      sendBy: parsedJson['sendBy'] ?? '',
       text: parsedJson['text'] ?? '',
       time: parsedJson['time'] ?? '',
     );
@@ -25,7 +25,7 @@ class ModalChatMessages with ChangeNotifier {
 
   Map<String, dynamic> toJson() => {
         "message": message,
-        "sendBy": sendby,
+        "sendBy": sendBy,
         "text": text,
         "time": time,
       };

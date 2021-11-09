@@ -103,7 +103,8 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
 
       var chatroomMap = ChatroomModal(
           users: Constants.myEmail,
-          authority: "higherauthority@gmail.com", // todo change
+          authority:
+              "localauthority@gmail.com", // saved place dont delete this comment
           chatroomId: chatroomId,
           title: _titleController.text,
           location: _locationController.text,
@@ -112,7 +113,8 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
 
       firebaseHelper.createChatRooms(
           userEmail1: Constants.myEmail,
-          userEmail2: "higherauthority@gmail.com", // todo change
+          userEmail2:
+              "localauthority@gmail.com", // saved place dont delete this comment
           chatroomId: chatroomId,
           chatroomMap: chatroomMap.toJson());
 
@@ -120,7 +122,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
           chatroomId: chatroomId,
           messageMap: ModalChatMessages(
                   message: ImageUrl!,
-                  sendby: Constants.myEmail,
+                  sendBy: Constants.myEmail,
                   text: false,
                   time: DateTime.now().millisecondsSinceEpoch)
               .toJson());
