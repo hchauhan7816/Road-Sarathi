@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:sadak/Pages/Login%20Signup%20Page/login.dart';
-import 'package:sadak/Pages/Login%20Signup%20Page/login_gov.dart';
+import 'package:sadak/Pages/Login%20Pages/login.dart';
+import 'package:sadak/Pages/Login%20Pages/login_gov.dart';
 import 'package:sadak/Pages/Signup%20Page/signup.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'package:sadak/Config/palette.dart';

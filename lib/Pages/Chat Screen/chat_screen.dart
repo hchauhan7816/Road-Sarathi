@@ -204,13 +204,13 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
               ),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.emoji_emotions_outlined,
-                    color: Colors.grey[500],
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
+                  // Icon(
+                  //   Icons.emoji_emotions_outlined,
+                  //   color: Colors.grey[500],
+                  // ),
+                  // SizedBox(
+                  //   width: 10,
+                  // ),
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(

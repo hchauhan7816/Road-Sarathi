@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sadak/Config/constants.dart';
+import 'package:sadak/Config/palette.dart';
 import 'package:sadak/Modal/chat_messages.dart';
 import 'package:sadak/Modal/chatroom_map.dart';
 import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
@@ -22,7 +24,9 @@ class ComplaintPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        body: ComplaintPageBody(), appBar: complaintPageAppBar(context));
+        backgroundColor: Colors.blueGrey,
+        body: ComplaintPageBody(),
+        appBar: complaintPageAppBar(context));
   }
 }
 
@@ -61,8 +65,6 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
   }
 
   Future uploadImage() async {
-    // Todo wait till is uploading
-
     setState(() {
       isUploading = true;
     });
@@ -81,7 +83,6 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
   }
 
   void sendDetails() {
-    // dev.log("Here  ${ImageUrl}");
     int val = DateTime.now().millisecondsSinceEpoch;
 
     if (ImageUrl != null && ImageUrl!.isNotEmpty) {
@@ -89,17 +90,6 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
           userEmail1: Constants.myEmail,
           userEmail2: "localauthority@gmail.com",
           val: val);
-
-      // dev.log("Done CreateChatroomAndStartConversation");
-      // Map<String, dynamic> chatroomMap = {
-      //   "users": Constants.myEmail,
-      //   "authority": "localauthority@gmail.com",
-      //   "chatroomId": chatroomId,
-      //   "title": _titleController.text,
-      //   "location": _locationController.text,
-      //   "completed": false,
-      //   "dueDate": DateTime.now().add(const Duration(days: 60)),
-      // };
 
       var chatroomMap = ChatroomModal(
           users: Constants.myEmail,
@@ -150,13 +140,14 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
         // isLastItem ? _pickImage() : _viewOrDeleteImage(imageFile);
       },
       child: Container(
-        width: 100,
+        // constraints: BoxConstraints(maxWidth: 10),
+        //   width: 100,
         child: Card(
           shape: RoundedRectangleBorder(
             side: BorderSide.none,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(15),
           ),
-          color: Colors.amber,
+          color: Palette.orange,
           child: isLastItem
               ? Icon(Icons.camera_alt,
                   size: 40,
@@ -167,7 +158,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                   borderRadius: BorderRadius.circular(12),
                   child: Image.file(
                     imageFile,
-                    fit: BoxFit.cover,
+                    // fit: BoxFit.cover,
                   ),
                 ),
         ),
@@ -177,241 +168,288 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: Text('Register Complaint'),
-      ),
-      body: Stack(
-        children: <Widget>[
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 40),
-              child: Column(
+    return isUploading
+        ? Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  color: Colors.amber,
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                Text(
+                  "Uploading Image",
+                  style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white70),
+                ),
+              ],
+            ),
+          )
+        : ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+            child: //Conversation(user: widget.user),
+                Container(
+              padding: EdgeInsets.only(top: 20),
+              color: Colors.white,
+              child: Stack(
                 children: <Widget>[
-                  Material(
-                    // color: isDarkMode(context) ? Colors.black12 : Colors.white,
-                    type: MaterialType.canvas,
-                    elevation: 2,
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 16.0, left: 16.0, right: 16.0),
-                          child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Title',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextField(
-                            controller: _titleController,
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              hintText: 'Start typing',
-                              isDense: true,
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide.none,
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide.none,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: Material(
-                      // color:
-                      //     isDarkMode(context) ? Colors.black12 : Colors.white,
-                      elevation: 2,
+                  SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 40),
                       child: Column(
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(
-                                left: 16.0, right: 16, top: 16),
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'Location',
-                                style: TextStyle(fontSize: 20),
-                              ),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Title",
+                                  style: TextStyle(
+                                      fontSize: 70.sp,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black87),
+                                ),
+                                SizedBox(
+                                  height: 15.h,
+                                ),
+                                TextField(
+                                  autocorrect: true,
+                                  controller: _titleController,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration(
+                                    hintText: 'Enter Title',
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 40.h, horizontal: 30.w),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 30.h,
+                                )
+                              ],
                             ),
                           ),
+                          SizedBox(
+                            height: 25,
+                          ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              keyboardType: TextInputType.multiline,
-                              controller: _locationController,
-                              textInputAction: TextInputAction.next,
-                              decoration: InputDecoration(
-                                isDense: true,
-                                hintText: 'Start typing',
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide.none,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Location",
+                                  style: TextStyle(
+                                      fontSize: 70.sp,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black87),
                                 ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide.none,
+                                SizedBox(
+                                  height: 15.h,
                                 ),
-                              ),
+                                TextField(
+                                  autocorrect: true,
+                                  controller: _locationController,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration(
+                                    hintText: 'Enter Location',
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 40.h, horizontal: 30.w),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 30.h,
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 50,
+                          ),
+                          Material(
+                            color: Colors.white,
+                            // color: isDarkMode(context) ? Colors.black12 : Colors.white,
+                            // elevation: 2,
+                            child: ListView(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              children: <Widget>[
+                                // ListTile(
+                                //   dense: true,
+                                //   title: Text(
+                                //     'Filters',
+                                //     style: TextStyle(fontSize: 20),
+                                //   ),
+                                // trailing: Text(_filters?.isEmpty ?? true
+                                //     ? 'Set Filters'
+                                //     : 'Edit Filters'),
+                                // onTap: () async {
+                                //   _filters = await showModalBottomSheet(
+                                //     isScrollControlled: true,
+                                //     context: context,
+                                //     shape: RoundedRectangleBorder(
+                                //       borderRadius: BorderRadius.vertical(
+                                //         top: Radius.circular(20),
+                                //       ),
+                                //     ),
+                                //     builder: (context) {
+                                //       return FiltersScreen(
+                                //           filtersValue: _filters ?? {});
+                                //     },
+                                //   );
+                                //   if (_filters == null) _filters = Map();
+                                //   setState(() {});
+                                //   print('${_filters.toString()}'.tr());
+                                // },
+                                // ),
+                                // ListTile(
+                                //   title: Text(
+                                //     'Location',
+                                //     style: TextStyle(fontSize: 20),
+                                //   ),
+                                //   // trailing: Container(
+                                //   width: MediaQuery.of(context).size.width / 2,
+                                //   child: Text(
+                                //     _placeDetail != null
+                                //         ? '${_placeDetail!.result.formattedAddress}'
+                                //             .tr()
+                                //         : 'Select Place'.tr(),
+                                //     textAlign: TextAlign.end,
+                                //   ),
+                                // ),
+                                // onTap: () async {
+                                //   Prediction? p = await PlacesAutocomplete.show(
+                                //     context: context,
+                                //     apiKey: GOOGLE_API_KEY,
+                                //     mode: Mode.fullscreen,
+                                //     language: 'en',
+                                //   );
+                                //   if (p != null)
+                                //     _placeDetail = await _places
+                                //         .getDetailsByPlaceId(p.placeId ?? '');
+                                //   setState(() {});
+                                // },
+                                // ),
+
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 16),
+                                  child: Text(
+                                    "Add Photos",
+                                    style: TextStyle(
+                                        fontSize: 70.sp,
+                                        fontWeight: FontWeight.w300,
+                                        color: Colors.black87),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal:
+                                          MediaQuery.of(context).size.width /
+                                              3.5),
+                                  child: Container(
+                                      //     // color: Colors.pinkAccent,
+                                      height: 150,
+                                      width: 150,
+                                      //     // child: ListView.builder(
+                                      //     shrinkWrap: true,
+                                      //     itemCount: _images.length,
+                                      //     scrollDirection: Axis.horizontal,
+                                      //     itemBuilder: (context, index) {
+                                      // File? image =_images[index];
+                                      child: _imageBuilder(
+                                          imageFile) //;     return
+                                      //     }),
+                                      ),
+                                ),
+                                // Padding(
+                                //   padding: const EdgeInsets.only(bottom: 8.0),
+                                //   child: GestureDetector(
+                                //     child: SizedBox(
+                                //       height: 100,
+                                //       child: Container(
+                                //           color: Colors.amber,
+                                //           child:
+                                //               Center(child: Icon(Icons.add_a_photo))),
+                                //     ),
+                                //     onTap: () {
+                                //       getImage();
+                                //     },
+                                //   ),
+                                // ),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  Material(
-                    // color: isDarkMode(context) ? Colors.black12 : Colors.white,
-                    elevation: 2,
-                    child: ListView(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      children: <Widget>[
-                        // ListTile(
-                        //   dense: true,
-                        //   title: Text(
-                        //     'Filters',
-                        //     style: TextStyle(fontSize: 20),
-                        //   ),
-                        // trailing: Text(_filters?.isEmpty ?? true
-                        //     ? 'Set Filters'
-                        //     : 'Edit Filters'),
-                        // onTap: () async {
-                        //   _filters = await showModalBottomSheet(
-                        //     isScrollControlled: true,
-                        //     context: context,
-                        //     shape: RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.vertical(
-                        //         top: Radius.circular(20),
-                        //       ),
-                        //     ),
-                        //     builder: (context) {
-                        //       return FiltersScreen(
-                        //           filtersValue: _filters ?? {});
-                        //     },
-                        //   );
-                        //   if (_filters == null) _filters = Map();
-                        //   setState(() {});
-                        //   print('${_filters.toString()}'.tr());
-                        // },
-                        // ),
-                        // ListTile(
-                        //   title: Text(
-                        //     'Location',
-                        //     style: TextStyle(fontSize: 20),
-                        //   ),
-                        //   // trailing: Container(
-                        //   width: MediaQuery.of(context).size.width / 2,
-                        //   child: Text(
-                        //     _placeDetail != null
-                        //         ? '${_placeDetail!.result.formattedAddress}'
-                        //             .tr()
-                        //         : 'Select Place'.tr(),
-                        //     textAlign: TextAlign.end,
-                        //   ),
-                        // ),
-                        // onTap: () async {
-                        //   Prediction? p = await PlacesAutocomplete.show(
-                        //     context: context,
-                        //     apiKey: GOOGLE_API_KEY,
-                        //     mode: Mode.fullscreen,
-                        //     language: 'en',
-                        //   );
-                        //   if (p != null)
-                        //     _placeDetail = await _places
-                        //         .getDetailsByPlaceId(p.placeId ?? '');
-                        //   setState(() {});
-                        // },
-                        // ),
-
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            'Add Photos',
-                            style: TextStyle(fontSize: 25),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 24),
+                          primary: Palette.orange,
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide.none,
+                            borderRadius: BorderRadius.circular(6),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: SizedBox(
-                              height: 100,
-                              // child: ListView.builder(
-                              //     shrinkWrap: true,
-                              //     itemCount: _images.length,
-                              //     scrollDirection: Axis.horizontal,
-                              //     itemBuilder: (context, index) {
-                              // File? image =_images[index];
-                              child: _imageBuilder(imageFile) //;     return
-                              //     }),
-                              ),
+                        child: Text(
+                          'Post Listing',
+                          style: TextStyle(
+                              // color: isDarkMode(context)
+                              //     ? Colors.black
+                              color: Colors.white,
+                              fontSize: 20),
                         ),
-                        // Padding(
-                        //   padding: const EdgeInsets.only(bottom: 8.0),
-                        //   child: GestureDetector(
-                        //     child: SizedBox(
-                        //       height: 100,
-                        //       child: Container(
-                        //           color: Colors.amber,
-                        //           child:
-                        //               Center(child: Icon(Icons.add_a_photo))),
-                        //     ),
-                        //     onTap: () {
-                        //       getImage();
-                        //     },
-                        //   ),
-                        // ),
-                      ],
+                        onPressed: () {
+                          if (!isUploading) {
+                            sendDetails();
+                          }
+                        }, // => _postListing()),
+                      ),
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                  primary: Colors.amber,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide.none,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                ),
-                child: isUploading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
-                      )
-                    : Text(
-                        'Post Listing',
-                        style: TextStyle(
-                            // color: isDarkMode(context)
-                            //     ? Colors.black
-                            color: Colors.white,
-                            fontSize: 20),
-                      ),
-                onPressed: () {
-                  if (!isUploading) {
-                    sendDetails();
-                  }
-                }, // => _postListing()),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
+          );
   }
 }
