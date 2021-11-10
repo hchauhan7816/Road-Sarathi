@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:sadak/Config/text_styles.dart';
 import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
 import 'dart:developer' as dev;
@@ -10,11 +11,15 @@ class ChatRoomsTile extends StatelessWidget {
       {Key? key,
       required this.username,
       required this.userEmail,
+      required this.isWithHigher,
+      required this.completed,
       required this.title,
       required this.chatRoomId})
       : super(key: key);
 
   final String username;
+  final bool completed;
+  final bool isWithHigher;
   final String userEmail;
   final String title;
   final String chatRoomId;
@@ -23,7 +28,11 @@ class ChatRoomsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => ChatScreen(chatroomId: chatRoomId, userEmail: userEmail));
+        Get.to(() => ChatScreen(
+            isWithHigher: isWithHigher,
+            completed: completed,
+            chatroomId: chatRoomId,
+            userEmail: userEmail));
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -84,6 +93,7 @@ class ChatRoomsTile extends StatelessWidget {
 class MessageTile extends StatelessWidget {
   final String message;
   final bool isSendByMe;
+  final int time;
   final String otherUserEmail;
   final bool isText;
 
@@ -91,10 +101,15 @@ class MessageTile extends StatelessWidget {
       {required this.message,
       required this.isSendByMe,
       required this.isText,
+      required this.time,
       required this.otherUserEmail});
 
   @override
   Widget build(BuildContext context) {
+    DateTime convertedTime = DateTime.fromMillisecondsSinceEpoch(time);
+
+    String finalTime = DateFormat('dd/M/yyyy hh:mm a').format(convertedTime);
+
     return isText
         ? Container(
             margin: EdgeInsets.only(top: 15),
@@ -127,7 +142,7 @@ class MessageTile extends StatelessWidget {
                       padding:
                           EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                       constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.6),
+                          maxWidth: MediaQuery.of(context).size.width * 0.75),
                       decoration: BoxDecoration(
                           color: isSendByMe
                               ? Color(0xff7C7B9B)
@@ -147,6 +162,33 @@ class MessageTile extends StatelessWidget {
                     ),
                   ],
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Row(
+                    mainAxisAlignment: isSendByMe
+                        ? MainAxisAlignment.end
+                        : MainAxisAlignment.start,
+                    children: [
+                      if (!isSendByMe)
+                        SizedBox(
+                          width: 62,
+                        ),
+                      Icon(
+                        Icons.done_all,
+                        size: 20,
+                        color: Colors.blue[300], //MyTheme.bodyTextTime.color,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(finalTime,
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600]) //MyTheme.bodyTextTime,
+                          )
+                    ],
+                  ),
+                )
               ],
             ),
           )
@@ -211,6 +253,33 @@ class MessageTile extends StatelessWidget {
                         )),
                   ],
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Row(
+                    mainAxisAlignment: isSendByMe
+                        ? MainAxisAlignment.end
+                        : MainAxisAlignment.start,
+                    children: [
+                      if (!isSendByMe)
+                        SizedBox(
+                          width: 62,
+                        ),
+                      Icon(
+                        Icons.done_all,
+                        size: 20,
+                        color: Colors.blue[300], //MyTheme.bodyTextTime.color,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(finalTime,
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600]) //MyTheme.bodyTextTime,
+                          )
+                    ],
+                  ),
+                )
               ],
             ),
           );
@@ -218,14 +287,23 @@ class MessageTile extends StatelessWidget {
 }
 
 class HeadingTile extends StatelessWidget {
-  const HeadingTile({Key? key, required this.title, required this.location})
+  const HeadingTile(
+      {Key? key,
+      required this.title,
+      required this.location,
+      required this.dueDate})
       : super(key: key);
 
   final String title;
+  final DateTime dueDate;
   final String location;
 
   @override
   Widget build(BuildContext context) {
+    String finalTime = DateFormat.yMMMMd('en_US').format(dueDate);
+    // String finalTime = DateFormat('dd/M/yyyy').format(dueDate);
+    // String finalTime = Intl.DateTimeFormat('en-GB', { dateStyle: 'full', timeStyle: 'long' }).format(date)
+
     return Container(
       margin: EdgeInsets.only(top: 15),
       child: Column(
@@ -247,75 +325,74 @@ class HeadingTile extends StatelessWidget {
                     )),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    children: [
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          "Title : $title",
-                          style:
-                              TextStyle(color: Colors.grey[700], fontSize: 16),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "Title  :",
+                                style: TextStyle(
+                                    color: Colors.grey[700], fontSize: 16),
+                              ),
+                            ),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "Location  :",
+                                style: TextStyle(
+                                    color: Colors.grey[700], fontSize: 16),
+                              ),
+                            ),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "Due Date  :",
+                                style: TextStyle(
+                                    color: Colors.grey[700], fontSize: 16),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          "Location: $location",
-                          style:
-                              TextStyle(color: Colors.grey[700], fontSize: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "  $title",
+                                style: TextStyle(
+                                    color: Colors.grey[700], fontSize: 16),
+                              ),
+                            ),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "  $location",
+                                style: TextStyle(
+                                    color: Colors.grey[700], fontSize: 16),
+                              ),
+                            ),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "  ${finalTime}",
+                                style: TextStyle(
+                                    color: Colors.grey[700], fontSize: 16),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ],
-          ),
-        ],
-      ),
-    );
-
-    return Container(
-      padding: EdgeInsets.only(left: 8, right: 8),
-      width: MediaQuery.of(context).size.width,
-      alignment: Alignment.center,
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 8),
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(23),
-              ),
-              gradient: LinearGradient(
-                  colors: [const Color(0xff007EF4), const Color(0xff2A75BC)]),
-            ),
-            child: Text(
-              title,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 8),
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(23),
-              ),
-              gradient: LinearGradient(
-                  colors: [const Color(0xff007EF4), const Color(0xff2A75BC)]),
-            ),
-            child: Text(
-              location,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-              ),
-            ),
           ),
         ],
       ),

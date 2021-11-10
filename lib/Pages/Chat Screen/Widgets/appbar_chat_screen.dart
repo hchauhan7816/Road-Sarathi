@@ -5,7 +5,9 @@ import 'package:sadak/Config/text_styles.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 
 AppBar chatScreenAppBar(BuildContext context,
-    {required String userEmail, required String chatroomId}) {
+    {required String userEmail,
+    required String chatroomId,
+    required bool completed}) {
   const String _LOCALAUTHORITYMAIL = "localauthority@gmail.com";
   const String _HIGHERAUTHORITYMAIL = "higherauthority@gmail.com";
 
@@ -39,20 +41,28 @@ AppBar chatScreenAppBar(BuildContext context,
               //     firebaseHelper.setCompleteComplaint(chatroomId: chatroomId);
               //   },
 
-              child: Container(
-                height: 40,
-                width: 100,
-                constraints: BoxConstraints(maxWidth: 100),
-                alignment: Alignment.center,
-                child: Text(
-                  "Mark Done",
-                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                  textAlign: TextAlign.center,
-                ),
-                decoration: BoxDecoration(
-                  color: Palette.orange, //Colors.amber,
-                  borderRadius: BorderRadius.circular(30),
-                ),
+              child: GestureDetector(
+                onTap: () {
+                  if (!completed)
+                    firebaseHelper.setCompleteComplaint(chatroomId: chatroomId);
+                },
+                child: !completed
+                    ? Container(
+                        height: 40,
+                        width: 100,
+                        constraints: BoxConstraints(maxWidth: 100),
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Mark Done",
+                          style: TextStyle(fontSize: 16, color: Colors.black87),
+                          textAlign: TextAlign.center,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Palette.orange, //Colors.amber,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      )
+                    : Container(),
               ),
               // child: Text(
               //   "Completed",

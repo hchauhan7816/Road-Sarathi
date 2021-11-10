@@ -25,14 +25,16 @@ class UserConversationRooms extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       // Added
-      length: 2, // Added
+      length: 3, // Added
       initialIndex: 0,
       child: CustomScaffold(
           body: TabBarView(
             children: [
-              UserConversationRoomsBody(completed: false),
+              UserConversationRoomsBody(completed: false, isWithHigher: false),
 
-              UserConversationRoomsBody(completed: true),
+              UserConversationRoomsBody(completed: true, isWithHigher: false),
+              UserConversationRoomsBody(completed: true, isWithHigher: true),
+
               // GovConversationRoomsBody(
               //     authorityEmail: authorityEmail, completed: false),
               // GovConversationRoomsBody(
@@ -44,7 +46,7 @@ class UserConversationRooms extends StatelessWidget {
           backgroundColor: Colors.blueGrey,
           appBar: userConversationRoomsAppBar(
             context,
-            tabBar: conversationRoomsTabBar(),
+            tabBar: userLocalGovConversationRoomsTabBar(),
           )),
     );
   }
@@ -65,9 +67,11 @@ FloatingActionButton userConversationRoomsFloatingActionButton(context) {
 }
 
 class UserConversationRoomsBody extends StatefulWidget {
-  UserConversationRoomsBody({Key? key, required this.completed})
+  UserConversationRoomsBody(
+      {Key? key, required this.completed, required this.isWithHigher})
       : super(key: key);
   bool completed;
+  bool isWithHigher;
 
   @override
   State<UserConversationRoomsBody> createState() =>
@@ -89,7 +93,9 @@ class _UserConversationRoomsBodyState extends State<UserConversationRoomsBody> {
     Constants.myEmail = firebaseHelper.auth.currentUser!.email!;
     // getUserInfo();
     chatRoomsStream = firebaseHelper.getChatRoomsLocalAuthority(
-        userEmail: Constants.myEmail, completed: widget.completed);
+        userEmail: Constants.myEmail,
+        completed: widget.completed,
+        isWithHigher: widget.isWithHigher);
     super.initState();
   }
 
@@ -120,48 +126,55 @@ class _UserConversationRoomsBodyState extends State<UserConversationRoomsBody> {
   // }
 
   Widget chatRoomList() {
-    return StreamBuilder(
-      stream: chatRoomsStream,
-      builder: (context,
-          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-        if (!snapshot.hasData) {
-          return Container(
-            height: MediaQuery.of(context).size.height / 1.5,
-            child: Center(
-              child: Text(
-                "No Complaints",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+    return SingleChildScrollView(
+      physics: ScrollPhysics(),
+      child: StreamBuilder(
+        stream: chatRoomsStream,
+        builder: (context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (!snapshot.hasData) {
+            return Container(
+              height: MediaQuery.of(context).size.height / 1.5,
+              child: Center(
+                child: Text(
+                  "No Complaints",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+                ),
               ),
-            ),
-          );
-        } else if (snapshot.data!.docs.length == 0) {
-          return Container(
-            height: MediaQuery.of(context).size.height / 1.5,
-            child: Center(
-              child: Text(
-                "No Complaints",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+            );
+          } else if (snapshot.data!.docs.length == 0) {
+            return Container(
+              height: MediaQuery.of(context).size.height / 1.5,
+              child: Center(
+                child: Text(
+                  "No Complaints",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+                ),
               ),
-            ),
-          );
-        }
+            );
+          }
 
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: snapshot.data!.docs.length,
-          itemBuilder: (context, index) {
-            // dev.log(
-            //     "${snapshot.data!.docs.length}  \n\n\n${snapshot.data!.docs[index].data()[CHATROOM]}");
-            return ChatRoomsTile(
-                username:
-                    snapshot.data!.docs[index].data()["authority"].toString(),
-                userEmail: Constants.myEmail,
-                title: snapshot.data!.docs[index].data()["title"].toString(),
-                chatRoomId:
-                    snapshot.data!.docs[index].data()[_CHATROOMID].toString());
-          },
-        );
-      },
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              // dev.log(
+              //     "${snapshot.data!.docs.length}  \n\n\n${snapshot.data!.docs[index].data()[CHATROOM]}");
+              return ChatRoomsTile(
+                  completed: widget.completed,
+                  username:
+                      snapshot.data!.docs[index].data()["authority"].toString(),
+                  isWithHigher: widget.isWithHigher,
+                  userEmail: Constants.myEmail,
+                  title: snapshot.data!.docs[index].data()["title"].toString(),
+                  chatRoomId: snapshot.data!.docs[index]
+                      .data()[_CHATROOMID]
+                      .toString());
+            },
+          );
+        },
+      ),
     );
 
     // return Text("Hello");

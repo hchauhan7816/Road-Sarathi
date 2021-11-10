@@ -25,6 +25,7 @@ class FirebaseHelper extends GetxController {
   static const String _HIGHERAUTHORITY = "higherauthority";
   static const String _LOCALAUTHORITYMAIL = "localauthority@gmail.com";
   static const String _HIGHERAUTHORITYMAIL = "higherauthority@gmail.com";
+  static const String _ISWITHHIGHER = "isWithHigher";
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -289,6 +290,7 @@ class FirebaseHelper extends GetxController {
           chatroomList[i].dueDate.isBefore(DateTime.now())) {
         dev.log(chatroomList[i].toString());
         setCompleteComplaint(chatroomId: chatroomList[i].chatroomId);
+        setWithHigherAuthority(chatroomId: chatroomList[i].chatroomId);
         var chatroomId = getChatroomId(
             userEmail1: chatroomList[i].users,
             userEmail2: _HIGHERAUTHORITYMAIL,
@@ -299,6 +301,7 @@ class FirebaseHelper extends GetxController {
             authority: _HIGHERAUTHORITYMAIL,
             chatroomId: chatroomId,
             title: chatroomList[i].title,
+            isWithHigher: true,
             location: chatroomList[i].location,
             completed: false,
             dueDate: DateTime.now().add(const Duration(days: 120)));
@@ -349,12 +352,15 @@ class FirebaseHelper extends GetxController {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getChatRoomsLocalAuthority(
-      {required String userEmail, required bool completed}) {
+      {required String userEmail,
+      required bool completed,
+      required bool isWithHigher}) {
     return firebaseFirestore
         .collection(_CHATROOM)
         .where(_USERS, isEqualTo: userEmail)
         .where(_AUTHORITY, isEqualTo: _LOCALAUTHORITYMAIL)
         .where(_COMPLETED, isEqualTo: completed)
+        .where(_ISWITHHIGHER, isEqualTo: isWithHigher)
         .snapshots();
   }
 
@@ -381,6 +387,25 @@ class FirebaseHelper extends GetxController {
     dev.log(chatroomId);
     try {
       collection.doc(chatroomId).update({"completed": true});
+
+      Get.back();
+    } catch (e) {
+      Get.snackbar("Error", "Cannot perform task");
+    }
+
+    // QuerySnapshot<Map<String, dynamic>> querySnapshot = await firebaseFirestore
+    //     .collection(_USERS)
+    //     .where(_EMAIL, isGreaterThanOrEqualTo: val)
+    //     .where(_EMAIL, isLessThanOrEqualTo: val + 'z')
+    //     .where(_EMAIL, isNotEqualTo: Constants.myEmail)
+    //     .get();
+  }
+
+  setWithHigherAuthority({required chatroomId}) async {
+    var collection = FirebaseFirestore.instance.collection(_CHATROOM);
+    // dev.log(chatroomId);
+    try {
+      collection.doc(chatroomId).update({"isWithHigher": true});
 
       Get.back();
     } catch (e) {

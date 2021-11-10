@@ -7,7 +7,7 @@ AppBar userConversationRoomsAppBar(BuildContext context, {TabBar? tabBar}) {
   return AppBar(
     // elevation: 10,
     title: Text(
-      "Chat Rooms",
+      "Road Sarathi",
       style: appTitleStyle,
     ),
     centerTitle: true,

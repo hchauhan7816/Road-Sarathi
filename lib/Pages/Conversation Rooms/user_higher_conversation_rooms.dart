@@ -123,48 +123,55 @@ class _UserHigherConversationRoomsBodyState
   // }
 
   Widget chatRoomList() {
-    return StreamBuilder(
-      stream: chatRoomsStream,
-      builder: (context,
-          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-        if (snapshot.data == null) {
-          return Container(
-            height: MediaQuery.of(context).size.height / 1.5,
-            child: Center(
-              child: Text(
-                "No Complaints",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+    return SingleChildScrollView(
+      physics: ScrollPhysics(),
+      child: StreamBuilder(
+        stream: chatRoomsStream,
+        builder: (context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.data == null) {
+            return Container(
+              height: MediaQuery.of(context).size.height / 1.5,
+              child: Center(
+                child: Text(
+                  "No Complaints",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+                ),
               ),
-            ),
-          );
-        } else if (snapshot.data!.docs.length == 0) {
-          return Container(
-            height: MediaQuery.of(context).size.height / 1.5,
-            child: Center(
-              child: Text(
-                "No Complaints",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+            );
+          } else if (snapshot.data!.docs.length == 0) {
+            return Container(
+              height: MediaQuery.of(context).size.height / 1.5,
+              child: Center(
+                child: Text(
+                  "No Complaints",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+                ),
               ),
-            ),
-          );
-        }
+            );
+          }
 
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: snapshot.data!.docs.length,
-          itemBuilder: (context, index) {
-            // dev.log(
-            //     "${snapshot.data!.docs.length}  \n\n\n${snapshot.data!.docs[index].data()[CHATROOM]}");
-            return ChatRoomsTile(
-                username:
-                    snapshot.data!.docs[index].data()["authority"].toString(),
-                userEmail: Constants.myEmail,
-                title: snapshot.data!.docs[index].data()["title"].toString(),
-                chatRoomId:
-                    snapshot.data!.docs[index].data()[_CHATROOMID].toString());
-          },
-        );
-      },
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              // dev.log(
+              //     "${snapshot.data!.docs.length}  \n\n\n${snapshot.data!.docs[index].data()[CHATROOM]}");
+              return ChatRoomsTile(
+                  isWithHigher: false,
+                  completed: widget.completed,
+                  username:
+                      snapshot.data!.docs[index].data()["authority"].toString(),
+                  userEmail: Constants.myEmail,
+                  title: snapshot.data!.docs[index].data()["title"].toString(),
+                  chatRoomId: snapshot.data!.docs[index]
+                      .data()[_CHATROOMID]
+                      .toString());
+            },
+          );
+        },
+      ),
     );
 
     // return Text("Hello");

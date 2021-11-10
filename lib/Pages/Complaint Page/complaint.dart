@@ -106,6 +106,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
           authority:
               "localauthority@gmail.com", // saved place dont delete this comment
           chatroomId: chatroomId,
+          isWithHigher: false,
           title: _titleController.text,
           location: _locationController.text,
           completed: false,
@@ -127,8 +128,11 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                   time: DateTime.now().millisecondsSinceEpoch)
               .toJson());
 
-      Get.to(() =>
-          ChatScreen(chatroomId: chatroomId, userEmail: Constants.myEmail));
+      Get.off(() => ChatScreen(
+          isWithHigher: false,
+          completed: false,
+          chatroomId: chatroomId,
+          userEmail: Constants.myEmail));
     } else {
       // Todo
       Get.snackbar("Unable to Proceed", "Image not Uploaded");
