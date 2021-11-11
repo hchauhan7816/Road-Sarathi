@@ -182,6 +182,18 @@ class FirebaseHelper extends GetxController {
     return userList;
   }
 
+  Future<ModalUser> getUserWithEmail({required String email}) async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await firebaseFirestore
+        .collection(_USERS)
+        .where(_EMAIL, isEqualTo: email)
+        .get();
+
+    var userList =
+        querySnapshot.docs.map((e) => ModalUser.fromJson(e.data())).toList();
+
+    return userList[0];
+  }
+
   Future<List<ModalUser>> searchWithAlreadyConnectedUsers(
       {required String userEmail}) async {
     // Todo check only in connected Users
