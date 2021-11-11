@@ -185,6 +185,7 @@ class _HomePageState extends State<HomePage> {
                                   fontStyle: FontStyle.normal,
                                   fontWeight: FontWeight.w700,
                                   fontSize: 32,
+                                  height: 1.2,
                                 ),
                               ),
                               Text(
@@ -193,6 +194,7 @@ class _HomePageState extends State<HomePage> {
                                   fontStyle: FontStyle.normal,
                                   fontWeight: FontWeight.w400,
                                   fontSize: 32,
+                                  height: 1.2,
                                 ),
                               ),
                             ],
