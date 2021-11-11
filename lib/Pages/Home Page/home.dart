@@ -11,6 +11,9 @@ import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'dart:developer' as dev;
 
+import 'CategoryCard.dart';
+import 'navigatorbar.dart';
+
 const String _USERS = "users";
 const String _EMAIL = "email";
 
@@ -27,45 +30,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   FirebaseHelper firebaseHelper = Get.find<FirebaseHelper>();
   bool isLoading = false;
-
-  navigateUser() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    int? x;
-
-    await firebaseHelper.firebaseFirestore
-        .collection(_USERS)
-        .where(_EMAIL, isEqualTo: Constants.myEmail)
-        .get()
-        .then((value) {
-      value.docs.isNotEmpty ? x = value.docs[0].data()["status"] : x = null;
-
-      dev.log(value.docs[0].data()["status"].toString());
-    });
-
-    if (x != null) {
-      dev.log(x.toString() + "   HEREEE");
-      if (x != 0) {
-        if (x == 1) {
-          Get.offAll(
-              () => GovConversationRooms(authorityEmail: _LOCALAUTHORITYMAIL));
-        } else {
-          Get.offAll(
-              () => GovConversationRooms(authorityEmail: _HIGHERAUTHORITYMAIL));
-        }
-      }
-    }
-
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  checkAllComplaints() {
-    firebaseHelper.getAllChatRooms();
-  }
 
   @override
   void initState() {
@@ -115,14 +79,140 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  navigateUser() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    int? x;
+
+    await firebaseHelper.firebaseFirestore
+        .collection(_USERS)
+        .where(_EMAIL, isEqualTo: Constants.myEmail)
+        .get()
+        .then((value) {
+      value.docs.isNotEmpty ? x = value.docs[0].data()["status"] : x = null;
+
+      dev.log(value.docs[0].data()["status"].toString());
+    });
+
+    if (x != null) {
+      dev.log(x.toString() + "   HEREEE");
+      if (x != 0) {
+        if (x == 1) {
+          Get.offAll(
+              () => GovConversationRooms(authorityEmail: _LOCALAUTHORITYMAIL));
+        } else {
+          Get.offAll(
+              () => GovConversationRooms(authorityEmail: _HIGHERAUTHORITYMAIL));
+        }
+      }
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  checkAllComplaints() {
+    firebaseHelper.getAllChatRooms();
+  }
+
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+
     return Scaffold(
+      bottomNavigationBar: BottomNavBar(),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
-          : Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width / 1.1,
+          : Stack(
+              children: <Widget>[
+                Container(
+                  height: size.height * .45,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF5CEB8),
+                    image: DecorationImage(
+                        alignment: Alignment.centerLeft,
+                        image:
+                            AssetImage("assets/img/undraw_pilates_gpdb.png")),
+                  ),
+                ),
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 52,
+                            width: 52,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFF2BEA1),
+                              shape: BoxShape.circle,
+                            ),
+                            // child: SvgPicture.asset("assets/icons/menu.svg"),
+                          ),
+                        ),
+                        Text(
+                          "Good Morning\njatin",
+                          style: TextStyle(
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 30,
+                          ),
+                        ),
+                        Expanded(
+                          child: GridView.count(
+                            crossAxisCount: 2,
+                            childAspectRatio: .80,
+                            crossAxisSpacing: 30,
+                            mainAxisSpacing: 30,
+                            padding: EdgeInsets.symmetric(vertical: 70),
+                            children: <Widget>[
+                              CategoryCard(
+                                title: "New Complaint",
+                                svgSrc: "assets/icons/new_complaint.svg",
+                                press: () {},
+                              ),
+                              CategoryCard(
+                                title: "Active Complaint",
+                                svgSrc: "assets/icons/active_complaint.svg",
+                                press: () {},
+                              ),
+                              CategoryCard(
+                                  title: "Solved Complaint",
+                                  svgSrc: "assets/icons/solved_complaint.svg",
+                                  press: () {}),
+                              CategoryCard(
+                                title: "About Us",
+                                svgSrc: "assets/icons/about_us.svg",
+                                press: () {},
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+    );
+  }
+}
+
+
+
+
+
+
+
+/*width: MediaQuery.of(context).size.width / 1.1,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -237,9 +327,4 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ],
-                ),
-              ),
-            ),
-    );
-  }
-}
+                ), */
