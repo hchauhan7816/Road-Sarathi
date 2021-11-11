@@ -5,7 +5,8 @@ import 'package:sadak/Config/palette.dart';
 
 class Themes {
   final lightTheme = ThemeData(
-    primarySwatch: Colors.purple,
+    primarySwatch: Colors.blueGrey,
+    fontFamily: "Cairo",
     // primaryColor: Colors.white,
     // disabledColor: Colors.grey,
     // cardColor: Colors.white,

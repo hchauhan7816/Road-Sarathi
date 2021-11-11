@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sadak/Config/constants.dart';
 import 'package:sadak/Config/palette.dart';
@@ -7,12 +8,12 @@ import 'package:sadak/Pages/Complaint%20Page/complaint.dart';
 import 'package:sadak/Pages/Conversation%20Rooms/conversation_rooms.dart';
 import 'package:sadak/Pages/Conversation%20Rooms/user_higher_conversation_rooms.dart';
 import 'package:sadak/Pages/Conversation%20Rooms/user_local_conversation_rooms.dart';
+import 'package:sadak/Pages/Home%20Page/Widgets/category_card.dart';
 import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'dart:developer' as dev;
 
-import 'CategoryCard.dart';
-import 'navigatorbar.dart';
+import 'Widgets/navigatorbar.dart';
 
 const String _USERS = "users";
 const String _EMAIL = "email";
@@ -34,6 +35,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     Constants.myEmail = firebaseHelper.auth.currentUser!.email!;
+
+    findName();
 
     // dev.log("email :: $email   \n\n password :: $password");
 
@@ -77,6 +80,11 @@ class _HomePageState extends State<HomePage> {
     // dev.log("Here");
 
     super.initState();
+  }
+
+  findName() async {
+    var val = await firebaseHelper.getUserWithEmail(email: Constants.myEmail);
+    Constants.myName = val.name;
   }
 
   navigateUser() async {
@@ -130,68 +138,102 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 Container(
                   height: size.height * .45,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Color(0xFFF5CEB8),
                     image: DecorationImage(
                         alignment: Alignment.centerLeft,
-                        image:
+                        image: //AssetImage("assets/img/welcome.png")),
                             AssetImage("assets/img/undraw_pilates_gpdb.png")),
                   ),
                 ),
                 SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 20),
+                        horizontal: 10, vertical: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 52,
-                            width: 52,
-                            decoration: BoxDecoration(
-                              color: Color(0xFFF2BEA1),
-                              shape: BoxShape.circle,
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: GestureDetector(
+                              onTap: () {
+                                firebaseHelper.signout();
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 52,
+                                width: 52,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFF2BEA1),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(Icons.logout_outlined),
+                              ),
                             ),
-                            // child: SvgPicture.asset("assets/icons/menu.svg"),
                           ),
                         ),
-                        Text(
-                          "Good Morning\njatin",
-                          style: TextStyle(
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 30,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Welcome",
+                                style: TextStyle(
+                                  fontStyle: FontStyle.normal,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 32,
+                                ),
+                              ),
+                              Text(
+                                "${Constants.myName.substring(0, 1).toUpperCase()}${Constants.myName.substring(1)}",
+                                style: TextStyle(
+                                  fontStyle: FontStyle.normal,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 32,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         Expanded(
                           child: GridView.count(
+                            physics: NeverScrollableScrollPhysics(),
                             crossAxisCount: 2,
                             childAspectRatio: .80,
                             crossAxisSpacing: 30,
                             mainAxisSpacing: 30,
-                            padding: EdgeInsets.symmetric(vertical: 70),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 70, horizontal: 10),
                             children: <Widget>[
                               CategoryCard(
                                 title: "New Complaint",
-                                svgSrc: "assets/icons/new_complaint.svg",
-                                press: () {},
+                                svgSrc: "assets/img/new_complaint.svg",
+                                press: () {
+                                  Get.to(() => ComplaintPage());
+                                },
                               ),
                               CategoryCard(
-                                title: "Active Complaint",
-                                svgSrc: "assets/icons/active_complaint.svg",
-                                press: () {},
+                                title: "Local Authority Complaint",
+                                svgSrc: "assets/img/active_complaint.svg",
+                                press: () {
+                                  Get.to(() => UserConversationRooms());
+                                },
                               ),
                               CategoryCard(
-                                  title: "Solved Complaint",
-                                  svgSrc: "assets/icons/solved_complaint.svg",
-                                  press: () {}),
+                                  title: "Higher Authority Complaint",
+                                  svgSrc: "assets/img/solved_complaint.svg",
+                                  press: () {
+                                    Get.to(() => UserHigherConversationRooms());
+                                  }),
                               CategoryCard(
                                 title: "About Us",
-                                svgSrc: "assets/icons/about_us.svg",
-                                press: () {},
+                                svgSrc: "assets/img/about_us.svg",
+                                press: () {
+                                  // Get.to(() => ComplaintPage());
+                                },
                               ),
                             ],
                           ),
@@ -205,126 +247,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
-
-
-
-
-
-/*width: MediaQuery.of(context).size.width / 1.1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    MaterialButton(
-                      minWidth: double.infinity,
-                      height: 150.h,
-                      onPressed: () {},
-                      color: Palette.darkPurple,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Palette.darkPurple),
-                        borderRadius: BorderRadius.circular(75.w),
-                      ),
-                      child: Text(
-                        "${firebaseHelper.auth.currentUser!.email}",
-                        style: TextStyle(
-                          fontSize: 55.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 100.h,
-                    ),
-                    MaterialButton(
-                      minWidth: double.infinity,
-                      height: 150.h,
-                      onPressed: () {
-                        firebaseHelper.signout();
-                      },
-                      color: Palette.darkPurple,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Palette.darkPurple),
-                        borderRadius: BorderRadius.circular(75.w),
-                      ),
-                      child: Text(
-                        "Logout",
-                        style: TextStyle(
-                          fontSize: 55.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 100.h,
-                    ),
-                    MaterialButton(
-                      minWidth: double.infinity,
-                      height: 150.h,
-                      onPressed: () {
-                        Get.to(UserConversationRooms());
-                      },
-                      color: Palette.darkPurple,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Palette.darkPurple),
-                        borderRadius: BorderRadius.circular(75.w),
-                      ),
-                      child: Text(
-                        "Local Authority",
-                        style: TextStyle(
-                          fontSize: 55.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 100.h,
-                    ),
-                    MaterialButton(
-                      minWidth: double.infinity,
-                      height: 150.h,
-                      onPressed: () {
-                        Get.to(UserHigherConversationRooms());
-                      },
-                      color: Palette.darkPurple,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Palette.darkPurple),
-                        borderRadius: BorderRadius.circular(75.w),
-                      ),
-                      child: Text(
-                        "Higher Authority",
-                        style: TextStyle(
-                          fontSize: 55.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 100.h,
-                    ),
-                    MaterialButton(
-                      minWidth: double.infinity,
-                      height: 150.h,
-                      onPressed: () {
-                        Get.to(ComplaintPage());
-                      },
-                      color: Palette.darkPurple,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Palette.darkPurple),
-                        borderRadius: BorderRadius.circular(75.w),
-                      ),
-                      child: Text(
-                        "Create New Complaints",
-                        style: TextStyle(
-                          fontSize: 55.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ), */

@@ -45,7 +45,7 @@ dependencies:
   image_picker: ^0.8.4+4
   firebase_storage: ^10.0.6
   uuid: ^3.0.5
-  flutter_svg: ^0.19.0
+  flutter_svg: ^0.23.0+1
   
 
 
@@ -76,6 +76,17 @@ flutter:
     - assets/img/
     - assets/icons/
   #   - images/a_dot_ham.jpeg
+
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/cairo/Cairo-Regular.ttf
+        - asset: assets/fonts/cairo/Cairo-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/cairo/Cairo-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/cairo/Cairo-Black.ttf
+          weight: 900
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
