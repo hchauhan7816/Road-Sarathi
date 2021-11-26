@@ -10,8 +10,9 @@ import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
 import 'dart:developer' as dev;
 
 import 'package:sadak/Pages/Slider/Widgets/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../../temp2.dart';
+import '../../Map Page/map_page.dart';
 
 class ChatRoomsTile extends StatelessWidget {
   const ChatRoomsTile(
@@ -124,6 +125,17 @@ class MessageTile extends StatelessWidget {
     required this.longitude,
   });
 
+  void googleMap() async {
+    String googleURL =
+        "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude";
+
+    if (await canLaunch(googleURL)) {
+      launch(googleURL);
+    } else {
+      throw ("Could not open google maps");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime convertedTime = DateTime.fromMillisecondsSinceEpoch(time);
@@ -195,10 +207,10 @@ class MessageTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     child: InkWell(
                       onTap: () {
-                        // print("helllllllllllllllllllllllo");
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => ShowMap(
-                                position: LatLng(latitude, longitude))));
+                        googleMap();
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //     builder: (_) => ShowMap(
+                        //         position: LatLng(latitude, longitude))));
                         // Get.to(ShowMap(position: LatLng(latitude, longitude)));
                       },
                       child: Container(

@@ -6,7 +6,7 @@ import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 import 'package:get/get.dart';
 import 'package:sadak/Pages/Slider/splash_screen.dart';
 import 'package:sadak/Pages/temp.dart';
-import 'package:sadak/Pages/temp2.dart';
+import 'package:sadak/Pages/Map%20Page/map_page.dart';
 import 'Config/themes.dart';
 import 'Pages/Chat Screen/chat_screen.dart';
 import 'Pages/Conversation Rooms/conversation_rooms.dart';
@@ -33,10 +33,10 @@ class OurApp extends StatelessWidget {
         theme: Themes().lightTheme,
 
         // Todo uncomment
-        // home:
-        //     firebaseHelper.auth.currentUser != null ? HomePage() : OnBoarding(),
+        home:
+            firebaseHelper.auth.currentUser != null ? HomePage() : OnBoarding(),
 
-        home: SplashScreen(),
+        // home: SplashScreen(),
 
         // home: Temp(), //MyMap(), // Temp(),
 

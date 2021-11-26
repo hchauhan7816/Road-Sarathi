@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 import 'package:sadak/Pages/Slider/Widgets/constants.dart';
-import 'package:sadak/Pages/temp2.dart';
+import 'package:sadak/Pages/Map%20Page/map_page.dart';
 
 class Temp extends StatefulWidget {
   const Temp({Key? key}) : super(key: key);

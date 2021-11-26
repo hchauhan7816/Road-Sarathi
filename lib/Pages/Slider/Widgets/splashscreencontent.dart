@@ -46,7 +46,7 @@ class SplashScreenContent extends StatelessWidget {
           // ),
           // // Spacer(flex: 2,),
           Image.asset(
-            "assets/img/login.png",
+            imageURL,
             height: getProportionateScreenHeight(285),
             width: getProportionateScreenWidth(245),
           ),

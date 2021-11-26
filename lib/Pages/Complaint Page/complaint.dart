@@ -3,7 +3,10 @@ import 'package:flutter_dropdown_x/flutter_dropdown_x.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sadak/Config/constants.dart';
 import 'package:sadak/Config/palette.dart';
@@ -45,6 +48,16 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _locationController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
+
+  double? latitude, longitude;
+  String? userAddress;
+  bool locationRecieved = false;
+  bool changeButton = false;
+  bool isLoading = false;
+  AnimationController? rotationController;
+
+  LatLng? position;
+
   bool isUploading = false;
   File? imageFile;
 
@@ -55,6 +68,67 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
     Constants.myEmail = firebaseHelper.auth.currentUser!.email!;
 
     super.initState();
+  }
+
+  setLocation({required lat, required lon}) async {
+    latitude = lat;
+    longitude = lon;
+
+    List<Placemark> placemarks = await placemarkFromCoordinates(lat, lon);
+    Placemark place = placemarks[0];
+
+    print("HELOOOOOOOOOOOOO");
+    print(place);
+
+    setState(() {
+      position = LatLng(lat, lon);
+      locationRecieved = true;
+      changeButton = true;
+
+      userAddress =
+          "${place.subThoroughfare}, ${place.thoroughfare} , ${place.subLocality}, ${place.locality}, ${place.administrativeArea}, ${place.postalCode}, ${place.country}";
+
+      _locationController.text = userAddress!;
+    });
+  }
+
+  void getUserLocation() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    bool serviceEnabled;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return Future.error('Location Service Disabled');
+    }
+
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      LocationPermission asked = await Geolocator.requestPermission();
+
+      if (asked == LocationPermission.whileInUse ||
+          asked == LocationPermission.always) {
+        Position currentPosition = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.best);
+
+        setLocation(
+            lat: currentPosition.latitude, lon: currentPosition.longitude);
+      }
+    } else {
+      Position currentPosition = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+
+      setLocation(
+          lat: currentPosition.latitude, lon: currentPosition.longitude);
+    }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future getImage() async {
@@ -88,7 +162,10 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
   void sendDetails() {
     int val = DateTime.now().millisecondsSinceEpoch;
 
-    if (ImageUrl != null && ImageUrl!.isNotEmpty && _selected != null) {
+    if (ImageUrl != null &&
+        ImageUrl!.isNotEmpty &&
+        _selected != null &&
+        locationRecieved) {
       var chatroomId = firebaseHelper.getChatroomId(
         userEmail1: Constants.myEmail,
         userEmail2: "localauthority@gmail.com",
@@ -115,26 +192,39 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
       );
 
       firebaseHelper.setConversationMessages(
-          chatroomId: chatroomId,
-          messageMap: ModalChatMessages(
-                  message: ImageUrl!,
-                  sendBy: Constants.myEmail,
-                  text: false,
-                  isLocation: false,
-                  time: DateTime.now().millisecondsSinceEpoch)
-              .toJson());
+        chatroomId: chatroomId,
+        messageMap: ModalChatMessages(
+                message: ImageUrl!,
+                sendBy: Constants.myEmail,
+                text: false,
+                isLocation: false,
+                time: DateTime.now().millisecondsSinceEpoch)
+            .toJson(),
+      );
 
       firebaseHelper.setConversationMessages(
-          chatroomId: chatroomId,
-          messageMap: ModalChatMessages(
-                  message: "",
-                  sendBy: Constants.myEmail,
-                  text: false,
-                  isLocation: true,
-                  latitude: 24.234,
-                  longitude: 73.283,
-                  time: DateTime.now().millisecondsSinceEpoch)
-              .toJson());
+        chatroomId: chatroomId,
+        messageMap: ModalChatMessages(
+                message: _descriptionController.text,
+                sendBy: Constants.myEmail,
+                text: true,
+                isLocation: false,
+                time: DateTime.now().millisecondsSinceEpoch)
+            .toJson(),
+      );
+
+      firebaseHelper.setConversationMessages(
+        chatroomId: chatroomId,
+        messageMap: ModalChatMessages(
+                message: "",
+                sendBy: Constants.myEmail,
+                text: false,
+                isLocation: true,
+                latitude: latitude!,
+                longitude: longitude!,
+                time: DateTime.now().millisecondsSinceEpoch)
+            .toJson(),
+      );
 
       Get.off(
         () => ChatScreen(
@@ -146,7 +236,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
       );
     } else {
       // Todo
-      Get.snackbar("Unable to Proceed", "Image not Uploaded");
+      Get.snackbar("Unable to Proceed", "Some data is still missing");
     }
   }
 
@@ -198,7 +288,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircularProgressIndicator(
-                  color: Colors.amber,
+                  color: Colors.black,
                 ),
                 SizedBox(
                   height: 50,
@@ -329,11 +419,14 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                   height: 30.h,
                                 ),
                                 TextField(
+                                  minLines: 1,
+                                  maxLines: 4,
                                   autocorrect: true,
                                   controller: _locationController,
                                   textInputAction: TextInputAction.next,
+                                  readOnly: true,
                                   decoration: InputDecoration(
-                                    hintText: 'Enter Location*',
+                                    hintText: 'Please provide your location*',
                                     isDense: true,
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: 40.h, horizontal: 30.w),
@@ -346,6 +439,47 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                           BorderSide(color: Colors.grey),
                                     ),
                                   ),
+                                ),
+                                SizedBox(height: 20.h),
+                                Row(
+                                  children: [
+                                    Spacer(),
+                                    Material(
+                                      color: Colors.orange[300],
+                                      borderRadius: BorderRadius.circular(
+                                          changeButton ? 50 : 8),
+                                      child: InkWell(
+                                        onTap: () {
+                                          getUserLocation();
+                                        },
+                                        child: AnimatedContainer(
+                                          duration: Duration(seconds: 1),
+                                          width: changeButton ? 50 : 200,
+                                          height: 50,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                changeButton ? 50 : 8),
+                                          ),
+                                          child: isLoading
+                                              ? CircularProgressIndicator(
+                                                  color: Colors.black54,
+                                                )
+                                              : changeButton
+                                                  ? Icon(Icons.refresh)
+                                                  : Text(
+                                                      "Provide Location",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                        ),
+                                      ),
+                                    ),
+                                    Spacer(),
+                                  ],
                                 ),
                               ],
                             ),
