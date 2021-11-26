@@ -24,7 +24,8 @@ class ComplaintPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        backgroundColor: Colors.blueGrey,
+        // backgroundColor: Colors.blueGrey,
+        backgroundColor: Palette.peach,
         body: ComplaintPageBody(),
         appBar: complaintPageAppBar(context));
   }
@@ -40,7 +41,7 @@ class ComplaintPageBody extends StatefulWidget {
 class _ComplaintPageBodyState extends State<ComplaintPageBody> {
   FirebaseHelper firebaseHelper = Get.find<FirebaseHelper>();
 
-  String _selected = "";
+  String? _selected;
   TextEditingController _titleController = TextEditingController();
   TextEditingController _locationController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
@@ -87,44 +88,60 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
   void sendDetails() {
     int val = DateTime.now().millisecondsSinceEpoch;
 
-    if (ImageUrl != null && ImageUrl!.isNotEmpty) {
+    if (ImageUrl != null && ImageUrl!.isNotEmpty && _selected != null) {
       var chatroomId = firebaseHelper.getChatroomId(
-          userEmail1: Constants.myEmail,
-          userEmail2: "localauthority@gmail.com",
-          val: val);
+        userEmail1: Constants.myEmail,
+        userEmail2: "localauthority@gmail.com",
+        val: val,
+      );
 
       var chatroomMap = ChatroomModal(
-          users: Constants.myEmail,
-          authority:
-              "localauthority@gmail.com", // saved place dont delete this comment
-          chatroomId: chatroomId,
-          isWithHigher: false,
-          title: _titleController.text,
-          location: _locationController.text,
-          completed: false,
-          dueDate: DateTime.now().add(const Duration(days: 60)));
+        users: Constants.myEmail,
+        authority:
+            "localauthority@gmail.com", // saved place dont delete this comment
+        chatroomId: chatroomId,
+        isWithHigher: false,
+        title: _selected!,
+        completed: false,
+        dueDate: DateTime.now().add(const Duration(days: 60)),
+      );
 
       firebaseHelper.createChatRooms(
-          userEmail1: Constants.myEmail,
-          userEmail2:
-              "localauthority@gmail.com", // saved place dont delete this comment
-          chatroomId: chatroomId,
-          chatroomMap: chatroomMap.toJson());
+        userEmail1: Constants.myEmail,
+        userEmail2:
+            "localauthority@gmail.com", // saved place dont delete this comment
+        chatroomId: chatroomId,
+        chatroomMap: chatroomMap.toJson(),
+      );
 
       firebaseHelper.setConversationMessages(
-          chatroomId: chatroomId,
-          messageMap: ModalChatMessages(
-                  message: ImageUrl!,
-                  sendBy: Constants.myEmail,
-                  text: false,
-                  time: DateTime.now().millisecondsSinceEpoch)
-              .toJson());
+        chatroomId: chatroomId,
+        messageMap: ModalChatMessages(
+          message: ImageUrl!,
+          sendBy: Constants.myEmail,
+          text: false,
+          time: DateTime.now().millisecondsSinceEpoch,
+        ).toJson(),
+      );
 
-      Get.off(() => ChatScreen(
+      firebaseHelper.setConversationMessages(
+        chatroomId: chatroomId,
+        messageMap: ModalChatMessages(
+          message: _descriptionController.text,
+          sendBy: Constants.myEmail,
+          text: true,
+          time: DateTime.now().millisecondsSinceEpoch,
+        ).toJson(),
+      );
+
+      Get.off(
+        () => ChatScreen(
           isWithHigher: false,
           completed: false,
           chatroomId: chatroomId,
-          userEmail: Constants.myEmail));
+          userEmail: Constants.myEmail,
+        ),
+      );
     } else {
       // Todo
       Get.snackbar("Unable to Proceed", "Image not Uploaded");
@@ -149,12 +166,13 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
             side: BorderSide.none,
             borderRadius: BorderRadius.circular(15),
           ),
-          color: Palette.orange,
+          // color: Palette.orange,
+          color: Palette.peach,
           child: isLastItem
               ? Icon(Icons.camera_alt,
                   size: 40,
                   color: Colors
-                      .white //isDarkMode(context) ? Colors.black : Colors.white,
+                      .black //isDarkMode(context) ? Colors.black : Colors.white,
                   )
               : ClipRRect(
                   borderRadius: BorderRadius.circular(12),
@@ -189,7 +207,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                       height: 1.2,
                       fontSize: 35,
                       fontWeight: FontWeight.w300,
-                      color: Colors.white70),
+                      color: Colors.black87),
                 ),
               ],
             ),
@@ -270,15 +288,15 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                     dataSource: const [
                                       {
                                         "display": "Potholes",
-                                        "value": "1",
+                                        "value": "Potholes",
                                       },
                                       {
                                         "display": "Water Logging",
-                                        "value": "2",
+                                        "value": "Water Logging",
                                       },
                                       {
                                         "display": "Unauthorized Median Cut",
-                                        "value": "3",
+                                        "value": "Unauthorized Median Cut",
                                       },
                                     ],
                                     textField: 'display',
@@ -291,9 +309,6 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                               ],
                             ),
                           ),
-                          /* SizedBox(
-                            height: 25,
-                          ),*/
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 16.0, horizontal: 16),
@@ -330,9 +345,6 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                     ),
                                   ),
                                 ),
-                                /*SizedBox(
-                                  height: 30.h,
-                                )*/
                               ],
                             ),
                           ),
@@ -391,10 +403,11 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                   child: Text(
                                     "Add Photos",
                                     style: TextStyle(
-                                        height: 1.2,
-                                        fontSize: 70.sp,
-                                        fontWeight: FontWeight.w300,
-                                        color: Colors.black87),
+                                      height: 1.2,
+                                      fontSize: 70.sp,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black87,
+                                    ),
                                   ),
                                 ),
                                 /*SizedBox(
@@ -445,21 +458,23 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.symmetric(
-                                    vertical: 16, horizontal: 300.h),
-                                primary: Palette.orange,
+                                    vertical: 16, horizontal: 250.w),
+                                // primary: Palette.orange,
+                                primary: Palette.peach,
                                 shape: RoundedRectangleBorder(
                                   side: BorderSide.none,
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                               ),
                               child: Text(
-                                'Post Listing',
+                                'Register Complaint',
                                 style: TextStyle(
-                                    height: 1.2,
-                                    // color: isDarkMode(context)
-                                    //     ? Colors.black
-                                    color: Colors.white,
-                                    fontSize: 20),
+                                  height: 1.2,
+                                  // color: isDarkMode(context)
+                                  //     ? Colors.black
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
                               ),
                               onPressed: () {
                                 if (!isUploading) {

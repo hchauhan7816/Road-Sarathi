@@ -5,7 +5,6 @@ class ChatroomModal with ChangeNotifier {
   String authority;
   String chatroomId;
   String title;
-  String location;
   bool completed;
   bool isWithHigher;
   DateTime dueDate;
@@ -16,7 +15,6 @@ class ChatroomModal with ChangeNotifier {
     required this.authority,
     required this.chatroomId,
     required this.title,
-    required this.location,
     required this.isWithHigher,
     required this.completed,
     required this.dueDate,
@@ -29,7 +27,6 @@ class ChatroomModal with ChangeNotifier {
       chatroomId: parsedJson['chatroomId'] ?? '',
       title: parsedJson['title'] ?? '',
       isWithHigher: parsedJson['isWithHigher'] ?? '',
-      location: parsedJson['location'] ?? '',
       completed: parsedJson['completed'] ?? '',
       dueDate: parsedJson['dueDate'].toDate() ?? '',
     );
@@ -41,7 +38,6 @@ class ChatroomModal with ChangeNotifier {
         "chatroomId": chatroomId,
         "title": title,
         "isWithHigher": isWithHigher,
-        "location": location,
         "completed": completed,
         "dueDate": dueDate, //DateTime.now().add(const Duration(days: 60)),
       };

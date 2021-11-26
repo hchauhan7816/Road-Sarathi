@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sadak/Config/palette.dart';
 import 'package:sadak/Config/text_styles.dart';
 import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
 import 'dart:developer' as dev;
@@ -61,8 +62,11 @@ class ChatRoomsTile extends StatelessWidget {
                     fit: BoxFit.scaleDown,
                     child: Text(
                       "${title.substring(0, 1).toUpperCase()}${title.substring(1)}",
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w400,
+                        height: 1.2,
+                      ),
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -76,8 +80,11 @@ class ChatRoomsTile extends StatelessWidget {
                     fit: BoxFit.scaleDown,
                     child: Text(
                       username,
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w300,
+                        height: 1.2,
+                      ),
                     ),
                   ),
                 ),
@@ -145,7 +152,7 @@ class MessageTile extends StatelessWidget {
                           maxWidth: MediaQuery.of(context).size.width * 0.75),
                       decoration: BoxDecoration(
                           color: isSendByMe
-                              ? Color(0xff7C7B9B)
+                              ? Palette.peach //Color(0xff7C7B9B)
                               : Colors.grey[200], // todo color?
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(16),
@@ -156,8 +163,10 @@ class MessageTile extends StatelessWidget {
                       child: Text(
                         message,
                         style: TextStyle(
-                            color: isSendByMe ? Colors.white : Colors.grey[800],
-                            fontSize: 18),
+                          height: 1.2,
+                          color: isSendByMe ? Colors.black : Colors.grey[800],
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ],
@@ -183,8 +192,10 @@ class MessageTile extends StatelessWidget {
                       ),
                       Text(finalTime,
                           style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[600]) //MyTheme.bodyTextTime,
+                            height: 1.2,
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ) //MyTheme.bodyTextTime,
                           )
                     ],
                   ),
@@ -224,33 +235,34 @@ class MessageTile extends StatelessWidget {
                       width: 10,
                     ),
                     Container(
-                        padding: EdgeInsets.all(4),
-                        constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * 0.6,
-                            maxHeight:
-                                MediaQuery.of(context).size.height * 0.4),
-                        decoration: BoxDecoration(
-                            color: isSendByMe
-                                ? Colors.blueGrey[300]
-                                : Colors.grey[200], // todo color?
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(16),
-                              topRight: Radius.circular(16),
-                              bottomLeft: Radius.circular(isSendByMe ? 12 : 0),
-                              bottomRight: Radius.circular(isSendByMe ? 0 : 12),
-                            )),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12.0),
-                          child: CachedNetworkImage(
-                            imageUrl: message,
-                            placeholder: (context, url) => Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CircularProgressIndicator(),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                      padding: EdgeInsets.all(4),
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.6,
+                          maxHeight: MediaQuery.of(context).size.height * 0.4),
+                      decoration: BoxDecoration(
+                        color: isSendByMe
+                            ? Palette.peach //Colors.blueGrey[300]
+                            : Colors.grey[200], // todo color?
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                          bottomLeft: Radius.circular(isSendByMe ? 12 : 0),
+                          bottomRight: Radius.circular(isSendByMe ? 0 : 12),
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12.0),
+                        child: CachedNetworkImage(
+                          imageUrl: message,
+                          placeholder: (context, url) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(),
                           ),
-                        )),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 Padding(
@@ -272,11 +284,14 @@ class MessageTile extends StatelessWidget {
                       SizedBox(
                         width: 5,
                       ),
-                      Text(finalTime,
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[600]) //MyTheme.bodyTextTime,
-                          )
+                      Text(
+                        finalTime,
+                        style: TextStyle(
+                          height: 1.2,
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                        ),
+                      )
                     ],
                   ),
                 )
@@ -287,16 +302,11 @@ class MessageTile extends StatelessWidget {
 }
 
 class HeadingTile extends StatelessWidget {
-  const HeadingTile(
-      {Key? key,
-      required this.title,
-      required this.location,
-      required this.dueDate})
+  const HeadingTile({Key? key, required this.title, required this.dueDate})
       : super(key: key);
 
   final String title;
   final DateTime dueDate;
-  final String location;
 
   @override
   Widget build(BuildContext context) {
@@ -337,15 +347,9 @@ class HeadingTile extends StatelessWidget {
                               child: Text(
                                 "Title  :",
                                 style: TextStyle(
-                                    color: Colors.grey[700], fontSize: 16),
-                              ),
-                            ),
-                            FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                "Location  :",
-                                style: TextStyle(
-                                    color: Colors.grey[700], fontSize: 16),
+                                    height: 1.2,
+                                    color: Colors.grey[700],
+                                    fontSize: 16),
                               ),
                             ),
                             FittedBox(
@@ -353,7 +357,9 @@ class HeadingTile extends StatelessWidget {
                               child: Text(
                                 "Due Date  :",
                                 style: TextStyle(
-                                    color: Colors.grey[700], fontSize: 16),
+                                    height: 1.2,
+                                    color: Colors.grey[700],
+                                    fontSize: 16),
                               ),
                             ),
                           ],
@@ -366,15 +372,10 @@ class HeadingTile extends StatelessWidget {
                               child: Text(
                                 "  $title",
                                 style: TextStyle(
-                                    color: Colors.grey[700], fontSize: 16),
-                              ),
-                            ),
-                            FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                "  $location",
-                                style: TextStyle(
-                                    color: Colors.grey[700], fontSize: 16),
+                                  height: 1.2,
+                                  color: Colors.grey[700],
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                             FittedBox(
@@ -382,7 +383,10 @@ class HeadingTile extends StatelessWidget {
                               child: Text(
                                 "  ${finalTime}",
                                 style: TextStyle(
-                                    color: Colors.grey[700], fontSize: 16),
+                                  height: 1.2,
+                                  color: Colors.grey[700],
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                           ],

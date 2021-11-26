@@ -314,7 +314,6 @@ class FirebaseHelper extends GetxController {
             chatroomId: chatroomId,
             title: chatroomList[i].title,
             isWithHigher: true,
-            location: chatroomList[i].location,
             completed: false,
             dueDate: DateTime.now().add(const Duration(days: 120)));
 

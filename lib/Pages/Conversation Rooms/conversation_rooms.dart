@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:sadak/Config/constants.dart';
+import 'package:sadak/Config/palette.dart';
 import 'package:sadak/Config/text_styles.dart';
 import 'package:sadak/Modal/users.dart';
 import 'package:sadak/Pages/Chat%20Screen/Widgets/tiles.dart';
@@ -42,7 +43,7 @@ class GovConversationRooms extends StatelessWidget {
             // Icon(Icons.directions_car, size: 350),
           ],
         ),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Palette.peach,
         appBar: govConversationRoomsAppBar(
           context,
           tabBar: conversationRoomsTabBar(),

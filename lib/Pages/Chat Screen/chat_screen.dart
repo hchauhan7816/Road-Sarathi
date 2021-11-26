@@ -21,13 +21,13 @@ const String _LOCATION = "location";
 const String _DUEDATE = "dueDate";
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen(
-      {Key? key,
-      required this.chatroomId,
-      required this.completed,
-      required this.isWithHigher,
-      required this.userEmail})
-      : super(key: key);
+  const ChatScreen({
+    Key? key,
+    required this.chatroomId,
+    required this.completed,
+    required this.isWithHigher,
+    required this.userEmail,
+  }) : super(key: key);
   final String chatroomId;
   final bool completed;
   final bool isWithHigher;
@@ -37,16 +37,20 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // dev.log(userEmail);
     return CustomScaffold(
-        body: ChatScreenBody(
-            completed: completed,
-            isWithHigher: isWithHigher,
-            chatroomId: chatroomId,
-            userEmail: userEmail),
-        backgroundColor: Colors.blueGrey, //Color(0xFFFFFFF6),
-        appBar: chatScreenAppBar(context,
-            userEmail: userEmail,
-            chatroomId: chatroomId,
-            completed: completed));
+      body: ChatScreenBody(
+        completed: completed,
+        isWithHigher: isWithHigher,
+        chatroomId: chatroomId,
+        userEmail: userEmail,
+      ),
+      backgroundColor: Palette.peach, //Colors.blueGrey, //Color(0xFFFFFFF6),
+      appBar: chatScreenAppBar(
+        context,
+        userEmail: userEmail,
+        chatroomId: chatroomId,
+        completed: completed,
+      ),
+    );
   }
 }
 
@@ -109,6 +113,7 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
                     Text(
                       "Uploading Image",
                       style: TextStyle(
+                          height: 1.2,
                           fontSize: 35,
                           fontWeight: FontWeight.w300,
                           color: Colors.white70),
@@ -173,7 +178,10 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: message,
-                        hintStyle: TextStyle(color: Colors.grey[700]),
+                        hintStyle: TextStyle(
+                          color: Colors.grey[700],
+                          height: 1.2,
+                        ),
                       ),
                       controller: messageController,
                     ),
@@ -216,7 +224,10 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Type your message ...',
-                        hintStyle: TextStyle(color: Colors.grey[500]),
+                        hintStyle: TextStyle(
+                          height: 1.2,
+                          color: Colors.grey[500],
+                        ),
                       ),
                       controller: messageController,
                     ),
@@ -341,8 +352,6 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
                 itemBuilder: (context, index) {
                   return HeadingTile(
                     title: snapshot.data!.docs[index].data()[_TITLE].toString(),
-                    location:
-                        snapshot.data!.docs[index].data()[_LOCATION].toString(),
                     dueDate:
                         snapshot.data!.docs[index].data()[_DUEDATE].toDate(),
                   );
