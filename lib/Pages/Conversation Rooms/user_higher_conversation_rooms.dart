@@ -1,17 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:sadak/Config/constants.dart';
-import 'package:sadak/Config/text_styles.dart';
-import 'package:sadak/Modal/users.dart';
 import 'package:sadak/Pages/Chat%20Screen/Widgets/tiles.dart';
-import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
 import 'package:sadak/Pages/Conversation%20Rooms/Widgets/tabbar.dart';
-import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
-import 'dart:developer' as dev;
 
 import 'Widgets/appbar_user_conversation_rooms.dart';
 
@@ -34,12 +28,6 @@ class UserHigherConversationRooms extends StatelessWidget {
 
             UserHigherConversationRoomsBody(
                 completed: true), //completed: true),
-            // GovConversationRoomsBody(
-            //     authorityEmail: authorityEmail, completed: false),
-            // GovConversationRoomsBody(
-            //     authorityEmail: authorityEmail, completed: true),
-            // Icon(Icons.directions_transit, size: 350),
-            // Icon(Icons.directions_car, size: 350),
           ],
         ),
         backgroundColor: Colors.blueGrey,
@@ -52,20 +40,7 @@ class UserHigherConversationRooms extends StatelessWidget {
   }
 }
 
-FloatingActionButton userHigherConversationRoomsFloatingActionButton(context) {
-  return FloatingActionButton(
-    child: Icon(Icons.search_rounded),
-    onPressed: () {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => SearchScreen(),
-      //   ),
-      // );
-    },
-  );
-}
-
+// ignore: must_be_immutable
 class UserHigherConversationRoomsBody extends StatefulWidget {
   UserHigherConversationRoomsBody({Key? key, required this.completed})
       : super(key: key);
@@ -80,47 +55,17 @@ class _UserHigherConversationRoomsBodyState
     extends State<UserHigherConversationRoomsBody> {
   FirebaseHelper firebaseHelper = Get.find<FirebaseHelper>();
 
-  // TextEditingController searchTextController = TextEditingController();
-  // Future<List<ModalUser>>? searchResult;
   Stream<QuerySnapshot<Map<String, dynamic>>>? chatRoomsStream;
-  // String? searchValue = "";
 
   bool isLoading = false;
 
   @override
   void initState() {
     Constants.myEmail = firebaseHelper.auth.currentUser!.email!;
-    // getUserInfo();
     chatRoomsStream = firebaseHelper.getChatRoomsHigherAuthority(
         userEmail: Constants.myEmail, completed: widget.completed);
     super.initState();
   }
-
-  // initiateSearch(String searchValue) {
-  //   // databaseMethods
-  //   //     .getUserByUsername(searchTextEditingController.text)
-  //   //     .then((e) {
-  //   //   setState(() {
-  //   //     searchSnapshot = e;
-  //   //   });
-  //   // });
-
-  //   setState(() {
-  //     isLoading = true;
-  //   });
-
-  //   // dev.log("Here");
-
-  //   searchResult =
-  //       firebaseHelper.searchWithAlreadyConnectedUsers(userEmail: searchValue);
-
-  //   // dev.log(searchResult);
-  //   // dev.log("Done");
-
-  //   setState(() {
-  //     isLoading = false;
-  //   });
-  // }
 
   Widget chatRoomList() {
     return SingleChildScrollView(
@@ -156,8 +101,6 @@ class _UserHigherConversationRoomsBodyState
             physics: NeverScrollableScrollPhysics(),
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
-              // dev.log(
-              //     "${snapshot.data!.docs.length}  \n\n\n${snapshot.data!.docs[index].data()[CHATROOM]}");
               return ChatRoomsTile(
                   isWithHigher: false,
                   completed: widget.completed,
@@ -173,8 +116,6 @@ class _UserHigherConversationRoomsBodyState
         },
       ),
     );
-
-    // return Text("Hello");
   }
 
   // createChatroomAndStartConversation(String clickedUserEmail) {

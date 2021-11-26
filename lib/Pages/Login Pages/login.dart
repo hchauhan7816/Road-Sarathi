@@ -45,6 +45,8 @@ class LoginBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: ScrollPhysics(),
+      scrollDirection: Axis.vertical,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 40.h),
         height: 1970.h,
@@ -53,169 +55,173 @@ class LoginBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Column(
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        "Login",
-                        style: heading1(),
-                      ),
-                      SizedBox(
-                        height: 30.h,
-                      ),
-                      Text(
-                        "Login to your account",
-                        style: normal3(),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 120.h,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 50.w),
-                    child: Column(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "Email",
-                              style: TextStyle(
-                                  fontSize: 40.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black87),
-                            ),
-                            SizedBox(
-                              height: 15.h,
-                            ),
-                            TextField(
-                              controller: email,
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 0.h, horizontal: 15.w),
-                                  enabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey))),
-                            ),
-                            SizedBox(
-                              height: 30.h,
-                            )
-                          ],
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          "Login",
+                          style: heading1(),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "Password",
-                              style: TextStyle(
-                                  fontSize: 40.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black87),
-                            ),
-                            SizedBox(
-                              height: 15.h,
-                            ),
-                            TextField(
-                              controller: password,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 0.h, horizontal: 15.w),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey))),
-                            ),
-                            SizedBox(
-                              height: 30.h,
-                            )
-                          ],
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        Text(
+                          "Login to your account",
+                          style: normal3(),
                         ),
                       ],
                     ),
-                  ),
-
-                  SizedBox(
-                    height: 80.h,
-                  ),
-
-                  // Login Button
-                  MaterialButton(
-                    minWidth: double.infinity,
-                    height: 150.h,
-                    onPressed: () {
-                      if (email != null &&
-                          password != null &&
-                          email!.text.isNotEmpty &&
-                          password!.text.isNotEmpty) {
-                        firebaseHelper.signIn(
-                            email: email!.text, password: password!.text);
-                      } else {
-                        Get.snackbar(
-                            "Error", "Please Enter email and password");
-                      }
-                    },
-                    color: Palette.darkPurple,
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(color: Palette.darkPurple),
-                      borderRadius: BorderRadius.circular(75.w),
+                    SizedBox(
+                      height: 120.h,
                     ),
-                    child: Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 55.sp,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 50.w),
+                      child: Column(
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "Email",
+                                style: TextStyle(
+                                    fontSize: 40.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black87),
+                              ),
+                              SizedBox(
+                                height: 15.h,
+                              ),
+                              TextField(
+                                controller: email,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 0.h, horizontal: 15.w),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    border: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.grey))),
+                              ),
+                              SizedBox(
+                                height: 30.h,
+                              )
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "Password",
+                                style: TextStyle(
+                                    fontSize: 40.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black87),
+                              ),
+                              SizedBox(
+                                height: 15.h,
+                              ),
+                              TextField(
+                                controller: password,
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 0.h, horizontal: 15.w),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    border: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.grey))),
+                              ),
+                              SizedBox(
+                                height: 30.h,
+                              )
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                  ),
 
-                  SizedBox(
-                    height: 60.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "Don't have an account?",
-                        style: small1(),
+                    SizedBox(
+                      height: 80.h,
+                    ),
+
+                    // Login Button
+                    MaterialButton(
+                      minWidth: double.infinity,
+                      height: 150.h,
+                      onPressed: () {
+                        if (email != null &&
+                            password != null &&
+                            email!.text.isNotEmpty &&
+                            password!.text.isNotEmpty) {
+                          firebaseHelper.signIn(
+                              email: email!.text, password: password!.text);
+                        } else {
+                          Get.snackbar(
+                              "Error", "Please Enter email and password");
+                        }
+                      },
+                      color: Palette.darkPurple,
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: Palette.darkPurple),
+                        borderRadius: BorderRadius.circular(75.w),
                       ),
-                      // Todo Sign up linking
-                      GestureDetector(
-                        onTap: () {
-                          Get.off(() => SignupPage());
-                        },
-                        child: Container(
-                          child: Text(
-                            " Sign up",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
+                      child: Text(
+                        "Login",
+                        style: TextStyle(
+                          fontSize: 55.sp,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: 60.h,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "Don't have an account?",
+                          style: small1(),
+                        ),
+                        // Todo Sign up linking
+                        GestureDetector(
+                          onTap: () {
+                            Get.off(() => SignupPage());
+                          },
+                          child: Container(
+                            child: Text(
+                              " Sign up",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 60.h,
-                  ),
-                  Container(
-                    height: 700.h,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/img/login.png"),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 60.h,
+                    ),
+                    Container(
+                      height: 700.h,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("assets/img/login.png"),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           ],

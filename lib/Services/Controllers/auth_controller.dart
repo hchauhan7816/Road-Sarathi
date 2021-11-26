@@ -340,10 +340,14 @@ class FirebaseHelper extends GetxController {
           dev.log(chatDataList[j].toJson().toString());
           if (chatDataList[j].text == false) {
             var tempInstance = ModalChatMessages(
-                message: chatDataList[j].message.toString(),
-                sendBy: chatDataList[j].sendBy.toString(),
-                text: chatDataList[j].text,
-                time: chatDataList[j].time);
+              message: chatDataList[j].message.toString(),
+              sendBy: chatDataList[j].sendBy.toString(),
+              text: chatDataList[j].text,
+              time: chatDataList[j].time,
+              isLocation: chatDataList[j].isLocation,
+              latitude: chatDataList[j].latitude,
+              longitude: chatDataList[j].longitude,
+            );
 
             dev.log(tempInstance.toJson().toString());
             setConversationMessages(

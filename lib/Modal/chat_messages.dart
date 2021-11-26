@@ -4,6 +4,9 @@ class ModalChatMessages with ChangeNotifier {
   String message;
   String sendBy;
   bool text;
+  bool isLocation;
+  double latitude;
+  double longitude;
   int time;
 
   // Default Values
@@ -12,6 +15,9 @@ class ModalChatMessages with ChangeNotifier {
     required this.sendBy,
     required this.text,
     required this.time,
+    required this.isLocation,
+    this.latitude = 0,
+    this.longitude = 0,
   });
 
   factory ModalChatMessages.fromJson(Map<String, dynamic> parsedJson) {
@@ -20,6 +26,9 @@ class ModalChatMessages with ChangeNotifier {
       sendBy: parsedJson['sendBy'] ?? '',
       text: parsedJson['text'] ?? '',
       time: parsedJson['time'] ?? '',
+      isLocation: parsedJson['isLocation'] ?? '',
+      latitude: parsedJson['latitude'] ?? '',
+      longitude: parsedJson['longitude'] ?? '',
     );
   }
 
@@ -27,6 +36,9 @@ class ModalChatMessages with ChangeNotifier {
         "message": message,
         "sendBy": sendBy,
         "text": text,
+        "isLocation": isLocation,
         "time": time,
+        "latitude": latitude,
+        "longitude": longitude,
       };
 }

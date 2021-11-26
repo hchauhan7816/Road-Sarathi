@@ -1,10 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:sadak/Config/text_styles.dart';
 import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
 import 'dart:developer' as dev;
+
+import 'package:sadak/Pages/Slider/Widgets/constants.dart';
+
+import '../../temp2.dart';
 
 class ChatRoomsTile extends StatelessWidget {
   const ChatRoomsTile(
@@ -96,19 +102,158 @@ class MessageTile extends StatelessWidget {
   final int time;
   final String otherUserEmail;
   final bool isText;
+  final bool isLocation;
+  final double latitude;
+  final double longitude;
 
-  MessageTile(
-      {required this.message,
-      required this.isSendByMe,
-      required this.isText,
-      required this.time,
-      required this.otherUserEmail});
+  MessageTile({
+    required this.message,
+    required this.isSendByMe,
+    required this.isText,
+    required this.time,
+    required this.otherUserEmail,
+    required this.isLocation,
+    required this.latitude,
+    required this.longitude,
+  });
 
   @override
   Widget build(BuildContext context) {
     DateTime convertedTime = DateTime.fromMillisecondsSinceEpoch(time);
 
     String finalTime = DateFormat('dd/M/yyyy hh:mm a').format(convertedTime);
+
+    if (isLocation) {
+      return Container(
+        margin: EdgeInsets.only(top: 15),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment:
+                  isSendByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (!isSendByMe)
+                  Container(
+                    height: 50,
+                    width: 50,
+                    alignment: Alignment.center,
+                    child: Text(
+                      "${otherUserEmail.substring(0, 1).toUpperCase()}",
+                      style: normal3(),
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey[200],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                //   CircleAvatar(
+                //     radius: 15,
+                //     backgroundImage: AssetImage(user.avatar),
+                //   ),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  padding: EdgeInsets.all(4),
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.6,
+                      maxHeight: MediaQuery.of(context).size.height * 0.4),
+                  decoration: BoxDecoration(
+                      color: isSendByMe
+                          ? Colors.blueGrey[300]
+                          : Colors.grey[200], // todo color?
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
+                        bottomLeft: Radius.circular(isSendByMe ? 12 : 0),
+                        bottomRight: Radius.circular(isSendByMe ? 0 : 12),
+                      )),
+                  // child: ClipRRect(
+                  //   borderRadius: BorderRadius.circular(12.0),
+                  //   child: CachedNetworkImage(
+                  //     imageUrl: message,
+                  //     placeholder: (context, url) => Padding(
+                  //       padding: const EdgeInsets.all(8.0),
+                  //       child: CircularProgressIndicator(),
+                  //     ),
+                  //     errorWidget: (context, url, error) => Icon(Icons.error),
+                  //   ),
+                  // ),
+                  // child: Text("hello"),
+
+                  child: Material(
+                    // color: Colors.orange[300],
+                    color: Colors.blueGrey[300],
+                    borderRadius: BorderRadius.circular(8),
+                    child: InkWell(
+                      onTap: () {
+                        // print("helllllllllllllllllllllllo");
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => ShowMap(
+                                position: LatLng(latitude, longitude))));
+                        // Get.to(ShowMap(position: LatLng(latitude, longitude)));
+                      },
+                      child: Container(
+                        height: 400.h,
+                        width: 400.w,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.location_pin,
+                                color: Colors.amber[300],
+                                size: 40,
+                              ),
+                              Text(
+                                "Click here to open location",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.orange[50],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Row(
+                mainAxisAlignment: isSendByMe
+                    ? MainAxisAlignment.end
+                    : MainAxisAlignment.start,
+                children: [
+                  if (!isSendByMe)
+                    SizedBox(
+                      width: 62,
+                    ),
+                  Icon(
+                    Icons.done_all,
+                    size: 20,
+                    color: Colors.blue[300], //MyTheme.bodyTextTime.color,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(finalTime,
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600]) //MyTheme.bodyTextTime,
+                      )
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    }
 
     return isText
         ? Container(

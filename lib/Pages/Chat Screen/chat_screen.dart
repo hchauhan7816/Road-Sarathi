@@ -266,6 +266,7 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
                   message: ImageUrl!,
                   sendBy: userEmail, //Constants.myEmail, // userEmail,
                   text: false,
+                  isLocation: false,
                   time: DateTime.now().millisecondsSinceEpoch)
               .toJson());
     } else {
@@ -314,6 +315,7 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
                   message: messageController.text,
                   sendBy: userEmail, //Constants.myEmail, // userEmail,
                   text: true,
+                  isLocation: false,
                   time: DateTime.now().millisecondsSinceEpoch)
               .toJson());
       messageController.text = "";
@@ -376,6 +378,9 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
                     isSendByMe: snapshot.data!.docs[index].data()["sendBy"] ==
                         widget.userEmail,
                     isText: snapshot.data!.docs[index].data()["text"],
+                    isLocation: snapshot.data!.docs[index].data()["isLocation"],
+                    latitude: snapshot.data!.docs[index].data()["latitude"],
+                    longitude: snapshot.data!.docs[index].data()["longitude"],
                   );
                 },
               );

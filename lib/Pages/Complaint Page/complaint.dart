@@ -115,6 +115,19 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                   message: ImageUrl!,
                   sendBy: Constants.myEmail,
                   text: false,
+                  isLocation: false,
+                  time: DateTime.now().millisecondsSinceEpoch)
+              .toJson());
+
+      firebaseHelper.setConversationMessages(
+          chatroomId: chatroomId,
+          messageMap: ModalChatMessages(
+                  message: "",
+                  sendBy: Constants.myEmail,
+                  text: false,
+                  isLocation: true,
+                  latitude: 24.234,
+                  longitude: 73.283,
                   time: DateTime.now().millisecondsSinceEpoch)
               .toJson());
 

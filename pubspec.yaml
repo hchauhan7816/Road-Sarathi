@@ -48,6 +48,9 @@ dependencies:
   cached_network_image: ^3.1.0+1
   intl: ^0.17.0
   flutter_svg: ^0.23.0+1
+  shared_preferences: ^2.0.9
+  geolocator: ^7.7.1
+  google_maps_flutter: ^2.1.1
   
 
 
