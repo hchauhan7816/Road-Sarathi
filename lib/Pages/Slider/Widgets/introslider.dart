@@ -14,14 +14,14 @@ class _IntroSliderBodyState extends State<IntroSliderBody> {
   int currentPage = 0;
 
   List<Map<String, String>> splashData = [
-    {"heading": "Delivery and Payments", "image": "assets/img/login.png"},
+    {"heading": "Register Bad Road Complaints", "image": "assets/img/road.png"},
     {
-      "heading": "Instant Delivery and Payments",
-      "image": "assets/img/login.png"
+      "heading": "Real Time Connection With Road Authorities",
+      "image": "assets/img/Chatting.png"
     },
     {
-      "heading": "Enjoy Instant Delivery and Payments",
-      "image": "assets/img/login.png"
+      "heading": "Track Status Of Your Complaint",
+      "image": "assets/img/Status_update.png"
     }
   ];
 
