@@ -25,7 +25,8 @@ class SplashScreenContent extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 30),
+
+          SizedBox(height: 40),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Text(
@@ -46,11 +47,11 @@ class SplashScreenContent extends StatelessWidget {
           // ),
           // // Spacer(flex: 2,),
           Image.asset(
-            "assets/img/login.png",
-            height: getProportionateScreenHeight(285),
-            width: getProportionateScreenWidth(245),
+            imageURL,
+            height: getProportionateScreenHeight(300),
+            width: getProportionateScreenWidth(500),
           ),
-          Spacer(),
+          Spacer(flex: 2),
         ],
       ),
     );
