@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dropdownfield/dropdownfield.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,6 +43,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
 
   TextEditingController _titleController = TextEditingController();
   TextEditingController _locationController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
   bool isUploading = false;
   File? imageFile;
 
@@ -223,34 +225,41 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                 SizedBox(
                                   height: 15.h,
                                 ),
-                                TextField(
-                                  autocorrect: true,
-                                  controller: _titleController,
-                                  textInputAction: TextInputAction.next,
-                                  decoration: InputDecoration(
-                                    hintText: 'Enter Title',
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 40.h, horizontal: 30.w),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
+                                Container(
+                                  //padding:
+                                  //  EdgeInsets.symmetric(horizontal: 10.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(3.0),
+                                    border: Border.all(
+                                        color: Colors.grey,
+                                        style: BorderStyle.solid,
+                                        width: 0.90),
+                                  ),
+                                  child: DropDownField(
+                                    //autocorrect: true,
+                                    controller: _titleController,
+                                    //textInputAction: TextInputAction.next,
+                                    //decoration: InputDecoration(
+                                    hintText: 'Select Title Tags*',
+                                    enabled: true,
+                                    itemsVisibleInDropdown: 3,
+                                    items: problem,
+                                    onValueChanged: (value) {
+                                      setState(() {
+                                        selectproblem = value;
+                                      });
+                                    },
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 30.h,
-                                )
+                                /* SizedBox(
+                                  height: 5.h,
+                                )*/
                               ],
                             ),
                           ),
-                          SizedBox(
+                          /* SizedBox(
                             height: 25,
-                          ),
+                          ),*/
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 8.0, horizontal: 16),
@@ -272,7 +281,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                   controller: _locationController,
                                   textInputAction: TextInputAction.next,
                                   decoration: InputDecoration(
-                                    hintText: 'Enter Location',
+                                    hintText: 'Enter Location*',
                                     isDense: true,
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: 40.h, horizontal: 30.w),
@@ -286,15 +295,59 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                /*SizedBox(
                                   height: 30.h,
-                                )
+                                )*/
                               ],
                             ),
                           ),
-                          SizedBox(
-                            height: 50,
+                          /* SizedBox(
+                            height: 25,
+                          ),*/
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Description",
+                                  style: TextStyle(
+                                      fontSize: 70.sp,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black87),
+                                ),
+                                SizedBox(
+                                  height: 15.h,
+                                ),
+                                TextField(
+                                  autocorrect: true,
+                                  controller: _descriptionController,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration(
+                                    hintText: 'Fill in your complaint here*',
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 40.h, horizontal: 30.w),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                                /*SizedBox(
+                                  height: 100.h,
+                                )*/
+                              ],
+                            ),
                           ),
+                          /*SizedBox(
+                            height: 50,
+                          ),*/
                           Material(
                             color: Colors.white,
                             // color: isDarkMode(context) ? Colors.black12 : Colors.white,
@@ -372,9 +425,9 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                         color: Colors.black87),
                                   ),
                                 ),
-                                SizedBox(
+                                /*SizedBox(
                                   height: 20,
-                                ),
+                                ),*/
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal:
@@ -383,7 +436,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                   child: Container(
                                       //     // color: Colors.pinkAccent,
                                       height: 150,
-                                      width: 150,
+                                      width: 100,
                                       //     // child: ListView.builder(
                                       //     shrinkWrap: true,
                                       //     itemCount: _images.length,
@@ -424,7 +477,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 24),
+                              vertical: 16, horizontal: 300.h),
                           primary: Palette.orange,
                           shape: RoundedRectangleBorder(
                             side: BorderSide.none,
@@ -453,3 +506,6 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
           );
   }
 }
+
+String selectproblem = "";
+List<String> problem = ["Pothole", "Water logging", "Unauthorized median cut"];
