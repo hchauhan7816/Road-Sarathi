@@ -43,7 +43,7 @@ class UserConversationRooms extends StatelessWidget {
               // Icon(Icons.directions_car, size: 350),
             ],
           ),
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Palette.peach,
           appBar: userConversationRoomsAppBar(
             context,
             tabBar: userLocalGovConversationRoomsTabBar(),

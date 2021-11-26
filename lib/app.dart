@@ -33,8 +33,10 @@ class OurApp extends StatelessWidget {
         theme: Themes().lightTheme,
 
         // Todo uncomment
-        home:
-            firebaseHelper.auth.currentUser != null ? HomePage() : OnBoarding(),
+        // home:
+        //     firebaseHelper.auth.currentUser != null ? HomePage() : OnBoarding(),
+
+        home: SplashScreen(),
 
         // home: Temp(), //MyMap(), // Temp(),
 

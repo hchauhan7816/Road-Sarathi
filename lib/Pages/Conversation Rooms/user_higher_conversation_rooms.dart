@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sadak/Config/constants.dart';
+import 'package:sadak/Config/palette.dart';
 import 'package:sadak/Pages/Chat%20Screen/Widgets/tiles.dart';
 import 'package:sadak/Pages/Conversation%20Rooms/Widgets/tabbar.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
@@ -30,7 +31,7 @@ class UserHigherConversationRooms extends StatelessWidget {
                 completed: true), //completed: true),
           ],
         ),
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Palette.peach,
         appBar: userConversationRoomsAppBar(
           context,
           tabBar: conversationRoomsTabBar(),

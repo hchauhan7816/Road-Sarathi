@@ -6,18 +6,22 @@ TabBar conversationRoomsTabBar() {
   return TabBar(
     indicatorSize: TabBarIndicatorSize.label,
     indicator: ShapeDecoration(
-        color: Palette.orange,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+      color: Palette.orange,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    ),
     isScrollable: false,
     labelStyle: TextStyle(fontSize: 45.sp),
-    tabs: <Widget>[
+    tabs: const <Widget>[
       Tab(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Text(
             "Ongoing Complaints",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 17),
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.black,
+            ),
           ),
         ),
       ),
@@ -27,7 +31,10 @@ TabBar conversationRoomsTabBar() {
           child: Text(
             "Completed Complaints",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 17),
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.black,
+            ),
           ),
         ),
       ),
@@ -43,14 +50,17 @@ TabBar userLocalGovConversationRoomsTabBar() {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
     isScrollable: false,
     labelStyle: TextStyle(fontSize: 45.sp),
-    tabs: <Widget>[
+    tabs: const <Widget>[
       Tab(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Text(
             "Ongoing Complaints",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.black,
+            ),
           ),
         ),
       ),
@@ -60,7 +70,10 @@ TabBar userLocalGovConversationRoomsTabBar() {
           child: Text(
             "Completed Complaints",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.black,
+            ),
           ),
         ),
       ),
@@ -70,7 +83,10 @@ TabBar userLocalGovConversationRoomsTabBar() {
           child: Text(
             "Transfered Complaints",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 15),
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.black,
+            ),
           ),
         ),
       ),

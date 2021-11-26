@@ -20,7 +20,7 @@ class BottomNavBar extends StatelessWidget {
               style: GoogleFonts.roboto(
                 fontSize: 25,
                 fontWeight: FontWeight.w900,
-                height: 1,
+                height: 1.2,
               ),
             ),
             Text(

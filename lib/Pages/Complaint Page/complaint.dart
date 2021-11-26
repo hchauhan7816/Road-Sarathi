@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:flutter_dropdown_x/flutter_dropdown_x.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,7 +24,8 @@ class ComplaintPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        backgroundColor: Colors.blueGrey,
+        // backgroundColor: Colors.blueGrey,
+        backgroundColor: Palette.peach,
         body: ComplaintPageBody(),
         appBar: complaintPageAppBar(context));
   }
@@ -40,8 +41,10 @@ class ComplaintPageBody extends StatefulWidget {
 class _ComplaintPageBodyState extends State<ComplaintPageBody> {
   FirebaseHelper firebaseHelper = Get.find<FirebaseHelper>();
 
+  String? _selected;
   TextEditingController _titleController = TextEditingController();
   TextEditingController _locationController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
   bool isUploading = false;
   File? imageFile;
 
@@ -85,29 +88,31 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
   void sendDetails() {
     int val = DateTime.now().millisecondsSinceEpoch;
 
-    if (ImageUrl != null && ImageUrl!.isNotEmpty) {
+    if (ImageUrl != null && ImageUrl!.isNotEmpty && _selected != null) {
       var chatroomId = firebaseHelper.getChatroomId(
-          userEmail1: Constants.myEmail,
-          userEmail2: "localauthority@gmail.com",
-          val: val);
+        userEmail1: Constants.myEmail,
+        userEmail2: "localauthority@gmail.com",
+        val: val,
+      );
 
       var chatroomMap = ChatroomModal(
-          users: Constants.myEmail,
-          authority:
-              "localauthority@gmail.com", // saved place dont delete this comment
-          chatroomId: chatroomId,
-          isWithHigher: false,
-          title: _titleController.text,
-          location: _locationController.text,
-          completed: false,
-          dueDate: DateTime.now().add(const Duration(days: 60)));
+        users: Constants.myEmail,
+        authority:
+            "localauthority@gmail.com", // saved place dont delete this comment
+        chatroomId: chatroomId,
+        isWithHigher: false,
+        title: _selected!,
+        completed: false,
+        dueDate: DateTime.now().add(const Duration(days: 60)),
+      );
 
       firebaseHelper.createChatRooms(
-          userEmail1: Constants.myEmail,
-          userEmail2:
-              "localauthority@gmail.com", // saved place dont delete this comment
-          chatroomId: chatroomId,
-          chatroomMap: chatroomMap.toJson());
+        userEmail1: Constants.myEmail,
+        userEmail2:
+            "localauthority@gmail.com", // saved place dont delete this comment
+        chatroomId: chatroomId,
+        chatroomMap: chatroomMap.toJson(),
+      );
 
       firebaseHelper.setConversationMessages(
           chatroomId: chatroomId,
@@ -131,11 +136,14 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                   time: DateTime.now().millisecondsSinceEpoch)
               .toJson());
 
-      Get.off(() => ChatScreen(
+      Get.off(
+        () => ChatScreen(
           isWithHigher: false,
           completed: false,
           chatroomId: chatroomId,
-          userEmail: Constants.myEmail));
+          userEmail: Constants.myEmail,
+        ),
+      );
     } else {
       // Todo
       Get.snackbar("Unable to Proceed", "Image not Uploaded");
@@ -160,12 +168,13 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
             side: BorderSide.none,
             borderRadius: BorderRadius.circular(15),
           ),
-          color: Palette.orange,
+          // color: Palette.orange,
+          color: Palette.peach,
           child: isLastItem
               ? Icon(Icons.camera_alt,
                   size: 40,
                   color: Colors
-                      .white //isDarkMode(context) ? Colors.black : Colors.white,
+                      .black //isDarkMode(context) ? Colors.black : Colors.white,
                   )
               : ClipRRect(
                   borderRadius: BorderRadius.circular(12),
@@ -197,9 +206,10 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                 Text(
                   "Uploading Image",
                   style: TextStyle(
+                      height: 1.2,
                       fontSize: 35,
                       fontWeight: FontWeight.w300,
-                      color: Colors.white70),
+                      color: Colors.black87),
                 ),
               ],
             ),
@@ -222,172 +232,189 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 16),
+                                vertical: 8.0, horizontal: 8),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  "Title",
-                                  style: TextStyle(
-                                      fontSize: 70.sp,
-                                      fontWeight: FontWeight.w300,
-                                      color: Colors.black87),
-                                ),
-                                SizedBox(
-                                  height: 15.h,
-                                ),
-                                TextField(
-                                  autocorrect: true,
-                                  controller: _titleController,
-                                  textInputAction: TextInputAction.next,
-                                  decoration: InputDecoration(
-                                    hintText: 'Enter Title',
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 40.h, horizontal: 30.w),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 30.h,
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  "Location",
-                                  style: TextStyle(
-                                      fontSize: 70.sp,
-                                      fontWeight: FontWeight.w300,
-                                      color: Colors.black87),
-                                ),
-                                SizedBox(
-                                  height: 15.h,
-                                ),
-                                TextField(
-                                  autocorrect: true,
-                                  controller: _locationController,
-                                  textInputAction: TextInputAction.next,
-                                  decoration: InputDecoration(
-                                    hintText: 'Enter Location',
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 40.h, horizontal: 30.w),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.grey),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 30.h,
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Material(
-                            color: Colors.white,
-                            // color: isDarkMode(context) ? Colors.black12 : Colors.white,
-                            // elevation: 2,
-                            child: ListView(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              children: <Widget>[
-                                // ListTile(
-                                //   dense: true,
-                                //   title: Text(
-                                //     'Filters',
-                                //     style: TextStyle(fontSize: 20),
-                                //   ),
-                                // trailing: Text(_filters?.isEmpty ?? true
-                                //     ? 'Set Filters'
-                                //     : 'Edit Filters'),
-                                // onTap: () async {
-                                //   _filters = await showModalBottomSheet(
-                                //     isScrollControlled: true,
-                                //     context: context,
-                                //     shape: RoundedRectangleBorder(
-                                //       borderRadius: BorderRadius.vertical(
-                                //         top: Radius.circular(20),
-                                //       ),
-                                //     ),
-                                //     builder: (context) {
-                                //       return FiltersScreen(
-                                //           filtersValue: _filters ?? {});
-                                //     },
-                                //   );
-                                //   if (_filters == null) _filters = Map();
-                                //   setState(() {});
-                                //   print('${_filters.toString()}'.tr());
-                                // },
-                                // ),
-                                // ListTile(
-                                //   title: Text(
-                                //     'Location',
-                                //     style: TextStyle(fontSize: 20),
-                                //   ),
-                                //   // trailing: Container(
-                                //   width: MediaQuery.of(context).size.width / 2,
-                                //   child: Text(
-                                //     _placeDetail != null
-                                //         ? '${_placeDetail!.result.formattedAddress}'
-                                //             .tr()
-                                //         : 'Select Place'.tr(),
-                                //     textAlign: TextAlign.end,
-                                //   ),
-                                // ),
-                                // onTap: () async {
-                                //   Prediction? p = await PlacesAutocomplete.show(
-                                //     context: context,
-                                //     apiKey: GOOGLE_API_KEY,
-                                //     mode: Mode.fullscreen,
-                                //     language: 'en',
-                                //   );
-                                //   if (p != null)
-                                //     _placeDetail = await _places
-                                //         .getDetailsByPlaceId(p.placeId ?? '');
-                                //   setState(() {});
-                                // },
-                                // ),
-
                                 Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
                                   child: Text(
-                                    "Add Photos",
+                                    "Title",
                                     style: TextStyle(
+                                        height: 1.2,
                                         fontSize: 70.sp,
                                         fontWeight: FontWeight.w300,
                                         color: Colors.black87),
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 15.h,
                                 ),
+                                Container(
+                                  // color: Colors.amber,
+                                  // padding: EdgeInsets.all(0),
+                                  //padding:
+                                  //  EdgeInsets.symmetric(horizontal: 10.0),
+                                  // decoration: BoxDecoration(
+                                  //   borderRadius: BorderRadius.circular(3.0),
+                                  //   border: Border.all(
+                                  //       color: Colors.grey,
+                                  //       style: BorderStyle.solid,
+                                  //       width: 0.90),
+                                  // ),
+                                  // child: DropDownField(
+                                  //   //autocorrect: true,
+                                  //   controller: _titleController,
+                                  //   //textInputAction: TextInputAction.next,
+                                  //   //decoration: InputDecoration(
+                                  //   hintText: 'Select Title Tags*',
+                                  //   enabled: true,
+                                  //   itemsVisibleInDropdown: 3,
+                                  //   items: problem,
+                                  //   onValueChanged: (value) {
+                                  //     setState(() {
+                                  //       selectproblem = value;
+                                  //     });
+                                  //   },
+                                  // ),
+
+                                  child: DropDownField(
+                                    hintText: 'Enter Title Tag*',
+                                    value: _selected,
+                                    onChanged: (v) {
+                                      setState(() {
+                                        _selected = v;
+                                      });
+                                    },
+                                    dataSource: const [
+                                      {
+                                        "display": "Potholes",
+                                        "value": "Potholes",
+                                      },
+                                      {
+                                        "display": "Water Logging",
+                                        "value": "Water Logging",
+                                      },
+                                      {
+                                        "display": "Unauthorized Median Cut",
+                                        "value": "Unauthorized Median Cut",
+                                      },
+                                    ],
+                                    textField: 'display',
+                                    valueField: 'value',
+                                  ),
+                                ),
+                                /* SizedBox(
+                                  height: 5.h,
+                                )*/
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16.0, horizontal: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Location",
+                                  style: TextStyle(
+                                      height: 1.2,
+                                      fontSize: 70.sp,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black87),
+                                ),
+                                SizedBox(
+                                  height: 30.h,
+                                ),
+                                TextField(
+                                  autocorrect: true,
+                                  controller: _locationController,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration(
+                                    hintText: 'Enter Location*',
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 40.h, horizontal: 30.w),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          /* SizedBox(
+                            height: 25,
+                          ),*/
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16.0, horizontal: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Description",
+                                  style: TextStyle(
+                                      height: 1.2,
+                                      fontSize: 70.sp,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black87),
+                                ),
+                                SizedBox(
+                                  height: 30.h,
+                                ),
+                                TextField(
+                                  autocorrect: true,
+                                  controller: _descriptionController,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration(
+                                    hintText: 'Fill in your complaint here*',
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 40.h, horizontal: 30.w),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Material(
+                            color: Colors.white,
+                            child: ListView(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 16),
+                                  child: Text(
+                                    "Add Photos",
+                                    style: TextStyle(
+                                      height: 1.2,
+                                      fontSize: 70.sp,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                ),
+                                /*SizedBox(
+                                  height: 20,
+                                ),*/
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal:
@@ -396,7 +423,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                   child: Container(
                                       //     // color: Colors.pinkAccent,
                                       height: 150,
-                                      width: 150,
+                                      width: 100,
                                       //     // child: ListView.builder(
                                       //     shrinkWrap: true,
                                       //     itemCount: _images.length,
@@ -426,40 +453,42 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                               ],
                             ),
                           ),
+                          SizedBox(height: 20.h),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 16, horizontal: 250.w),
+                                // primary: Palette.orange,
+                                primary: Palette.peach,
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                              ),
+                              child: Text(
+                                'Register Complaint',
+                                style: TextStyle(
+                                  height: 1.2,
+                                  // color: isDarkMode(context)
+                                  //     ? Colors.black
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              onPressed: () {
+                                if (!isUploading) {
+                                  sendDetails();
+                                }
+                              }, // => _postListing()),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 24),
-                          primary: Palette.orange,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide.none,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                        ),
-                        child: Text(
-                          'Post Listing',
-                          style: TextStyle(
-                              // color: isDarkMode(context)
-                              //     ? Colors.black
-                              color: Colors.white,
-                              fontSize: 20),
-                        ),
-                        onPressed: () {
-                          if (!isUploading) {
-                            sendDetails();
-                          }
-                        }, // => _postListing()),
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),

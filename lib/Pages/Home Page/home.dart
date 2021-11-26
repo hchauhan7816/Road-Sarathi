@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   height: size.height * .45,
                   decoration: const BoxDecoration(
-                    color: Color(0xFFF5CEB8),
+                    color: Palette.peach,
                     image: DecorationImage(
                         alignment: Alignment.centerLeft,
                         image: //AssetImage("assets/img/welcome.png")),
