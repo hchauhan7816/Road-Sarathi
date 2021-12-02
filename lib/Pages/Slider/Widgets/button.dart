@@ -15,12 +15,10 @@ class introslidertextbutton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {
-        // Respond to button press
-      },
+      onPressed: () {},
       child: Text(
         text,
-        style: TextStyle(fontSize: 24, color: Colors.black),
+        style: const TextStyle(fontSize: 24, color: Colors.black),
       ),
     );
   }
@@ -47,11 +45,11 @@ class introsliderdefaultbutton extends StatelessWidget {
           ),
         ),
         onPressed: () {
-          Get.offAll(OnBoarding());
+          Get.offAll(const OnBoarding());
         },
         child: Text(
           text,
-          style: TextStyle(fontSize: 24, color: Colors.white),
+          style: const TextStyle(fontSize: 24, color: Colors.white),
         ),
       ),
     );

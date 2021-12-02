@@ -12,7 +12,6 @@ import 'package:sadak/Pages/Chat%20Screen/Widgets/tiles.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'package:uuid/uuid.dart';
-import 'dart:developer' as dev;
 
 import 'Widgets/appbar_chat_screen.dart';
 
@@ -35,7 +34,6 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // dev.log(userEmail);
     return CustomScaffold(
       body: ChatScreenBody(
         completed: completed,
@@ -43,7 +41,7 @@ class ChatScreen extends StatelessWidget {
         chatroomId: chatroomId,
         userEmail: userEmail,
       ),
-      backgroundColor: Palette.peach, //Colors.blueGrey, //Color(0xFFFFFFF6),
+      backgroundColor: Palette.peach,
       appBar: chatScreenAppBar(
         context,
         userEmail: userEmail,
@@ -78,6 +76,7 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
   Stream<QuerySnapshot<Map<String, dynamic>>>? heading;
   bool isUploading = false;
   File? imageFile;
+  // ignore: non_constant_identifier_names
   String? ImageUrl;
 
   @override
@@ -98,12 +97,12 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
         FocusScope.of(context).unfocus();
       },
       child: isUploading
-          ? Container(
+          ? SizedBox(
               height: MediaQuery.of(context).size.height / 1.3,
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const [
                     CircularProgressIndicator(
                       color: Colors.amber,
                     ),
@@ -125,23 +124,24 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
           : Column(
               children: [
                 Expanded(
-                    child: Container(
-                  margin: EdgeInsets.only(top: 10),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFFFF6),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFFFFFF6),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                      child: chatMessageList(),
                     ),
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30),
-                    ),
-                    child: chatMessageList(), //Conversation(user: widget.user),
-                  ),
-                )),
+                ),
                 if (!widget.completed)
                   buildChatComposer()
                 else if (widget.isWithHigher)
@@ -156,14 +156,14 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
 
   Container disabledChatComposer({required String message}) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
-      color: Color(0xFFFFFFF6),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      color: const Color(0xFFFFFFF6),
       height: 80,
       child: Row(
         children: [
           Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
               height: 50,
               decoration: BoxDecoration(
                 color: Colors.grey[300],
@@ -197,14 +197,14 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
 
   Container buildChatComposer() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15),
-      color: Color(0xFFFFFFF6),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      color: const Color(0xFFFFFFF6),
       height: 80,
       child: Row(
         children: [
           Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
               height: 50,
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -212,13 +212,6 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
               ),
               child: Row(
                 children: [
-                  // Icon(
-                  //   Icons.emoji_emotions_outlined,
-                  //   color: Colors.grey[500],
-                  // ),
-                  // SizedBox(
-                  //   width: 10,
-                  // ),
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
@@ -245,17 +238,16 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 12,
           ),
           GestureDetector(
             onTap: () {
               sendMessage(userEmail: widget.userEmail);
             },
-            child: CircleAvatar(
+            child: const CircleAvatar(
               radius: 25,
-              backgroundColor:
-                  Palette.orange, //Colors.amber, //MyTheme.kAccentColor,
+              backgroundColor: Palette.orange,
               child: Icon(
                 Icons.send,
                 color: Colors.white,
@@ -268,20 +260,17 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
   }
 
   void sendDetails({required userEmail}) {
-    int val = DateTime.now().millisecondsSinceEpoch;
-
     if (ImageUrl != null && ImageUrl!.isNotEmpty) {
       firebaseHelper.setConversationMessages(
           chatroomId: widget.chatroomId,
           messageMap: ModalChatMessages(
                   message: ImageUrl!,
-                  sendBy: userEmail, //Constants.myEmail, // userEmail,
+                  sendBy: userEmail,
                   text: false,
                   isLocation: false,
                   time: DateTime.now().millisecondsSinceEpoch)
               .toJson());
     } else {
-      // Todo
       Get.snackbar("Unable to Proceed", "Image not Uploaded");
     }
   }
@@ -298,13 +287,11 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
   }
 
   uploadImage() async {
-    // Todo wait till is uploading
-
     setState(() {
       isUploading = true;
     });
 
-    String fileName = Uuid().v1();
+    String fileName = const Uuid().v1();
 
     var ref =
         await FirebaseStorage.instance.ref().child('images').child(fileName);
@@ -324,7 +311,7 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
           chatroomId: widget.chatroomId,
           messageMap: ModalChatMessages(
                   message: messageController.text,
-                  sendBy: userEmail, //Constants.myEmail, // userEmail,
+                  sendBy: userEmail,
                   text: true,
                   isLocation: false,
                   time: DateTime.now().millisecondsSinceEpoch)
@@ -335,8 +322,8 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
 
   Widget chatMessageList() {
     return SingleChildScrollView(
-      physics: ScrollPhysics(),
-      padding: EdgeInsets.symmetric(horizontal: 6),
+      physics: const ScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 6),
       child: Column(
         children: [
           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -371,13 +358,9 @@ class _ChatScreenBodyState extends State<ChatScreenBody> {
 
               return ListView.builder(
                 shrinkWrap: true,
-                // reverse: true,
-                physics: NeverScrollableScrollPhysics(),
-                // scrollDirection: Axis.vertical,
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
-                  // dev.log(
-                  //     "Value    ----->     ${snapshot.data!.docs[index].data()["sendBy"]}");
                   return MessageTile(
                     otherUserEmail: widget.chatroomId
                         .replaceAll(widget.userEmail, "")

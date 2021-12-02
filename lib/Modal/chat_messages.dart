@@ -9,7 +9,6 @@ class ModalChatMessages with ChangeNotifier {
   double longitude;
   int time;
 
-  // Default Values
   ModalChatMessages({
     required this.message,
     required this.sendBy,

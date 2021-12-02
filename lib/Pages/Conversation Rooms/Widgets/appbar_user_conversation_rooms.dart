@@ -5,30 +5,20 @@ import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 
 AppBar userConversationRoomsAppBar(BuildContext context, {TabBar? tabBar}) {
   return AppBar(
-    // elevation: 10,
     title: Text(
       "Road Sarathi",
       style: appTitleStyle,
     ),
     centerTitle: true,
-    // brightness: Brightness.light,
-    // backgroundColor: Colors.white,
     bottom: tabBar,
     actions: [
       GestureDetector(
         onTap: () {
-          // authMethods.signOut();
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => Authenticate(),
-          //   ),
-          // );
-          Get.offAll(() => OnBoarding());
+          Get.offAll(() => const OnBoarding());
         },
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Icon(Icons.logout),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: const Icon(Icons.logout),
         ),
       ),
     ],

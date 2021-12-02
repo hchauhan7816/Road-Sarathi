@@ -13,11 +13,9 @@ import 'package:sadak/Config/palette.dart';
 import 'package:sadak/Modal/chat_messages.dart';
 import 'package:sadak/Modal/chatroom_map.dart';
 import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
-import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
 import 'package:uuid/uuid.dart';
-import 'dart:developer' as dev;
 
 import 'Widgets/appbar_complaint.dart';
 
@@ -27,15 +25,15 @@ class ComplaintPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        // backgroundColor: Colors.blueGrey,
-        backgroundColor: Palette.peach,
-        body: ComplaintPageBody(),
-        appBar: complaintPageAppBar(context));
+      backgroundColor: Palette.peach,
+      body: ComplaintPageBody(),
+      appBar: complaintPageAppBar(context),
+    );
   }
 }
 
 class ComplaintPageBody extends StatefulWidget {
-  ComplaintPageBody({Key? key}) : super(key: key);
+  const ComplaintPageBody({Key? key}) : super(key: key);
 
   @override
   State<ComplaintPageBody> createState() => _ComplaintPageBodyState();
@@ -61,6 +59,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
   bool isUploading = false;
   File? imageFile;
 
+  // ignore: non_constant_identifier_names
   String? ImageUrl;
 
   @override
@@ -76,9 +75,6 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
 
     List<Placemark> placemarks = await placemarkFromCoordinates(lat, lon);
     Placemark place = placemarks[0];
-
-    print("HELOOOOOOOOOOOOO");
-    print(place);
 
     setState(() {
       position = LatLng(lat, lon);
@@ -146,9 +142,9 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
       isUploading = true;
     });
 
-    String fileName = Uuid().v1();
+    String fileName = const Uuid().v1();
 
-    var ref = FirebaseStorage.instance.ref().child('images').child('$fileName');
+    var ref = FirebaseStorage.instance.ref().child('images').child(fileName);
 
     var uploadTask = await ref.putFile(imageFile!);
 
@@ -174,8 +170,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
 
       var chatroomMap = ChatroomModal(
         users: Constants.myEmail,
-        authority:
-            "localauthority@gmail.com", // saved place dont delete this comment
+        authority: "localauthority@gmail.com",
         chatroomId: chatroomId,
         isWithHigher: false,
         title: _selected!,
@@ -185,8 +180,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
 
       firebaseHelper.createChatRooms(
         userEmail1: Constants.myEmail,
-        userEmail2:
-            "localauthority@gmail.com", // saved place dont delete this comment
+        userEmail2: "localauthority@gmail.com",
         chatroomId: chatroomId,
         chatroomMap: chatroomMap.toJson(),
       );
@@ -194,12 +188,12 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
       firebaseHelper.setConversationMessages(
         chatroomId: chatroomId,
         messageMap: ModalChatMessages(
-                message: ImageUrl!,
-                sendBy: Constants.myEmail,
-                text: false,
-                isLocation: false,
-                time: DateTime.now().millisecondsSinceEpoch)
-            .toJson(),
+          message: ImageUrl!,
+          sendBy: Constants.myEmail,
+          text: false,
+          isLocation: false,
+          time: DateTime.now().millisecondsSinceEpoch,
+        ).toJson(),
       );
 
       firebaseHelper.setConversationMessages(
@@ -235,7 +229,6 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
         ),
       );
     } else {
-      // Todo
       Get.snackbar("Unable to Proceed", "Some data is still missing");
     }
   }
@@ -248,29 +241,20 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
         if (isLastItem) {
           getImage();
         }
-        // isLastItem ? _pickImage() : _viewOrDeleteImage(imageFile);
       },
       child: Container(
-        // constraints: BoxConstraints(maxWidth: 10),
-        //   width: 100,
         child: Card(
           shape: RoundedRectangleBorder(
             side: BorderSide.none,
             borderRadius: BorderRadius.circular(15),
           ),
-          // color: Palette.orange,
           color: Palette.peach,
           child: isLastItem
-              ? Icon(Icons.camera_alt,
-                  size: 40,
-                  color: Colors
-                      .black //isDarkMode(context) ? Colors.black : Colors.white,
-                  )
+              ? Icon(Icons.camera_alt, size: 40, color: Colors.black)
               : ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.file(
                     imageFile,
-                    // fit: BoxFit.cover,
                   ),
                 ),
         ),
@@ -281,12 +265,12 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
   @override
   Widget build(BuildContext context) {
     return isUploading
-        ? Container(
+        ? SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 CircularProgressIndicator(
                   color: Colors.black,
                 ),
@@ -305,13 +289,12 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
             ),
           )
         : ClipRRect(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(30),
               topRight: Radius.circular(30),
             ),
-            child: //Conversation(user: widget.user),
-                Container(
-              padding: EdgeInsets.only(top: 20),
+            child: Container(
+              padding: const EdgeInsets.only(top: 20),
               color: Colors.white,
               child: Stack(
                 children: <Widget>[
@@ -342,33 +325,6 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                   height: 15.h,
                                 ),
                                 Container(
-                                  // color: Colors.amber,
-                                  // padding: EdgeInsets.all(0),
-                                  //padding:
-                                  //  EdgeInsets.symmetric(horizontal: 10.0),
-                                  // decoration: BoxDecoration(
-                                  //   borderRadius: BorderRadius.circular(3.0),
-                                  //   border: Border.all(
-                                  //       color: Colors.grey,
-                                  //       style: BorderStyle.solid,
-                                  //       width: 0.90),
-                                  // ),
-                                  // child: DropDownField(
-                                  //   //autocorrect: true,
-                                  //   controller: _titleController,
-                                  //   //textInputAction: TextInputAction.next,
-                                  //   //decoration: InputDecoration(
-                                  //   hintText: 'Select Title Tags*',
-                                  //   enabled: true,
-                                  //   itemsVisibleInDropdown: 3,
-                                  //   items: problem,
-                                  //   onValueChanged: (value) {
-                                  //     setState(() {
-                                  //       selectproblem = value;
-                                  //     });
-                                  //   },
-                                  // ),
-
                                   child: DropDownField(
                                     hintText: 'Enter Title Tag*',
                                     value: _selected,
@@ -395,9 +351,6 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                     valueField: 'value',
                                   ),
                                 ),
-                                /* SizedBox(
-                                  height: 5.h,
-                                )*/
                               ],
                             ),
                           ),
@@ -434,7 +387,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                       borderSide:
                                           BorderSide(color: Colors.grey),
                                     ),
-                                    border: OutlineInputBorder(
+                                    border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.grey),
                                     ),
@@ -443,7 +396,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                 SizedBox(height: 20.h),
                                 Row(
                                   children: [
-                                    Spacer(),
+                                    const Spacer(),
                                     Material(
                                       color: Colors.orange[300],
                                       borderRadius: BorderRadius.circular(
@@ -453,7 +406,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                           getUserLocation();
                                         },
                                         child: AnimatedContainer(
-                                          duration: Duration(seconds: 1),
+                                          duration: const Duration(seconds: 1),
                                           width: changeButton ? 50 : 200,
                                           height: 50,
                                           alignment: Alignment.center,
@@ -462,12 +415,12 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                                 changeButton ? 50 : 8),
                                           ),
                                           child: isLoading
-                                              ? CircularProgressIndicator(
+                                              ? const CircularProgressIndicator(
                                                   color: Colors.black54,
                                                 )
                                               : changeButton
-                                                  ? Icon(Icons.refresh)
-                                                  : Text(
+                                                  ? const Icon(Icons.refresh)
+                                                  : const Text(
                                                       "Provide Location",
                                                       style: TextStyle(
                                                         fontSize: 16,
@@ -478,15 +431,12 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                         ),
                                       ),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                   ],
                                 ),
                               ],
                             ),
                           ),
-                          /* SizedBox(
-                            height: 25,
-                          ),*/
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 16.0, horizontal: 16),
@@ -517,7 +467,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                       borderSide:
                                           BorderSide(color: Colors.grey),
                                     ),
-                                    border: OutlineInputBorder(
+                                    border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Colors.grey),
                                     ),
@@ -529,12 +479,12 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                           Material(
                             color: Colors.white,
                             child: ListView(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              physics: NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               children: <Widget>[
                                 Padding(
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       vertical: 8.0, horizontal: 16),
                                   child: Text(
                                     "Add Photos",
@@ -546,44 +496,16 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                     ),
                                   ),
                                 ),
-                                /*SizedBox(
-                                  height: 20,
-                                ),*/
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal:
                                           MediaQuery.of(context).size.width /
                                               3.5),
-                                  child: Container(
-                                      //     // color: Colors.pinkAccent,
+                                  child: SizedBox(
                                       height: 150,
                                       width: 100,
-                                      //     // child: ListView.builder(
-                                      //     shrinkWrap: true,
-                                      //     itemCount: _images.length,
-                                      //     scrollDirection: Axis.horizontal,
-                                      //     itemBuilder: (context, index) {
-                                      // File? image =_images[index];
-                                      child: _imageBuilder(
-                                          imageFile) //;     return
-                                      //     }),
-                                      ),
+                                      child: _imageBuilder(imageFile)),
                                 ),
-                                // Padding(
-                                //   padding: const EdgeInsets.only(bottom: 8.0),
-                                //   child: GestureDetector(
-                                //     child: SizedBox(
-                                //       height: 100,
-                                //       child: Container(
-                                //           color: Colors.amber,
-                                //           child:
-                                //               Center(child: Icon(Icons.add_a_photo))),
-                                //     ),
-                                //     onTap: () {
-                                //       getImage();
-                                //     },
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
@@ -595,19 +517,16 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 16, horizontal: 250.w),
-                                // primary: Palette.orange,
                                 primary: Palette.peach,
                                 shape: RoundedRectangleBorder(
                                   side: BorderSide.none,
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                               ),
-                              child: Text(
+                              child: const Text(
                                 'Register Complaint',
                                 style: TextStyle(
                                   height: 1.2,
-                                  // color: isDarkMode(context)
-                                  //     ? Colors.black
                                   color: Colors.black,
                                   fontSize: 20,
                                 ),
@@ -616,7 +535,7 @@ class _ComplaintPageBodyState extends State<ComplaintPageBody> {
                                 if (!isUploading) {
                                   sendDetails();
                                 }
-                              }, // => _postListing()),
+                              },
                             ),
                           ),
                         ],

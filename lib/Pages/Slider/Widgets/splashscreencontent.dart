@@ -11,49 +11,40 @@ class SplashScreenContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Spacer(),
-          Text(
-            "Road Sarathi",
+    return Column(
+      children: <Widget>[
+        const Spacer(),
+        Text(
+          "Road Sarathi",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            height: 1.2,
+            fontSize: getProportionateScreenWidth(34),
+            color: kActiveIconColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 40),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Text(
+            heading,
             textAlign: TextAlign.center,
             style: TextStyle(
               height: 1.2,
-              fontSize: getProportionateScreenWidth(34),
-              color: kActiveIconColor,
-              fontWeight: FontWeight.bold,
+              fontSize: getProportionateScreenWidth(24),
+              color: kTextColor,
             ),
           ),
-
-          SizedBox(height: 40),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text(
-              heading,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                height: 1.2,
-                fontSize: getProportionateScreenWidth(24),
-                color: kTextColor,
-                // fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          Spacer(flex: 3),
-          // Container(
-          //   width: 100,
-          //   height: 100,
-          // ),
-          // // Spacer(flex: 2,),
-          Image.asset(
-            imageURL,
-            height: getProportionateScreenHeight(300),
-            width: getProportionateScreenWidth(500),
-          ),
-          Spacer(flex: 2),
-        ],
-      ),
+        ),
+        const Spacer(flex: 3),
+        Image.asset(
+          imageURL,
+          height: getProportionateScreenHeight(300),
+          width: getProportionateScreenWidth(500),
+        ),
+        const Spacer(flex: 2),
+      ],
     );
   }
 }

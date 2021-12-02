@@ -18,17 +18,13 @@ class UserHigherConversationRooms extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      // Added
-      length: 2, // Added
+      length: 2,
       initialIndex: 0,
       child: CustomScaffold(
         body: TabBarView(
           children: [
-            UserHigherConversationRoomsBody(
-                completed: false), //completed: false),
-
-            UserHigherConversationRoomsBody(
-                completed: true), //completed: true),
+            UserHigherConversationRoomsBody(completed: false),
+            UserHigherConversationRoomsBody(completed: true),
           ],
         ),
         backgroundColor: Palette.peach,
@@ -70,15 +66,15 @@ class _UserHigherConversationRoomsBodyState
 
   Widget chatRoomList() {
     return SingleChildScrollView(
-      physics: ScrollPhysics(),
+      physics: const ScrollPhysics(),
       child: StreamBuilder(
         stream: chatRoomsStream,
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.data == null) {
-            return Container(
+            return SizedBox(
               height: MediaQuery.of(context).size.height / 1.5,
-              child: Center(
+              child: const Center(
                 child: Text(
                   "No Complaints",
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
@@ -86,9 +82,9 @@ class _UserHigherConversationRoomsBodyState
               ),
             );
           } else if (snapshot.data!.docs.length == 0) {
-            return Container(
+            return SizedBox(
               height: MediaQuery.of(context).size.height / 1.5,
-              child: Center(
+              child: const Center(
                 child: Text(
                   "No Complaints",
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
@@ -99,7 +95,7 @@ class _UserHigherConversationRoomsBodyState
 
           return ListView.builder(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               return ChatRoomsTile(
@@ -119,92 +115,8 @@ class _UserHigherConversationRoomsBodyState
     );
   }
 
-  // createChatroomAndStartConversation(String clickedUserEmail) {
-  //   List<String> users = [Constants.myEmail, clickedUserEmail];
-  //   String chatroomId = firebaseHelper.getChatroomId(
-  //       userEmail1: Constants.myEmail, userEmail2: clickedUserEmail);
-
-  //   if (clickedUserEmail != Constants.myEmail) {
-  //     Map<String, dynamic> chatroomMap = {
-  //       "users": users,
-  //       "chatroomId": chatroomId
-  //     };
-
-  //     // dev.log("Done CreateChatroomAndStartConversation");
-  //     firebaseHelper.createChatRooms(
-  //         userEmail1: Constants.myEmail,
-  //         userEmail2: clickedUserEmail,
-  //         chatroomMap: chatroomMap);
-
-  //     Get.to(ChatScreen(
-  //       chatRoomId: chatroomId,
-  //     ));
-  //   }
-  // }
-
-  // Widget searchList() {
-  //   return FutureBuilder(
-  //     builder: (context, AsyncSnapshot<List<ModalUser>> snapshot) {
-  //       return snapshot.hasData
-  //           ? ListView.builder(
-  //               shrinkWrap: true,
-  //               itemCount: snapshot.data!.length,
-  //               itemBuilder: (context, index) {
-  //                 return searchTile(
-  //                   name: snapshot.data![index].name,
-  //                   email: snapshot.data![index].email,
-  //                 );
-  //               },
-  //             )
-  //           : Container();
-  //     },
-  //     future: searchResult,
-  //   );
-  // }
-
-  // Widget searchTile({required String email, required String name}) {
-  //   return Padding(
-  //     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-  //     child: Row(
-  //       children: [
-  //         Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Text(
-  //               name,
-  //               style: normal1(),
-  //             ),
-  //             Text(
-  //               email,
-  //               style: normal1(),
-  //             ),
-  //           ],
-  //         ),
-  //         const Spacer(),
-  //         GestureDetector(
-  //           onTap: () {
-  //             createChatroomAndStartConversation(email);
-  //           },
-  //           child: Container(
-  //             decoration: BoxDecoration(
-  //               borderRadius: BorderRadius.circular(30),
-  //               color: Colors.blue,
-  //             ),
-  //             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-  //             child: Text(
-  //               "Message",
-  //               style: normal2(),
-  //             ),
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(),
@@ -212,74 +124,15 @@ class _UserHigherConversationRoomsBodyState
         : Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30))),
               child: Column(
                 children: [
-                  // Column(
-                  //   children: [
-                  //     Container(
-                  //       color: const Color(0x54FFFFFF),
-                  //       padding:
-                  //           EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-                  //       child: Row(
-                  //         children: [
-                  //           Expanded(
-                  //             child: TextField(
-                  //               onChanged: (val) {
-                  //                 searchValue = val;
-                  //                 if (searchValue == null) {
-                  //                   Get.snackbar("Invalid", "Enter correct email");
-                  //                   return;
-                  //                 }
-                  //                 initiateSearch(searchValue!);
-                  //               },
-                  //               controller: searchTextController,
-                  //               // style: TextStyle(color: Colors.white),
-                  //               decoration: const InputDecoration(
-                  //                 hintText: "search username...",
-                  //                 hintStyle: TextStyle(
-                  //                   color: Colors.white54,
-                  //                 ),
-                  //                 border: InputBorder.none,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //           GestureDetector(
-                  //             onTap: () {
-                  //               if (searchValue == null) {
-                  //                 Get.snackbar("Invalid", "Enter correct email");
-                  //                 return;
-                  //               }
-                  //               initiateSearch(searchValue!);
-                  //             },
-                  //             child: Container(
-                  //               height: 48,
-                  //               width: 48,
-                  //               padding: EdgeInsets.all(16),
-                  //               decoration: BoxDecoration(
-                  //                 gradient: LinearGradient(
-                  //                   colors: [
-                  //                     const Color(0x36FFFFFF),
-                  //                     const Color(0x0FFFFFFF)
-                  //                   ],
-                  //                 ),
-                  //                 borderRadius: BorderRadius.circular(40),
-                  //               ),
-                  //               // color: Colors.red,
-                  //               child: Icon(Icons.search),
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                   Container(
-                    margin: EdgeInsets.only(top: 8),
+                    margin: const EdgeInsets.only(top: 8),
                     child: chatRoomList(),
                   ),
                 ],

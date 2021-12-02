@@ -52,7 +52,7 @@ class _IntroSliderBodyState extends State<IntroSliderBody> {
             Expanded(
               flex: 1,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 18),
+                padding: const EdgeInsets.symmetric(horizontal: 18),
                 child: Column(
                   children: <Widget>[
                     Row(
@@ -60,15 +60,11 @@ class _IntroSliderBodyState extends State<IntroSliderBody> {
                       children: List.generate(
                           splashData.length, (index) => buildDot(index: index)),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     introsliderdefaultbutton(
                       text: "CONTINUE",
                     ),
-                    Spacer(),
-                    // introslidertextbutton(
-                    //   text: "SKIP",
-                    // ),
-                    // Spacer()
+                    const Spacer(),
                   ],
                 ),
               ),
@@ -81,8 +77,8 @@ class _IntroSliderBodyState extends State<IntroSliderBody> {
 
   AnimatedContainer buildDot({required int index}) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      margin: EdgeInsets.only(right: 8),
+      duration: const Duration(milliseconds: 300),
+      margin: const EdgeInsets.only(right: 8),
       height: 7,
       width: currentPage == index ? 30 : 7,
       decoration: BoxDecoration(

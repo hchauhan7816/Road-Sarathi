@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sadak/Pages/Slider/Widgets/constants.dart';
 
+// ignore: must_be_immutable
 class ShowMap extends StatefulWidget {
   ShowMap({Key? key, required this.position}) : super(key: key);
   LatLng position;
@@ -15,7 +16,6 @@ Completer<GoogleMapController> _controller = Completer();
 
 class _ShowMapState extends State<ShowMap> {
   static LatLng? _intialLatLang;
-  // LatLng(23.64163321511503, 71.3500110000542);
   static CameraPosition? _initialPosition;
 
   Set<Marker> mapMarkers = {};
@@ -29,7 +29,7 @@ class _ShowMapState extends State<ShowMap> {
     Marker _initialMarker = Marker(
       markerId: MarkerId(_initialPosition.toString()),
       position: _intialLatLang!,
-      infoWindow: InfoWindow(
+      infoWindow: const InfoWindow(
         title: 'Bad Road Location',
       ),
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),

@@ -21,54 +21,34 @@ AppBar chatScreenAppBar(BuildContext context,
       style: appTitleStyle,
     ),
     centerTitle: true,
-    // brightness: Brightness.light,
-    // backgroundColor: Colors.white,
-    // leading: IconButton(
-    //   onPressed: () {
-    //     Get.back();
-    //   },
-    //   icon: const Icon(Icons.arrow_back_ios_new_rounded),
-    //   iconSize: 20,
-    //   color: Colors.black,
-    // ),
     actions: [
       userEmail == _LOCALAUTHORITYMAIL || userEmail == _HIGHERAUTHORITYMAIL
           ? Padding(
-              padding: EdgeInsets.all(5),
-              // child: MaterialButton(
-              //   color: Colors.amber,
-              //   onPressed: () {
-              //     firebaseHelper.setCompleteComplaint(chatroomId: chatroomId);
-              //   },
-
+              padding: const EdgeInsets.all(5),
               child: GestureDetector(
                 onTap: () {
-                  if (!completed)
+                  if (!completed) {
                     firebaseHelper.setCompleteComplaint(chatroomId: chatroomId);
+                  }
                 },
                 child: !completed
                     ? Container(
                         height: 40,
                         width: 100,
-                        constraints: BoxConstraints(maxWidth: 100),
+                        constraints: const BoxConstraints(maxWidth: 100),
                         alignment: Alignment.center,
-                        child: Text(
+                        child: const Text(
                           "Mark Done",
                           style: TextStyle(fontSize: 16, color: Colors.black87),
                           textAlign: TextAlign.center,
                         ),
                         decoration: BoxDecoration(
-                          color: Palette.orange, //Colors.amber,
+                          color: Palette.orange,
                           borderRadius: BorderRadius.circular(30),
                         ),
                       )
                     : Container(),
               ),
-              // child: Text(
-              //   "Completed",
-              //   style: TextStyle(fontSize: 15),
-              // ),
-              // ),
             )
           : Container(),
     ],

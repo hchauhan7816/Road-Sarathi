@@ -2,17 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:sadak/Config/palette.dart';
 import 'package:sadak/Config/text_styles.dart';
 import 'package:sadak/Pages/Chat%20Screen/chat_screen.dart';
-import 'dart:developer' as dev;
-
-import 'package:sadak/Pages/Slider/Widgets/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../Map Page/map_page.dart';
 
 class ChatRoomsTile extends StatelessWidget {
   const ChatRoomsTile(
@@ -43,7 +37,7 @@ class ChatRoomsTile extends StatelessWidget {
             userEmail: userEmail));
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         child: Row(
           children: [
             Container(
@@ -51,7 +45,7 @@ class ChatRoomsTile extends StatelessWidget {
               width: 60,
               alignment: Alignment.center,
               child: Text(
-                "${username.substring(0, 1).toUpperCase()}",
+                username.substring(0, 1).toUpperCase(),
                 style: normal3(),
               ),
               decoration: BoxDecoration(
@@ -59,17 +53,17 @@ class ChatRoomsTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(40),
               ),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  constraints: BoxConstraints(maxWidth: 280),
+                  constraints: const BoxConstraints(maxWidth: 280),
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
                       "${title.substring(0, 1).toUpperCase()}${title.substring(1)}",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w400,
                         height: 1.2,
@@ -78,16 +72,16 @@ class ChatRoomsTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Container(
-                  constraints: BoxConstraints(maxWidth: 280),
+                  constraints: const BoxConstraints(maxWidth: 280),
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
                       username,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w300,
                         height: 1.2,
@@ -114,7 +108,8 @@ class MessageTile extends StatelessWidget {
   final double latitude;
   final double longitude;
 
-  MessageTile({
+  // ignore: use_key_in_widget_constructors
+  const MessageTile({
     required this.message,
     required this.isSendByMe,
     required this.isText,
@@ -144,7 +139,7 @@ class MessageTile extends StatelessWidget {
 
     if (isLocation) {
       return Container(
-        margin: EdgeInsets.only(top: 15),
+        margin: const EdgeInsets.only(top: 15),
         child: Column(
           children: [
             Row(
@@ -158,7 +153,7 @@ class MessageTile extends StatelessWidget {
                     width: 50,
                     alignment: Alignment.center,
                     child: Text(
-                      "${otherUserEmail.substring(0, 1).toUpperCase()}",
+                      otherUserEmail.substring(0, 1).toUpperCase(),
                       style: normal3(),
                     ),
                     decoration: BoxDecoration(
@@ -166,15 +161,11 @@ class MessageTile extends StatelessWidget {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                //   CircleAvatar(
-                //     radius: 15,
-                //     backgroundImage: AssetImage(user.avatar),
-                //   ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Container(
-                  padding: EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(4),
                   constraints: BoxConstraints(
                       maxWidth: MediaQuery.of(context).size.width * 0.6,
                       maxHeight: MediaQuery.of(context).size.height * 0.4),
@@ -183,37 +174,19 @@ class MessageTile extends StatelessWidget {
                           ? Colors.blueGrey[300]
                           : Colors.grey[200], // todo color?
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16),
+                        topLeft: const Radius.circular(16),
+                        topRight: const Radius.circular(16),
                         bottomLeft: Radius.circular(isSendByMe ? 12 : 0),
                         bottomRight: Radius.circular(isSendByMe ? 0 : 12),
                       )),
-                  // child: ClipRRect(
-                  //   borderRadius: BorderRadius.circular(12.0),
-                  //   child: CachedNetworkImage(
-                  //     imageUrl: message,
-                  //     placeholder: (context, url) => Padding(
-                  //       padding: const EdgeInsets.all(8.0),
-                  //       child: CircularProgressIndicator(),
-                  //     ),
-                  //     errorWidget: (context, url, error) => Icon(Icons.error),
-                  //   ),
-                  // ),
-                  // child: Text("hello"),
-
                   child: Material(
-                    // color: Colors.orange[300],
                     color: Colors.blueGrey[300],
                     borderRadius: BorderRadius.circular(8),
                     child: InkWell(
                       onTap: () {
                         googleMap();
-                        // Navigator.of(context).push(MaterialPageRoute(
-                        //     builder: (_) => ShowMap(
-                        //         position: LatLng(latitude, longitude))));
-                        // Get.to(ShowMap(position: LatLng(latitude, longitude)));
                       },
-                      child: Container(
+                      child: SizedBox(
                         height: 400.h,
                         width: 400.w,
                         child: Padding(
@@ -250,7 +223,7 @@ class MessageTile extends StatelessWidget {
                     : MainAxisAlignment.start,
                 children: [
                   if (!isSendByMe)
-                    SizedBox(
+                    const SizedBox(
                       width: 62,
                     ),
                   Icon(
@@ -258,7 +231,7 @@ class MessageTile extends StatelessWidget {
                     size: 20,
                     color: Colors.blue[300], //MyTheme.bodyTextTime.color,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   Text(finalTime,
@@ -276,7 +249,7 @@ class MessageTile extends StatelessWidget {
 
     return isText
         ? Container(
-            margin: EdgeInsets.only(top: 15),
+            margin: const EdgeInsets.only(top: 15),
             child: Column(
               children: [
                 Row(
@@ -291,7 +264,7 @@ class MessageTile extends StatelessWidget {
                         width: 50,
                         alignment: Alignment.center,
                         child: Text(
-                          "${otherUserEmail.substring(0, 1).toUpperCase()}",
+                          otherUserEmail.substring(0, 1).toUpperCase(),
                           style: normal3(),
                         ),
                         decoration: BoxDecoration(
@@ -299,12 +272,12 @@ class MessageTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 12),
                       constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width * 0.75),
                       decoration: BoxDecoration(
@@ -312,8 +285,8 @@ class MessageTile extends StatelessWidget {
                               ? Palette.peach //Color(0xff7C7B9B)
                               : Colors.grey[200], // todo color?
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(16),
-                            topRight: Radius.circular(16),
+                            topLeft: const Radius.circular(16),
+                            topRight: const Radius.circular(16),
                             bottomLeft: Radius.circular(isSendByMe ? 12 : 0),
                             bottomRight: Radius.circular(isSendByMe ? 0 : 12),
                           )),
@@ -336,7 +309,7 @@ class MessageTile extends StatelessWidget {
                         : MainAxisAlignment.start,
                     children: [
                       if (!isSendByMe)
-                        SizedBox(
+                        const SizedBox(
                           width: 62,
                         ),
                       Icon(
@@ -344,16 +317,17 @@ class MessageTile extends StatelessWidget {
                         size: 20,
                         color: Colors.blue[300], //MyTheme.bodyTextTime.color,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
-                      Text(finalTime,
-                          style: TextStyle(
-                            height: 1.2,
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                          ) //MyTheme.bodyTextTime,
-                          )
+                      Text(
+                        finalTime,
+                        style: TextStyle(
+                          height: 1.2,
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                        ),
+                      )
                     ],
                   ),
                 )
@@ -361,7 +335,7 @@ class MessageTile extends StatelessWidget {
             ),
           )
         : Container(
-            margin: EdgeInsets.only(top: 15),
+            margin: const EdgeInsets.only(top: 15),
             child: Column(
               children: [
                 Row(
@@ -376,7 +350,7 @@ class MessageTile extends StatelessWidget {
                         width: 50,
                         alignment: Alignment.center,
                         child: Text(
-                          "${otherUserEmail.substring(0, 1).toUpperCase()}",
+                          otherUserEmail.substring(0, 1).toUpperCase(),
                           style: normal3(),
                         ),
                         decoration: BoxDecoration(
@@ -384,15 +358,11 @@ class MessageTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                    //   CircleAvatar(
-                    //     radius: 15,
-                    //     backgroundImage: AssetImage(user.avatar),
-                    //   ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Container(
-                      padding: EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(4),
                       constraints: BoxConstraints(
                           maxWidth: MediaQuery.of(context).size.width * 0.6,
                           maxHeight: MediaQuery.of(context).size.height * 0.4),
@@ -401,8 +371,8 @@ class MessageTile extends StatelessWidget {
                             ? Palette.peach //Colors.blueGrey[300]
                             : Colors.grey[200], // todo color?
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16),
+                          topLeft: const Radius.circular(16),
+                          topRight: const Radius.circular(16),
                           bottomLeft: Radius.circular(isSendByMe ? 12 : 0),
                           bottomRight: Radius.circular(isSendByMe ? 0 : 12),
                         ),
@@ -411,12 +381,12 @@ class MessageTile extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12.0),
                         child: CachedNetworkImage(
                           imageUrl: message,
-                          placeholder: (context, url) => Padding(
-                            padding: const EdgeInsets.all(8.0),
+                          placeholder: (context, url) => const Padding(
+                            padding: EdgeInsets.all(8.0),
                             child: CircularProgressIndicator(),
                           ),
                           errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                              const Icon(Icons.error),
                         ),
                       ),
                     ),
@@ -430,7 +400,7 @@ class MessageTile extends StatelessWidget {
                         : MainAxisAlignment.start,
                     children: [
                       if (!isSendByMe)
-                        SizedBox(
+                        const SizedBox(
                           width: 62,
                         ),
                       Icon(
@@ -438,7 +408,7 @@ class MessageTile extends StatelessWidget {
                         size: 20,
                         color: Colors.blue[300], //MyTheme.bodyTextTime.color,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Text(
@@ -468,11 +438,9 @@ class HeadingTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String finalTime = DateFormat.yMMMMd('en_US').format(dueDate);
-    // String finalTime = DateFormat('dd/M/yyyy').format(dueDate);
-    // String finalTime = Intl.DateTimeFormat('en-GB', { dateStyle: 'full', timeStyle: 'long' }).format(date)
 
     return Container(
-      margin: EdgeInsets.only(top: 15),
+      margin: const EdgeInsets.only(top: 15),
       child: Column(
         children: [
           Row(
@@ -480,16 +448,17 @@ class HeadingTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
                 constraints: BoxConstraints(
                     maxWidth: MediaQuery.of(context).size.width * 0.8),
                 decoration: BoxDecoration(
-                    color: Colors.grey[300], // todo color?
-                    // ? Color(0xff7C7B9B)
+                  color: Colors.grey[300], // todo color?
 
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(12),
-                    )),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(12),
+                  ),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: FittedBox(
@@ -538,7 +507,7 @@ class HeadingTile extends StatelessWidget {
                             FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
-                                "  ${finalTime}",
+                                "  $finalTime",
                                 style: TextStyle(
                                   height: 1.2,
                                   color: Colors.grey[700],

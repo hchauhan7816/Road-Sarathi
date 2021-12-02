@@ -39,6 +39,6 @@ class ChatroomModal with ChangeNotifier {
         "title": title,
         "isWithHigher": isWithHigher,
         "completed": completed,
-        "dueDate": dueDate, //DateTime.now().add(const Duration(days: 60)),
+        "dueDate": dueDate,
       };
 }

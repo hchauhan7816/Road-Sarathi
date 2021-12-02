@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'constants.dart';
 
 class BottomNavBar extends StatelessWidget {
+  const BottomNavBar({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
       height: 80,
-      color: Color(0xFFF5CEB8),
+      color: const Color(0xFFF5CEB8),
       child: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -23,7 +24,7 @@ class BottomNavBar extends StatelessWidget {
                 height: 1.2,
               ),
             ),
-            Text(
+            const Text(
               ' Road Sarthi',
               textAlign: TextAlign.center,
               style: TextStyle(

@@ -5,8 +5,6 @@ class ModalUser with ChangeNotifier {
   String name;
   int status;
 
-
-  // Default Values
   ModalUser({
     this.email = '',
     this.name = '',

@@ -84,6 +84,7 @@ flutter:
     - assets/
     - assets/img/
     - assets/icons/
+    - assets/img/aboutUs/
   #   - images/a_dot_ham.jpeg
 
   fonts:
