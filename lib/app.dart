@@ -21,6 +21,7 @@ class OurApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(1080, 2210),
       builder: () => GetMaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: Themes().lightTheme,
         home: firebaseHelper.auth.currentUser != null
