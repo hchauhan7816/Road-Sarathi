@@ -54,7 +54,6 @@ class LoginBody extends StatelessWidget {
         SingleChildScrollView(
             child: SvgPicture.asset(
           "assets/icons/Sign_Up_bg.svg",
-          
         )),
         SingleChildScrollView(
           child: Column(
@@ -79,7 +78,7 @@ class LoginBody extends StatelessWidget {
                 height: 120.h,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 50.w),
+                padding: EdgeInsets.symmetric(horizontal: 40.w),
                 child: Column(
                   children: <Widget>[
                     Column(
@@ -150,31 +149,34 @@ class LoginBody extends StatelessWidget {
               ),
 
               // Login Button
-              MaterialButton(
-                minWidth: double.infinity,
-                height: 150.h,
-                onPressed: () {
-                  if (email != null &&
-                      password != null &&
-                      email!.text.isNotEmpty &&
-                      password!.text.isNotEmpty) {
-                    firebaseHelper.signIn(
-                        email: email!.text, password: password!.text);
-                  } else {
-                    Get.snackbar("Error", "Please Enter email and password");
-                  }
-                },
-                color: Palette.darkPurple,
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(color: Palette.darkPurple),
-                  borderRadius: BorderRadius.circular(75.w),
-                ),
-                child: Text(
-                  "Login",
-                  style: TextStyle(
-                    fontSize: 55.sp,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 80.w),
+                child: MaterialButton(
+                  minWidth: double.infinity,
+                  height: 150.h,
+                  onPressed: () {
+                    if (email != null &&
+                        password != null &&
+                        email!.text.isNotEmpty &&
+                        password!.text.isNotEmpty) {
+                      firebaseHelper.signIn(
+                          email: email!.text, password: password!.text);
+                    } else {
+                      Get.snackbar("Error", "Please Enter email and password");
+                    }
+                  },
+                  color: Colors.blue[800],
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(color: Colors.transparent),
+                    borderRadius: BorderRadius.circular(20.w),
+                  ),
+                  child: Text(
+                    "Login",
+                    style: TextStyle(
+                      fontSize: 55.sp,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),

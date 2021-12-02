@@ -96,195 +96,205 @@ class SignupBody extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Column(
-                      children: <Widget>[
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    "Name",
-                                    style: TextStyle(
-                                        fontSize: 40.sp,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black87),
-                                  ),
-                                  SizedBox(
-                                    height: 15.h,
-                                  ),
-                                  TextFormField(
-                                    validator: (val) {
-                                      if (val!.isEmpty) {
-                                        return "Name cannot be empty";
-                                      }
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40.w),
+                      child: Column(
+                        children: <Widget>[
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      "Name",
+                                      style: TextStyle(
+                                          fontSize: 40.sp,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black87),
+                                    ),
+                                    SizedBox(
+                                      height: 15.h,
+                                    ),
+                                    TextFormField(
+                                      validator: (val) {
+                                        if (val!.isEmpty) {
+                                          return "Name cannot be empty";
+                                        }
 
-                                      return null;
-                                    },
-                                    controller: name,
-                                    decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 0.h, horizontal: 15.w),
-                                        enabledBorder: const OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.grey),
-                                        ),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.grey))),
-                                  ),
-                                  SizedBox(
-                                    height: 30.h,
-                                  )
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    "Email",
-                                    style: TextStyle(
-                                        fontSize: 40.sp,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black87),
-                                  ),
-                                  SizedBox(
-                                    height: 15.h,
-                                  ),
-                                  TextFormField(
-                                    validator: (val) {
-                                      if (val!.isEmpty) {
-                                        return "Email cannot be empty";
-                                      } else if (val.length < 4) {
-                                        return "Too short email";
-                                      }
+                                        return null;
+                                      },
+                                      controller: name,
+                                      decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 0.h, horizontal: 15.w),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.grey),
+                                          ),
+                                          border: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey))),
+                                    ),
+                                    SizedBox(
+                                      height: 30.h,
+                                    )
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      "Email",
+                                      style: TextStyle(
+                                          fontSize: 40.sp,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black87),
+                                    ),
+                                    SizedBox(
+                                      height: 15.h,
+                                    ),
+                                    TextFormField(
+                                      validator: (val) {
+                                        if (val!.isEmpty) {
+                                          return "Email cannot be empty";
+                                        } else if (val.length < 4) {
+                                          return "Too short email";
+                                        }
 
-                                      return null;
-                                    },
-                                    controller: email,
-                                    decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 0.h, horizontal: 15.w),
-                                        enabledBorder: const OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.grey),
-                                        ),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.grey))),
-                                  ),
-                                  SizedBox(
-                                    height: 30.h,
-                                  )
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    "Password",
-                                    style: TextStyle(
-                                        fontSize: 40.sp,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black87),
-                                  ),
-                                  SizedBox(
-                                    height: 15.h,
-                                  ),
-                                  TextFormField(
-                                    validator: (val) {
-                                      if (val!.isEmpty) {
-                                        return "Password cannot be empty";
-                                      } else if (val.length < 5) {
-                                        return "Password too short";
-                                      }
+                                        return null;
+                                      },
+                                      controller: email,
+                                      decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 0.h, horizontal: 15.w),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.grey),
+                                          ),
+                                          border: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey))),
+                                    ),
+                                    SizedBox(
+                                      height: 30.h,
+                                    )
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      "Password",
+                                      style: TextStyle(
+                                          fontSize: 40.sp,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black87),
+                                    ),
+                                    SizedBox(
+                                      height: 15.h,
+                                    ),
+                                    TextFormField(
+                                      validator: (val) {
+                                        if (val!.isEmpty) {
+                                          return "Password cannot be empty";
+                                        } else if (val.length < 5) {
+                                          return "Password too short";
+                                        }
 
-                                      return null;
-                                    },
-                                    controller: password,
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 0.h, horizontal: 15.w),
-                                        enabledBorder: const OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.grey),
-                                        ),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.grey))),
-                                  ),
-                                  SizedBox(
-                                    height: 30.h,
-                                  )
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    "Confirm Password",
-                                    style: TextStyle(
-                                        fontSize: 40.sp,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black87),
-                                  ),
-                                  SizedBox(
-                                    height: 15.h,
-                                  ),
-                                  TextFormField(
-                                    validator: (val) {
-                                      if (val!.isEmpty) {
-                                        return "Password cannot be empty";
-                                      } else if (val.length < 5) {
-                                        return "Password too short";
-                                      }
+                                        return null;
+                                      },
+                                      controller: password,
+                                      obscureText: true,
+                                      decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 0.h, horizontal: 15.w),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.grey),
+                                          ),
+                                          border: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey))),
+                                    ),
+                                    SizedBox(
+                                      height: 30.h,
+                                    )
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      "Confirm Password",
+                                      style: TextStyle(
+                                          fontSize: 40.sp,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.black87),
+                                    ),
+                                    SizedBox(
+                                      height: 15.h,
+                                    ),
+                                    TextFormField(
+                                      validator: (val) {
+                                        if (val!.isEmpty) {
+                                          return "Password cannot be empty";
+                                        } else if (val.length < 5) {
+                                          return "Password too short";
+                                        }
 
-                                      return null;
-                                    },
-                                    obscureText: true,
-                                    controller: password2,
-                                    decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 0.h, horizontal: 15.w),
-                                        enabledBorder: const OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.grey),
-                                        ),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.grey))),
-                                  ),
-                                  SizedBox(
-                                    height: 75.h,
-                                  )
-                                ],
-                              ),
-                            ],
+                                        return null;
+                                      },
+                                      obscureText: true,
+                                      controller: password2,
+                                      decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 0.h, horizontal: 15.w),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.grey),
+                                          ),
+                                          border: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey))),
+                                    ),
+                                    SizedBox(
+                                      height: 75.h,
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    MaterialButton(
-                      minWidth: double.infinity,
-                      height: 150.h,
-                      onPressed: () {
-                        signUpUser(context);
-                      },
-                      color: Palette.darkPurple,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Palette.darkPurple),
-                        borderRadius: BorderRadius.circular(75.w),
+                        ],
                       ),
-                      child: Text(
-                        "Sign Up",
-                        style: TextStyle(
-                          fontSize: 55.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 80.w),
+                      child: MaterialButton(
+                        minWidth: double.infinity,
+                        height: 150.h,
+                        onPressed: () {
+                          signUpUser(context);
+                        },
+                        color: Colors.blue[800],
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(color: Colors.transparent),
+                          borderRadius: BorderRadius.circular(20.w),
+                        ),
+                        child: Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            fontSize: 55.sp,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),

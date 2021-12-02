@@ -21,67 +21,104 @@ class OnBoarding extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
-              child: SvgPicture.asset(
-                "assets/icons/splash_bg.svg",
-                //height: double.infinity,
-              )),
-          Column(
-            children: [
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Get.to(() => LoginPage());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFF6CD8D1),
-                      minimumSize: Size(double.infinity, 65.0),
-                      shape: StadiumBorder(),
+          SvgPicture.asset(
+            "assets/icons/splash_bg.svg",
+            //height: double.infinity,
+            width: double.infinity,
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                Spacer(flex: 8),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    "Road Sarathi",
+                    style: TextStyle(
+                      fontSize: 40,
+                      height: 1.2,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
                     ),
-                    child: Text("Log In"),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Get.to(() => LoginGovPage());
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: Color(0xFF6CD8D1),
-                      minimumSize: Size(double.infinity, 65.0),
-                      shape: StadiumBorder(),
-                    ),
-                    child: Text("Log In Government"),
-                  ),
+                Spacer(
+                  flex: 2,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Get.to(() => SignupPage());
-                    },
-                    style: TextButton.styleFrom(
-                        backgroundColor: Color(0xFF6CD8D1),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.to(() => LoginPage());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xFF6CD8D1),
                         minimumSize: Size(double.infinity, 65.0),
-                        shape: StadiumBorder()),
-                    child: Text("Sign Up"),
+                        shape: StadiumBorder(),
+                      ),
+                      child: Text(
+                        "Log In",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          height: 1.2,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              Spacer(),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.to(() => LoginGovPage());
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: const Color(0xFF6CD8D1),
+                        minimumSize: const Size(double.infinity, 65.0),
+                        shape: const StadiumBorder(),
+                      ),
+                      child: const Text(
+                        "Log In Government",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          height: 1.2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.to(() => SignupPage());
+                      },
+                      style: TextButton.styleFrom(
+                          backgroundColor: Color(0xFF6CD8D1),
+                          minimumSize: Size(double.infinity, 65.0),
+                          shape: StadiumBorder()),
+                      child: Text(
+                        "Sign Up",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          height: 1.2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Spacer(),
+              ],
+            ),
           ),
         ],
       ),

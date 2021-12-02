@@ -11,6 +11,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
+  // debugshow
+
   // debugPaintSizeEnabled = true;
 
   SystemChrome.setSystemUIOverlayStyle(
