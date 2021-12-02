@@ -19,17 +19,19 @@ class OnBoarding extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        fit: StackFit.expand,
+        fit: StackFit.loose,
         children: [
-          SvgPicture.asset(
-            "assets/icons/splash_bg.svg",
-            //height: double.infinity,
-            width: double.infinity,
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/icons/splash_bg.png'),
+                  fit: BoxFit.cover),
+            ),
           ),
           SafeArea(
             child: Column(
               children: [
-                Spacer(flex: 8),
+                Spacer(),
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Text(
@@ -43,8 +45,8 @@ class OnBoarding extends StatelessWidget {
                   ),
                 ),
                 Spacer(
-                  flex: 2,
-                ),
+                    // flex: 2,
+                    ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: SizedBox(
@@ -59,10 +61,10 @@ class OnBoarding extends StatelessWidget {
                         shape: StadiumBorder(),
                       ),
                       child: Text(
-                        "Log In",
+                        "User Login",
                         style: TextStyle(
                           fontSize: 20,
-                          color: Colors.black,
+                          color: Colors.white,
                           height: 1.2,
                         ),
                       ),
@@ -83,10 +85,10 @@ class OnBoarding extends StatelessWidget {
                         shape: const StadiumBorder(),
                       ),
                       child: const Text(
-                        "Log In Government",
+                        "Government Login",
                         style: TextStyle(
                           fontSize: 20,
-                          color: Colors.black,
+                          color: Colors.white,
                           height: 1.2,
                         ),
                       ),
@@ -109,7 +111,7 @@ class OnBoarding extends StatelessWidget {
                         "Sign Up",
                         style: TextStyle(
                           fontSize: 20,
-                          color: Colors.black,
+                          color: Colors.white,
                           height: 1.2,
                         ),
                       ),

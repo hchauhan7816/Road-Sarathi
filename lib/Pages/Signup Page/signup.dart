@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:sadak/Config/palette.dart';
+import 'package:sadak/Pages/Login%20Pages/login.dart';
 import 'package:sadak/Pages/On%20Boarding/on_boarding.dart';
 import 'package:sadak/Services/Controllers/auth_controller.dart';
 import 'package:sadak/Widgets/custom_scaffold.dart';
@@ -69,8 +70,13 @@ class SignupBody extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          SingleChildScrollView(
-              child: SvgPicture.asset("assets/icons/Sign_Up_bg.svg")),
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/icons/sign_up_bg.png'),
+                  fit: BoxFit.cover),
+            ),
+          ),
           SingleChildScrollView(
             child: SafeArea(
               child: Padding(
@@ -312,7 +318,7 @@ class SignupBody extends StatelessWidget {
 
                         GestureDetector(
                           onTap: () {
-                            Get.off(() => OnBoarding());
+                            Get.off(() => LoginPage());
                           },
                           child: Text(
                             " Login",

@@ -51,14 +51,17 @@ class LoginBody extends StatelessWidget {
         body: Stack(
       fit: StackFit.expand,
       children: [
-        SingleChildScrollView(
-            child: SvgPicture.asset(
-          "assets/icons/Sign_Up_bg.svg",
-        )),
+        Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/icons/sign_up_bg.png'),
+                fit: BoxFit.cover),
+          ),
+        ),
         SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 250.h),
+              SizedBox(height: 350.h),
               Column(
                 children: [
                   Text(

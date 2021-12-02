@@ -48,179 +48,153 @@ class LoginGovBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-      fit: StackFit.expand,
-      children: [
-        SingleChildScrollView(
-            child: SvgPicture.asset("assets/icons/Sign_Up_bg.svg")),
-        SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 250.h),
-              Column(
-                children: [
-                  Text(
-                    "Government Login",
-                    style: heading1(),
-                  ),
-                  SizedBox(
-                    height: 30.h,
-                  ),
-                  Text(
-                    "Login to your account",
-                    style: normal3(),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 120.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.w),
-                child: Column(
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "Email",
-                          style: TextStyle(
-                              fontSize: 40.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black87),
-                        ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        TextField(
-                          controller: email,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 0.h, horizontal: 15.w),
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey))),
-                        ),
-                        SizedBox(
-                          height: 30.h,
-                        )
-                      ],
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/icons/sign_up_bg.png'),
+                  fit: BoxFit.cover),
+            ),
+          ),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 350.h),
+                Column(
+                  children: [
+                    Text(
+                      "Government Login",
+                      style: heading1(),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "Password",
-                          style: TextStyle(
-                              fontSize: 40.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black87),
-                        ),
-                        SizedBox(
-                          height: 15.h,
-                        ),
-                        TextField(
-                          controller: password,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 0.h, horizontal: 15.w),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey))),
-                        ),
-                        SizedBox(
-                          height: 30.h,
-                        )
-                      ],
+                    SizedBox(
+                      height: 30.h,
+                    ),
+                    Text(
+                      "Login to your account",
+                      style: normal3(),
                     ),
                   ],
                 ),
-              ),
-
-              SizedBox(
-                height: 80.h,
-              ),
-
-              // Login Button
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 80.w),
-                child: MaterialButton(
-                  minWidth: double.infinity,
-                  height: 150.h,
-                  onPressed: () {
-                    if (email != null &&
-                        password != null &&
-                        email!.text.isNotEmpty &&
-                        password!.text.isNotEmpty) {
-                      firebaseHelper.signIn(
-                          email: email!.text, password: password!.text);
-                    } else {
-                      Get.snackbar("Error", "Please Enter email and password");
-                    }
-                  },
-                  color: Colors.blue[800],
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(color: Colors.transparent),
-                    borderRadius: BorderRadius.circular(20.w),
-                  ),
-                  child: Text(
-                    "Login",
-                    style: TextStyle(
-                      fontSize: 55.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white,
-                    ),
+                SizedBox(
+                  height: 120.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 40.w),
+                  child: Column(
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Email",
+                            style: TextStyle(
+                                fontSize: 40.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black87),
+                          ),
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          TextField(
+                            controller: email,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 0.h, horizontal: 15.w),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.grey))),
+                          ),
+                          SizedBox(
+                            height: 30.h,
+                          )
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Password",
+                            style: TextStyle(
+                                fontSize: 40.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black87),
+                          ),
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          TextField(
+                            controller: password,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 0.h, horizontal: 15.w),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.grey))),
+                          ),
+                          SizedBox(
+                            height: 30.h,
+                          )
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ),
 
-              SizedBox(
-                height: 60.h,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "Don't have an account?",
-                    style: small1(),
-                  ),
-                  // Todo Sign up linking
-                  GestureDetector(
-                    onTap: () {
-                      Get.off(() => SignupPage());
+                SizedBox(
+                  height: 80.h,
+                ),
+
+                // Login Button
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 80.w),
+                  child: MaterialButton(
+                    minWidth: double.infinity,
+                    height: 150.h,
+                    onPressed: () {
+                      if (email != null &&
+                          password != null &&
+                          email!.text.isNotEmpty &&
+                          password!.text.isNotEmpty) {
+                        firebaseHelper.signIn(
+                            email: email!.text, password: password!.text);
+                      } else {
+                        Get.snackbar(
+                            "Error", "Please Enter email and password");
+                      }
                     },
-                    child: Container(
-                      child: Text(
-                        " Sign up",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                        ),
+                    color: Colors.blue[800],
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.transparent),
+                      borderRadius: BorderRadius.circular(20.w),
+                    ),
+                    child: Text(
+                      "Login",
+                      style: TextStyle(
+                        fontSize: 55.sp,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 60.h,
-              ),
-              // Container(
-              //   height: 700.h,
-              //   decoration: const BoxDecoration(
-              //     image: DecorationImage(
-              //       image: AssetImage("assets/img/login.png"),
-              //     ),
-              //   ),
-              // ),
-            ],
+                ),
+
+                SizedBox(
+                  height: 60.h,
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 }
